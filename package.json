@@ -1,0 +1,20 @@
+{
+  "name": "vectorpoint",
+  "version": "1.0.0",
+  "description": "Static GitHub Pages landing page for `vectorpoint.se`.",
+  "main": "script.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "preview": "node scripts/preview-server.mjs",
+    "test": "node scripts/smoke-test.mjs"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "playwright": "^1.60.0"
+  }
+}

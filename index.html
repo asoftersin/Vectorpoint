@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="sv">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Vectorpoint | AI-automation för arbetsflöden</title>
+  <meta name="description" content="Vectorpoint hjälper team att gå från manuellt arbete till självkörande processer med AI-agenter, automation och tydliga arbetsflöden.">
+  <meta name="theme-color" content="#81979f">
+  <meta property="og:title" content="Vectorpoint | Från manuellt arbete till självkörande processer">
+  <meta property="og:description" content="AI- och automationskonsulting för arbetsflöden som kopplar ihop människor, system och data.">
+  <meta property="og:type" content="website">
+  <link rel="preload" as="image" href="assets/vectorpoint-horizon.png">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="preview-stage" id="top">
+    <section class="browser-frame" aria-label="Vectorpoint startsida">
+      <div class="browser-window">
+        <header class="site-header" aria-label="Huvudnavigering">
+          <a class="brand" href="#top" aria-label="Vectorpoint startsida">
+            <span class="brand-mark" aria-hidden="true"></span>
+            <span>vectorpoint</span>
+          </a>
+          <a class="nav-cta" href="https://www.linkedin.com/in/johan-studt/" target="_blank" rel="noreferrer">
+            <span aria-hidden="true">in</span>
+            LinkedIn
+          </a>
+        </header>
+
+        <section class="hero-panel">
+          <img class="hero-image" src="assets/vectorpoint-horizon.png" alt="">
+          <div class="hero-copy">
+            <span class="section-label">AI-/automationskonsult</span>
+            <h1>Från manuellt arbete till självkörande processer.</h1>
+            <p>
+              Vectorpoint hjälper organisationer att hitta, designa och införa AI-drivna arbetsflöden där människor, system och data börjar jobba som ett sammanhängande flöde.
+            </p>
+            <div class="hero-actions">
+              <a class="primary-action" href="https://www.linkedin.com/in/johan-studt/" target="_blank" rel="noreferrer">
+                <span aria-hidden="true">in</span>
+                Kontakta via LinkedIn
+              </a>
+            </div>
+          </div>
+
+          <div class="agent-card" aria-label="Animerat agentflöde">
+            <div class="agent-card-head">
+              <span>Workflow agent</span>
+              <span class="agent-status">Aktiv</span>
+            </div>
+            <div class="workflow-scene">
+              <svg class="flow-lines" viewBox="0 0 520 220" aria-hidden="true">
+                <defs>
+                  <linearGradient id="flow-gradient" x1="0" x2="1" y1="0" y2="1">
+                    <stop offset="0%" stop-color="#f4d08b"/>
+                    <stop offset="55%" stop-color="#c49a54"/>
+                    <stop offset="100%" stop-color="#86a9a5"/>
+                  </linearGradient>
+                  <marker id="flow-arrow" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+                    <path d="M1 1 L7 4 L1 7" class="flow-arrow"/>
+                  </marker>
+                </defs>
+                <path id="path-input-agent" class="flow-path path-input-agent" d="M125 135 C145 133 160 126 177 123"/>
+                <path id="path-systems-agent" class="flow-path path-systems-agent" d="M156 79 C176 78 212 82 240 83"/>
+                <path id="path-agent-output" class="flow-path path-agent-output" d="M304 123 C318 125 329 137 340 142"/>
+                <circle class="flow-packet packet-input" r="3.6">
+                  <animateMotion dur="3.2s" repeatCount="indefinite">
+                    <mpath href="#path-input-agent"/>
+                  </animateMotion>
+                </circle>
+                <circle class="flow-packet packet-systems" r="3.3">
+                  <animateMotion dur="3.6s" begin="0.45s" repeatCount="indefinite">
+                    <mpath href="#path-systems-agent"/>
+                  </animateMotion>
+                </circle>
+                <circle class="flow-packet packet-output" r="3.8">
+                  <animateMotion dur="3.2s" begin="0.8s" repeatCount="indefinite">
+                    <mpath href="#path-agent-output"/>
+                  </animateMotion>
+                </circle>
+              </svg>
+              <div class="flow-node node-input" data-node>
+                <span>Input</span>
+                <strong>Manuella steg</strong>
+              </div>
+              <div class="flow-node node-systems" data-node>
+                <span>Källor</span>
+                <strong>System &amp; data</strong>
+              </div>
+              <div class="flow-node agent-node" data-node>
+                <span>LLM</span>
+                <strong>Agent</strong>
+              </div>
+              <div class="flow-node node-output" data-node>
+                <span>Output</span>
+                <strong>Självkörande process</strong>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section offer-section" id="offer">
+          <div>
+            <span class="section-label">Fokus</span>
+            <h2>AI-automation som börjar i verkliga arbetsprocesser.</h2>
+          </div>
+          <div class="offer-grid">
+            <article>
+              <span>01</span>
+              <h3>Prioritera rätt arbetsprocess</h3>
+              <p>Utgå från arbetsprocesser ni redan ser kan gå snabbare och välj den automation som ger tydligast effekt först.</p>
+            </article>
+            <article>
+              <span>02</span>
+              <h3>Designa agentflöden</h3>
+              <p>Forma LLM-agenter, systemkopplingar och kontrollpunkter så processen blir begriplig, mätbar och trygg.</p>
+            </article>
+            <article>
+              <span>03</span>
+              <h3>Införa i drift</h3>
+              <p>Bygg små, användbara steg först och väx där organisationen faktiskt får hävstång i vardagen.</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="final-cta" id="contact" aria-label="Kontakt">
+          <div>
+            <span class="section-label">Kontakt</span>
+            <h2>Har ni redan en arbetsprocess som borde gå snabbare?</h2>
+          </div>
+          <a class="primary-action" href="https://www.linkedin.com/in/johan-studt/" target="_blank" rel="noreferrer">
+            <span aria-hidden="true">in</span>
+            Kontakta via LinkedIn
+          </a>
+        </section>
+      </div>
+    </section>
+  </main>
+  <script src="script.js" defer></script>
+</body>
+</html>
