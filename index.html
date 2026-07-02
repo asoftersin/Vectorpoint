@@ -3,225 +3,625 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Vector Point — AI-flöden för kontoret</title>
-  <meta name="description" content="Vi bygger AI-flöden som tar över det manuella, repetitiva arbetet på ert kontor — skräddarsytt för hur just ni jobbar.">
-  <meta name="theme-color" content="#f4efe6">
-  <meta property="og:title" content="Vector Point — AI-flöden för kontoret">
-  <meta property="og:description" content="Vi bygger AI-flöden som tar över det manuella, repetitiva arbetet på ert kontor — skräddarsytt för hur just ni jobbar.">
+  <title>Vectorpoint — Från manuellt arbete till självkörande processer</title>
+  <meta name="description" content="Vectorpoint designar och bygger AI-drivna arbetsflöden som gör jobbet åt er — dygnet runt, utan friktion.">
+  <meta name="theme-color" content="#060606">
+  <meta property="og:title" content="Vectorpoint — AI &amp; automation">
+  <meta property="og:description" content="Från manuellt arbete till självkörande processer.">
   <meta property="og:type" content="website">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..700;1,6..72,300..600&family=Schibsted+Grotesk:wght@400..900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Gasoek+One&family=Geist+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
   <!-- NAV -->
-  <header class="b-nav">
-    <div class="b-wrap b-navrow">
-      <a class="b-logo" href="#top">Vector Point</a>
-      <nav class="b-navlinks" aria-label="Primär">
-        <a href="#usecases">Produkt</a>
-        <a href="#usecases">Lösningar</a>
-        <a href="#how">Så fungerar det</a>
-        <a href="#stats">Priser</a>
+  <header class="nav" id="siteNav">
+    <div class="nav__inner">
+      <a class="nav__logo" href="#top">
+        <span class="nav__mark" aria-hidden="true"></span>
+        VECTORPOINT
+      </a>
+      <nav class="nav__links" aria-label="Huvudmeny">
+        <a href="#services">Tjänster</a>
+        <a href="#work">Utvalda arbeten</a>
+        <a href="#approach">Metod</a>
+        <a href="#faq">FAQ</a>
       </nav>
-      <div class="b-navcta">
-        <a href="https://www.linkedin.com/in/johan-studt/" target="_blank" rel="noreferrer" class="b-linkedin" aria-label="LinkedIn">
-          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
-          LinkedIn
-        </a>
-        <a href="https://www.linkedin.com/in/johan-studt/" target="_blank" rel="noreferrer" class="b-btn">Boka möte</a>
-      </div>
-      <button class="b-hamburger" aria-label="Öppna meny" aria-expanded="false" aria-controls="mobile-nav">
-        <span></span><span></span><span></span>
+      <a class="btn btn--primary nav__cta" href="https://www.linkedin.com/in/johan-studt/" target="_blank" rel="noreferrer">Boka ett samtal</a>
+      <button class="nav__burger" id="navBurger" aria-label="Öppna meny" aria-expanded="false" aria-controls="mobileNav">
+        <span></span><span></span>
       </button>
     </div>
-    <div class="b-mobile-nav" id="mobile-nav">
-      <a href="#usecases">Produkt</a>
-      <a href="#usecases">Lösningar</a>
-      <a href="#how">Så fungerar det</a>
-      <a href="#stats">Priser</a>
-      <a href="https://www.linkedin.com/in/johan-studt/" target="_blank" rel="noreferrer" class="b-btn">Boka möte</a>
-    </div>
+    <nav class="nav__mobile" id="mobileNav" aria-label="Mobilmeny">
+      <a href="#services">Tjänster</a>
+      <a href="#work">Utvalda arbeten</a>
+      <a href="#approach">Metod</a>
+      <a href="#faq">FAQ</a>
+      <a class="btn btn--primary" href="https://www.linkedin.com/in/johan-studt/" target="_blank" rel="noreferrer">Boka ett samtal</a>
+    </nav>
   </header>
 
-  <!-- HERO -->
-  <section class="b-hero" id="top">
-    <div class="b-wrap">
-      <span class="b-eyebrow">AI-flöden för kontorsarbetet</span>
-      <h1>Automatisera det manuella.<br><em>Frigör tid</em> för det viktiga.</h1>
-      <div class="b-herobtm">
-        <p class="b-lead">Vi bygger AI-flöden som tar över det manuella, repetitiva arbetet på ert kontor — skräddarsytt för hur just ni jobbar. Ni beskriver uppgiften, vi automatiserar den.</p>
-        <div class="b-herobtns">
-          <a href="https://www.linkedin.com/in/johan-studt/" target="_blank" rel="noreferrer" class="b-btn b-btn-lg">Boka möte</a>
-          <a href="#how" class="b-btn-text">Se hur det fungerar →</a>
-          <span class="b-micro">Data i EU</span>
-        </div>
-      </div>
-    </div>
-    <div class="b-wrap">
-      <div class="b-herofig">
-        <div class="b-figmeta">
-          <span>Inkommande · idag</span>
-          <span>14 åtgärder körda</span>
-        </div>
-        <div class="b-figrows">
-          <div class="b-figrow">
-            <em>Feedback</em>
-            <span>Kund vill ha export till Excel</span>
-            <b>Taggad</b>
+  <main id="top">
+
+    <!-- HERO -->
+    <section class="hero">
+      <video class="hero__video" id="heroVideo" autoplay muted loop playsinline preload="metadata" poster="assets/hero-bg-poster.jpg" aria-hidden="true">
+        <source src="assets/hero-bg.mp4" type="video/mp4">
+      </video>
+      <div class="hero__scrim" aria-hidden="true"></div>
+      <div class="hero__frame">
+        <nav class="hero__services" aria-label="Tjänster i korthet" data-reveal>
+          <a href="#services">AI-strategi</a>
+          <a href="#services">Skräddarsydda agenter</a>
+          <a href="#services">Processautomation</a>
+          <a href="#services">Dataintelligens</a>
+          <p class="hero__tools">TEAMS · HUBSPOT · MICROSOFT 365 · SQL</p>
+        </nav>
+        <div class="hero__main">
+          <h1 class="hero__title" data-reveal>Från manuellt arbete till självkörande processer.</h1>
+          <p class="hero__lead" data-reveal>Vi designar och bygger AI-drivna arbetsflöden som gör jobbet åt er.<br>Dygnet runt, utan friktion.</p>
+          <div class="hero__actions" data-reveal>
+            <a class="btn btn--primary" href="https://www.linkedin.com/in/johan-studt/" target="_blank" rel="noreferrer"><span class="btn__ico" aria-hidden="true">▶</span>Boka ett samtal</a>
           </div>
-          <div class="b-figrow">
-            <em>Dokument</em>
-            <span>Q3-rapport.pdf · 24 sidor</span>
-            <b>Sammanfattad</b>
-          </div>
-          <div class="b-figrow">
-            <em>Ärende</em>
-            <span>Onboarding ny medarbetare</span>
-            <b>Dirigerad</b>
-          </div>
-          <div class="b-figrow">
-            <em>Lead</em>
-            <span>Acme AB · 200 anställda</span>
-            <b>Researchad</b>
-          </div>
+          <p class="hero__meta" data-reveal>VECTORPOINT.SE · GÖTEBORG, SVERIGE</p>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- USE CASES -->
-  <section class="b-uc" id="usecases">
-    <div class="b-wrap">
-      <div class="b-sechead">
-        <span class="b-eyebrow">Användningsfall</span>
-        <h2>Manuellt arbete som äter upp veckan</h2>
-      </div>
-      <div class="b-uclist">
-        <div class="b-ucrow">
-          <span class="b-ucn">01</span>
-          <h3>Feedback som fastnar</h3>
-          <p>Samla in feedback från mejl, Slack och formulär på ett ställe. Vector Point sorterar, taggar och sammanfattar.</p>
-        </div>
-        <div class="b-ucrow">
-          <span class="b-ucn">02</span>
-          <h3>Dokument som ska sammanfattas</h3>
-          <p>Långa rapporter, avtal och PDF:er blir korta sammanfattningar med det viktigaste först.</p>
-        </div>
-        <div class="b-ucrow">
-          <span class="b-ucn">03</span>
-          <h3>Interna ärenden</h3>
-          <p>Ärenden dirigeras automatiskt till rätt person och följs upp tills de är lösta.</p>
-        </div>
-        <div class="b-ucrow">
-          <span class="b-ucn">04</span>
-          <h3>Rapporter på autopilot</h3>
-          <p>Data från era system klipps ihop till färdiga rapporter — varje vecka, utan handpåläggning.</p>
-        </div>
-        <div class="b-ucrow">
-          <span class="b-ucn">05</span>
-          <h3>Leads som researchas</h3>
-          <p>Vector Point samlar bakgrund om varje lead så säljteamet kan fokusera på samtalen.</p>
-        </div>
+    <!-- MARQUEE: use cases -->
+    <div class="marquee" aria-label="Exempel på flöden vi automatiserar">
+      <div class="marquee__track">
+        <span>Ärendehantering</span><i>◆</i>
+        <span>Fakturaflöden</span><i>◆</i>
+        <span>E-post-triage</span><i>◆</i>
+        <span>Rapportering</span><i>◆</i>
+        <span>Onboarding</span><i>◆</i>
+        <span>Datainmatning</span><i>◆</i>
+        <span>Kundsvar</span><i>◆</i>
+        <span>Leadgenerering</span><i>◆</i>
+        <span>Automatiserad QA</span><i>◆</i>
+        <span>Uppföljning</span><i>◆</i>
+        <span>Ärendehantering</span><i>◆</i>
+        <span>Fakturaflöden</span><i>◆</i>
+        <span>E-post-triage</span><i>◆</i>
+        <span>Rapportering</span><i>◆</i>
+        <span>Onboarding</span><i>◆</i>
+        <span>Datainmatning</span><i>◆</i>
+        <span>Kundsvar</span><i>◆</i>
+        <span>Leadgenerering</span><i>◆</i>
+        <span>Automatiserad QA</span><i>◆</i>
+        <span>Uppföljning</span><i>◆</i>
       </div>
     </div>
-  </section>
 
-  <!-- HOW IT WORKS -->
-  <section class="b-how" id="how">
-    <div class="b-wrap">
-      <div class="b-sechead">
-        <span class="b-eyebrow b-eyebrow-light">Så fungerar det</span>
-        <h2 class="b-h2-light">Från kaos till flöde på tre steg</h2>
+    <!-- SERVICES -->
+    <section class="section" id="services">
+      <div class="section__head">
+        <p class="eyebrow" data-reveal>TJÄNSTER</p>
+        <h2 data-reveal>Vad vi bygger.</h2>
       </div>
-      <div class="b-steps">
-        <div class="b-step">
-          <span class="b-stepn">1</span>
-          <h3>Ni beskriver uppgiften</h3>
-          <p>Vi går igenom det manuella arbete som äter upp er tid och vad ni vill bli av med.</p>
-        </div>
-        <div class="b-step">
-          <span class="b-stepn">2</span>
-          <h3>Vi bygger flödet</h3>
-          <p>Vi sätter upp flödet och kopplar in era verktyg åt er. Inget IT-projekt på er sida.</p>
-        </div>
-        <div class="b-step">
-          <span class="b-stepn">3</span>
-          <h3>Agenterna gör jobbet</h3>
-          <p>AI-agenterna sköter uppgifterna i bakgrunden — summeringar, sortering, uppföljning — dygnet runt.</p>
-        </div>
+      <div class="grid grid--4">
+        <article class="card" data-reveal>
+          <span class="card__num">01</span>
+          <h3>AI-strategi</h3>
+          <p>En genomlysning av ert arbetssätt som pekar ut var AI och automation betalar sig snabbast — konkret, inte i teorin.</p>
+        </article>
+        <article class="card" data-reveal>
+          <span class="card__num">02</span>
+          <h3>Skräddarsydda agenter</h3>
+          <p>AI-agenter som läser, förstår och agerar i era system — tränade på era processer och er data.</p>
+        </article>
+        <article class="card" data-reveal>
+          <span class="card__num">03</span>
+          <h3>Processautomation</h3>
+          <p>Repetitiva flöden blir självkörande: från inkommande ärende till avslutat, utan manuella handgrepp.</p>
+        </article>
+        <article class="card" data-reveal>
+          <span class="card__num">04</span>
+          <h3>Dataintelligens</h3>
+          <p>Er data kopplas ihop och börjar arbeta — sammanställningar, beslutsunderlag och rapporter skapas av sig själva.</p>
+        </article>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- STATS -->
-  <section class="b-stats" id="stats">
-    <div class="b-wrap b-statgrid">
-      <div class="b-stat">
-        <span class="b-statk">12h</span>
-        <span class="b-statv">sparad tid per person &amp; vecka</span>
+    <!-- STATS -->
+    <section class="stats">
+      <div class="stats__grid">
+        <div class="stat" data-reveal>
+          <span class="stat__value"><span class="stat__count" data-count="24">0</span>/7</span>
+          <span class="stat__label">Flödena arbetar dygnet runt</span>
+        </div>
+        <div class="stat" data-reveal>
+          <span class="stat__value">&lt;<span class="stat__count" data-count="14">0</span></span>
+          <span class="stat__label">Dagar till körbar prototyp på riktig data</span>
+        </div>
+        <div class="stat" data-reveal>
+          <span class="stat__value"><span class="stat__count" data-count="100">0</span>%</span>
+          <span class="stat__label">Insyn i varje steg av flödet</span>
+        </div>
       </div>
-      <div class="b-stat">
-        <span class="b-statk">40+</span>
-        <span class="b-statv">färdiga integrationer</span>
-      </div>
-      <div class="b-stat">
-        <span class="b-statk">99,9%</span>
-        <span class="b-statv">garanterad drifttid</span>
-      </div>
-      <div class="b-stat">
-        <span class="b-statk">5 min</span>
-        <span class="b-statv">till ert första flöde</span>
-      </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- CTA -->
-  <section class="b-cta">
-    <div class="b-wrap b-ctawrap">
-      <h2>Redo att frigöra tid?</h2>
-      <p>Boka ett möte så pratar vi om hur vi kan hjälpa er med AI — från chatbottar till skräddarsydda flöden och agenter.</p>
-      <a href="https://www.linkedin.com/in/johan-studt/" target="_blank" rel="noreferrer" class="b-btn b-btn-lg b-btn-dark">Boka möte</a>
-    </div>
-  </section>
+    <!-- WORK 01: feedback pipeline -->
+    <section class="section section--flow" id="work">
+      <div class="section__head">
+        <p class="eyebrow" data-reveal>UTVALDA ARBETEN · 01 — FEEDBACK-ANALYS</p>
+        <h2 data-reveal>Från spridd feedback till färdig rapport.</h2>
+        <p class="section__sub" data-reveal id="flowCaption">Feedback strömmar in från Teams, HubSpot, e-post och enkäter.</p>
+      </div>
+      <div class="flow__stage" data-reveal>
+        <div class="flow__meta">
+          <span class="flow__chip">SCHEMA · FREDAG 09:00</span>
+          <span class="flow__chip flow__chip--ai">✦ AI/LLM</span>
+        </div>
+        <svg id="flowSvg" viewBox="0 0 1200 560" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Automationsflöde: feedback från Teams, HubSpot, e-post och enkäter normaliseras, klassificeras med AI, grupperas per produktområde, analyseras och blir en färdig rapport varje vecka.">
+          <defs>
+            <linearGradient id="wireGrad" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0" stop-color="#f2f2f2"/>
+              <stop offset="1" stop-color="#8a8a8a"/>
+            </linearGradient>
+            <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
+              <feGaussianBlur stdDeviation="6" result="b"/>
+              <feMerge>
+                <feMergeNode in="b"/><feMergeNode in="SourceGraphic"/>
+              </feMerge>
+            </filter>
+          </defs>
 
-  <!-- FOOTER -->
-  <footer class="b-foot">
-    <div class="b-wrap b-footgrid">
-      <div class="b-footbrand">
-        <div class="b-logo">Vector Point</div>
-        <p>AI-flöden som sköter kontorets manuella arbete.</p>
+          <!-- source wires -->
+          <path class="wire" id="wire-s1" d="M 225 62  C 275 62,  245 277, 300 277"/>
+          <path class="wire" id="wire-s2" d="M 225 148 C 275 148, 245 277, 300 277"/>
+          <path class="wire" id="wire-s3" d="M 225 234 C 275 234, 250 277, 300 277"/>
+          <path class="wire" id="wire-s4" d="M 225 320 C 275 320, 250 277, 300 277"/>
+          <path class="wire" id="wire-s5" d="M 225 406 C 275 406, 245 277, 300 277"/>
+          <path class="wire" id="wire-s6" d="M 225 492 C 275 492, 245 277, 300 277"/>
+
+          <!-- chain wires -->
+          <path class="wire" id="wire-c1" d="M 450 277 C 462 277, 468 277, 480 277"/>
+          <path class="wire" id="wire-c2" d="M 630 277 C 642 277, 648 277, 660 277"/>
+          <path class="wire" id="wire-c3" d="M 810 277 C 822 277, 828 277, 840 277"/>
+          <path class="wire" id="wire-c4" d="M 990 277 C 1002 277, 1008 277, 1020 277"/>
+
+          <!-- source nodes -->
+          <g class="node" id="node-s1" transform="translate(30,30)">
+            <rect class="node__box" width="195" height="64" rx="10"/>
+            <circle class="node__dot" cx="20" cy="22" r="4"/>
+            <text class="node__type" x="34" y="26">KÄLLA</text>
+            <text class="node__label" x="20" y="50">Teams-kanaler</text>
+          </g>
+          <g class="node" id="node-s2" transform="translate(30,116)">
+            <rect class="node__box" width="195" height="64" rx="10"/>
+            <circle class="node__dot" cx="20" cy="22" r="4"/>
+            <text class="node__type" x="34" y="26">KÄLLA</text>
+            <text class="node__label" x="20" y="50">Mötestranskript</text>
+          </g>
+          <g class="node" id="node-s3" transform="translate(30,202)">
+            <rect class="node__box" width="195" height="64" rx="10"/>
+            <circle class="node__dot" cx="20" cy="22" r="4"/>
+            <text class="node__type" x="34" y="26">KÄLLA</text>
+            <text class="node__label" x="20" y="50">HubSpot-ärenden</text>
+          </g>
+          <g class="node" id="node-s4" transform="translate(30,288)">
+            <rect class="node__box" width="195" height="64" rx="10"/>
+            <circle class="node__dot" cx="20" cy="22" r="4"/>
+            <text class="node__type" x="34" y="26">KÄLLA</text>
+            <text class="node__label" x="20" y="50">HubSpot e-post &amp; chat</text>
+          </g>
+          <g class="node" id="node-s5" transform="translate(30,374)">
+            <rect class="node__box" width="195" height="64" rx="10"/>
+            <circle class="node__dot" cx="20" cy="22" r="4"/>
+            <text class="node__type" x="34" y="26">KÄLLA</text>
+            <text class="node__label" x="20" y="50">NPS/CSAT-enkäter</text>
+          </g>
+          <g class="node" id="node-s6" transform="translate(30,460)">
+            <rect class="node__box" width="195" height="64" rx="10"/>
+            <circle class="node__dot" cx="20" cy="22" r="4"/>
+            <text class="node__type" x="34" y="26">KÄLLA</text>
+            <text class="node__label" x="20" y="50">Användardata (SQL)</text>
+          </g>
+
+          <!-- pipeline chain -->
+          <g class="node" id="node-c1" transform="translate(300,237)">
+            <rect class="node__box" width="150" height="80" rx="10"/>
+            <circle class="node__dot" cx="20" cy="24" r="4"/>
+            <text class="node__type" x="34" y="28">STEG 1</text>
+            <text class="node__label" x="20" y="56">Normalisera</text>
+          </g>
+          <g class="node" id="node-c2" transform="translate(480,237)">
+            <rect class="node__box" width="150" height="80" rx="10"/>
+            <circle class="node__dot" cx="20" cy="24" r="4"/>
+            <text class="node__type" x="34" y="28">STEG 2</text>
+            <text class="node__label" x="20" y="52">Klassificera</text>
+            <g class="node__badge">
+              <rect x="20" y="60" width="56" height="14" rx="7"/>
+              <text x="48" y="70" text-anchor="middle">✦ AI/LLM</text>
+            </g>
+          </g>
+          <g class="node" id="node-c3" transform="translate(660,237)">
+            <rect class="node__box" width="150" height="80" rx="10"/>
+            <circle class="node__dot" cx="20" cy="24" r="4"/>
+            <text class="node__type" x="34" y="28">STEG 3</text>
+            <text class="node__label" x="20" y="56">Gruppera per PO</text>
+          </g>
+          <g class="node" id="node-c4" transform="translate(840,237)">
+            <rect class="node__box" width="150" height="80" rx="10"/>
+            <circle class="node__dot" cx="20" cy="24" r="4"/>
+            <text class="node__type" x="34" y="28">STEG 4</text>
+            <text class="node__label" x="20" y="52">Analysera</text>
+            <g class="node__badge">
+              <rect x="20" y="60" width="56" height="14" rx="7"/>
+              <text x="48" y="70" text-anchor="middle">✦ AI/LLM</text>
+            </g>
+          </g>
+          <g class="node" id="node-c5" transform="translate(1020,237)">
+            <rect class="node__box" width="150" height="80" rx="10"/>
+            <circle class="node__dot" cx="20" cy="24" r="4"/>
+            <text class="node__type" x="34" y="28">STEG 5</text>
+            <text class="node__label" x="20" y="56">Generera rapport</text>
+          </g>
+
+          <!-- traveling pulses (activated by JS) -->
+          <circle class="pulse" id="pulse-s1" r="5"/>
+          <circle class="pulse" id="pulse-s2" r="5"/>
+          <circle class="pulse" id="pulse-s3" r="5"/>
+          <circle class="pulse" id="pulse-s4" r="5"/>
+          <circle class="pulse" id="pulse-s5" r="5"/>
+          <circle class="pulse" id="pulse-s6" r="5"/>
+          <circle class="pulse" id="pulse-c1" r="5"/>
+          <circle class="pulse" id="pulse-c2" r="5"/>
+          <circle class="pulse" id="pulse-c3" r="5"/>
+          <circle class="pulse" id="pulse-c4" r="5"/>
+        </svg>
       </div>
-      <div class="b-footcol">
-        <h4>Produkt</h4>
-        <a href="#">Översikt</a>
-        <a href="#">Integrationer</a>
-        <a href="#">Säkerhet</a>
-        <a href="#">Priser</a>
+    </section>
+
+    <!-- WORK 02: lead generation -->
+    <section class="section section--flow" id="work-leadgen">
+      <div class="section__head">
+        <p class="eyebrow" data-reveal>UTVALDA ARBETEN · 02 — LEADGENERERING</p>
+        <h2 data-reveal>Från sökkriterier till varma leads.</h2>
+        <p class="section__sub" data-reveal id="flowCaption2">Prospekt hämtas från persondatabaser och webben utifrån era kriterier.</p>
       </div>
-      <div class="b-footcol">
-        <h4>Företag</h4>
-        <a href="#">Om oss</a>
-        <a href="#">Karriär</a>
-        <a href="#">Kunder</a>
-        <a href="https://www.linkedin.com/in/johan-studt/" target="_blank" rel="noreferrer">Kontakt</a>
+      <div class="flow__stage" data-reveal>
+        <div class="flow__meta">
+          <span class="flow__chip">API · ON-DEMAND</span>
+          <span class="flow__chip flow__chip--ai">✦ AI/LLM</span>
+        </div>
+        <svg id="flowSvg2" viewBox="0 0 1200 520" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Automationsflöde: prospekt hämtas från People Data Labs, Apollo och webbsökning, AI researchar bolagens utmaningar, varje lead poängsätts och får ett personligt utkast som exporteras till HubSpot CRM.">
+          <defs>
+            <linearGradient id="wireGrad2" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0" stop-color="#f2f2f2"/>
+              <stop offset="1" stop-color="#8a8a8a"/>
+            </linearGradient>
+            <filter id="glow2" x="-60%" y="-60%" width="220%" height="220%">
+              <feGaussianBlur stdDeviation="6" result="b"/>
+              <feMerge>
+                <feMergeNode in="b"/><feMergeNode in="SourceGraphic"/>
+              </feMerge>
+            </filter>
+          </defs>
+
+          <!-- source wires -->
+          <path class="wire" id="wire2-s1" d="M 200 120 C 235 120, 220 260, 250 260"/>
+          <path class="wire" id="wire2-s2" d="M 200 260 C 220 260, 230 260, 250 260"/>
+          <path class="wire" id="wire2-s3" d="M 200 400 C 235 400, 220 260, 250 260"/>
+
+          <!-- chain wires -->
+          <path class="wire" id="wire2-c1" d="M 400 260 C 412 260, 418 260, 430 260"/>
+          <path class="wire" id="wire2-c2" d="M 580 260 C 592 260, 598 260, 610 260"/>
+          <path class="wire" id="wire2-c3" d="M 760 260 C 772 260, 778 260, 790 260"/>
+
+          <!-- output wires (fan-out) -->
+          <path class="wire" id="wire2-o1" d="M 940 260 C 965 260, 975 180, 1000 180"/>
+          <path class="wire" id="wire2-o2" d="M 940 260 C 965 260, 975 340, 1000 340"/>
+
+          <!-- source nodes -->
+          <g class="node" id="node2-s1" transform="translate(30,88)">
+            <rect class="node__box" width="170" height="64" rx="10"/>
+            <circle class="node__dot" cx="20" cy="22" r="4"/>
+            <text class="node__type" x="34" y="26">KÄLLA</text>
+            <text class="node__label" x="20" y="50">People Data Labs</text>
+          </g>
+          <g class="node" id="node2-s2" transform="translate(30,228)">
+            <rect class="node__box" width="170" height="64" rx="10"/>
+            <circle class="node__dot" cx="20" cy="22" r="4"/>
+            <text class="node__type" x="34" y="26">KÄLLA</text>
+            <text class="node__label" x="20" y="50">Apollo.io</text>
+          </g>
+          <g class="node" id="node2-s3" transform="translate(30,368)">
+            <rect class="node__box" width="170" height="64" rx="10"/>
+            <circle class="node__dot" cx="20" cy="22" r="4"/>
+            <text class="node__type" x="34" y="26">KÄLLA</text>
+            <text class="node__label" x="20" y="50">Webbsökning</text>
+          </g>
+
+          <!-- pipeline chain -->
+          <g class="node" id="node2-c1" transform="translate(250,220)">
+            <rect class="node__box" width="150" height="80" rx="10"/>
+            <circle class="node__dot" cx="20" cy="24" r="4"/>
+            <text class="node__type" x="34" y="28">STEG 1</text>
+            <text class="node__label" x="20" y="56">Hitta prospekt</text>
+          </g>
+          <g class="node" id="node2-c2" transform="translate(430,220)">
+            <rect class="node__box" width="150" height="80" rx="10"/>
+            <circle class="node__dot" cx="20" cy="24" r="4"/>
+            <text class="node__type" x="34" y="28">STEG 2</text>
+            <text class="node__label" x="20" y="52">Researcha bolag</text>
+            <g class="node__badge">
+              <rect x="20" y="60" width="56" height="14" rx="7"/>
+              <text x="48" y="70" text-anchor="middle">✦ AI/LLM</text>
+            </g>
+          </g>
+          <g class="node" id="node2-c3" transform="translate(610,220)">
+            <rect class="node__box" width="150" height="80" rx="10"/>
+            <circle class="node__dot" cx="20" cy="24" r="4"/>
+            <text class="node__type" x="34" y="28">STEG 3</text>
+            <text class="node__label" x="20" y="56">Poängsätt 0–100</text>
+          </g>
+          <g class="node" id="node2-c4" transform="translate(790,220)">
+            <rect class="node__box" width="150" height="80" rx="10"/>
+            <circle class="node__dot" cx="20" cy="24" r="4"/>
+            <text class="node__type" x="34" y="28">STEG 4</text>
+            <text class="node__label" x="20" y="52">Personligt utkast</text>
+            <g class="node__badge">
+              <rect x="20" y="60" width="56" height="14" rx="7"/>
+              <text x="48" y="70" text-anchor="middle">✦ AI/LLM</text>
+            </g>
+          </g>
+
+          <!-- output nodes -->
+          <g class="node" id="node2-o1" transform="translate(1000,148)">
+            <rect class="node__box" width="170" height="64" rx="10"/>
+            <circle class="node__dot" cx="20" cy="22" r="4"/>
+            <text class="node__type" x="34" y="26">MÅL</text>
+            <text class="node__label" x="20" y="50">HubSpot CRM</text>
+          </g>
+          <g class="node" id="node2-o2" transform="translate(1000,308)">
+            <rect class="node__box" width="170" height="64" rx="10"/>
+            <circle class="node__dot" cx="20" cy="22" r="4"/>
+            <text class="node__type" x="34" y="26">MÅL</text>
+            <text class="node__label" x="20" y="50">CSV/JSON-arkiv</text>
+          </g>
+
+          <!-- traveling pulses -->
+          <circle class="pulse" id="pulse2-s1" r="5"/>
+          <circle class="pulse" id="pulse2-s2" r="5"/>
+          <circle class="pulse" id="pulse2-s3" r="5"/>
+          <circle class="pulse" id="pulse2-c1" r="5"/>
+          <circle class="pulse" id="pulse2-c2" r="5"/>
+          <circle class="pulse" id="pulse2-c3" r="5"/>
+          <circle class="pulse" id="pulse2-o1" r="5"/>
+          <circle class="pulse" id="pulse2-o2" r="5"/>
+        </svg>
       </div>
-      <div class="b-footcol">
-        <h4>Resurser</h4>
-        <a href="#">Guider</a>
-        <a href="#">Dokumentation</a>
-        <a href="#">Status</a>
-        <a href="#">Support</a>
+    </section>
+
+    <!-- WORK 03: self-learning QA agent -->
+    <section class="section section--flow" id="work-qa">
+      <div class="section__head">
+        <p class="eyebrow" data-reveal>UTVALDA ARBETEN · 03 — KVALITETSSÄKRING</p>
+        <h2 data-reveal>En AI-testare som lär sig för varje körning.</h2>
+        <p class="section__sub" data-reveal id="flowCaption3">Ett Jira-ärende med acceptanskriterier triggar en AI-testare.</p>
+      </div>
+      <div class="flow__stage" data-reveal>
+        <div class="flow__meta">
+          <span class="flow__chip">AGENT · PLAYWRIGHT</span>
+          <span class="flow__chip">SJÄLVLÄRANDE</span>
+          <span class="flow__chip flow__chip--ai">✦ AI/LLM</span>
+        </div>
+        <svg id="flowSvg3" viewBox="0 0 1200 520" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Automationsflöde: ett Jira-ärende och en kunskapsbas triggar en AI-agent som testar applikationen i webbläsaren med Playwright, analyserar utfallet, rapporterar till Jira och sparar lärdomar tillbaka i kunskapsbasen.">
+          <defs>
+            <linearGradient id="wireGrad3" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0" stop-color="#f2f2f2"/>
+              <stop offset="1" stop-color="#8a8a8a"/>
+            </linearGradient>
+            <filter id="glow3" x="-60%" y="-60%" width="220%" height="220%">
+              <feGaussianBlur stdDeviation="6" result="b"/>
+              <feMerge>
+                <feMergeNode in="b"/><feMergeNode in="SourceGraphic"/>
+              </feMerge>
+            </filter>
+          </defs>
+
+          <!-- input wires -->
+          <path class="wire" id="wire3-in1" d="M 225 180 C 255 180, 255 260, 285 260"/>
+          <path class="wire" id="wire3-in2" d="M 225 340 C 255 340, 255 260, 285 260"/>
+
+          <!-- chain wires -->
+          <path class="wire" id="wire3-c1" d="M 475 260 C 487 260, 493 260, 505 260"/>
+          <path class="wire" id="wire3-c2" d="M 695 260 C 707 260, 713 260, 725 260"/>
+          <path class="wire" id="wire3-c3" d="M 915 260 C 927 260, 933 260, 945 260"/>
+
+          <!-- learning loop wire (back to the knowledge base) -->
+          <path class="wire" id="wire3-loop" d="M 1040 300 C 1050 470, 450 480, 228 358"/>
+          <text class="flow__looplabel" x="640" y="480" text-anchor="middle">LÄRDOMAR → KUNSKAPSBASEN</text>
+
+          <!-- input nodes -->
+          <g class="node" id="node3-in1" transform="translate(30,148)">
+            <rect class="node__box" width="195" height="64" rx="10"/>
+            <circle class="node__dot" cx="20" cy="22" r="4"/>
+            <text class="node__type" x="34" y="26">TRIGGER</text>
+            <text class="node__label" x="20" y="50">Jira-ärende</text>
+          </g>
+          <g class="node" id="node3-in2" transform="translate(30,308)">
+            <rect class="node__box" width="195" height="64" rx="10"/>
+            <circle class="node__dot" cx="20" cy="22" r="4"/>
+            <text class="node__type" x="34" y="26">KONTEXT</text>
+            <text class="node__label" x="20" y="50">Kunskapsbas (git)</text>
+          </g>
+
+          <!-- pipeline chain -->
+          <g class="node" id="node3-c1" transform="translate(285,220)">
+            <rect class="node__box" width="190" height="80" rx="10"/>
+            <circle class="node__dot" cx="20" cy="24" r="4"/>
+            <text class="node__type" x="34" y="28">STEG 1</text>
+            <text class="node__label" x="20" y="56">Läs acceptanskriterier</text>
+          </g>
+          <g class="node" id="node3-c2" transform="translate(505,220)">
+            <rect class="node__box" width="190" height="80" rx="10"/>
+            <circle class="node__dot" cx="20" cy="24" r="4"/>
+            <text class="node__type" x="34" y="28">STEG 2</text>
+            <text class="node__label" x="20" y="52">Testa i webbläsaren</text>
+            <g class="node__badge">
+              <rect x="20" y="60" width="56" height="14" rx="7"/>
+              <text x="48" y="70" text-anchor="middle">✦ AI/LLM</text>
+            </g>
+          </g>
+          <g class="node" id="node3-c3" transform="translate(725,220)">
+            <rect class="node__box" width="190" height="80" rx="10"/>
+            <circle class="node__dot" cx="20" cy="24" r="4"/>
+            <text class="node__type" x="34" y="28">STEG 3</text>
+            <text class="node__label" x="20" y="52">Analysera utfall</text>
+            <g class="node__badge">
+              <rect x="20" y="60" width="56" height="14" rx="7"/>
+              <text x="48" y="70" text-anchor="middle">✦ AI/LLM</text>
+            </g>
+          </g>
+          <g class="node" id="node3-c4" transform="translate(945,220)">
+            <rect class="node__box" width="190" height="80" rx="10"/>
+            <circle class="node__dot" cx="20" cy="24" r="4"/>
+            <text class="node__type" x="34" y="28">STEG 4</text>
+            <text class="node__label" x="20" y="56">Rapportera till Jira</text>
+          </g>
+
+          <!-- traveling pulses -->
+          <circle class="pulse" id="pulse3-in1" r="5"/>
+          <circle class="pulse" id="pulse3-in2" r="5"/>
+          <circle class="pulse" id="pulse3-c1" r="5"/>
+          <circle class="pulse" id="pulse3-c2" r="5"/>
+          <circle class="pulse" id="pulse3-c3" r="5"/>
+          <circle class="pulse" id="pulse3-loop" r="5"/>
+        </svg>
+      </div>
+    </section>
+
+    <!-- APPROACH -->
+    <section class="section" id="approach">
+      <div class="section__head">
+        <p class="eyebrow" data-reveal>METOD</p>
+        <h2 data-reveal>Från idé till drift.</h2>
+      </div>
+      <div class="grid grid--4">
+        <article class="card card--step" data-reveal>
+          <span class="card__num">01</span>
+          <h3>Kartlägg</h3>
+          <p>Vi går igenom era processer och hittar flödena där automation ger störst effekt — snabbt och konkret.</p>
+        </article>
+        <article class="card card--step" data-reveal>
+          <span class="card__num">02</span>
+          <h3>Designa</h3>
+          <p>Arkitektur, integrationer och säkerhet — en lösningsdesign som passar era system och er data, inte tvärtom.</p>
+        </article>
+        <article class="card card--step" data-reveal>
+          <span class="card__num">03</span>
+          <h3>Prototypa</h3>
+          <p>Inom dagar har ni en körbar prototyp på riktig data. Ni ser värdet innan ni bestämmer er.</p>
+        </article>
+        <article class="card card--step" data-reveal>
+          <span class="card__num">04</span>
+          <h3>Driftsätt</h3>
+          <p>Vi bygger klart, integrerar och lämnar över en lösning som ert team äger och litar på.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- PRINCIPLES -->
+    <section class="section section--alt" id="principles">
+      <div class="section__head">
+        <p class="eyebrow" data-reveal>PRINCIPER</p>
+        <h2 data-reveal>Byggt för att hålla.</h2>
+      </div>
+      <div class="grid grid--2">
+        <article class="card card--wide" data-reveal>
+          <h3>Säkerhet först</h3>
+          <p>Er data lämnar aldrig era system i onödan. Varje lösning designas med behörigheter, loggning och spårbarhet från början.</p>
+        </article>
+        <article class="card card--wide" data-reveal>
+          <h3>Era system, inte våra</h3>
+          <p>Vi bygger ovanpå det ni redan använder — CRM, ärendesystem, e-post, ekonomisystem — istället för att tvinga in er i nya verktyg.</p>
+        </article>
+        <article class="card card--wide" data-reveal>
+          <h3>Full insyn</h3>
+          <p>Varje steg i flödet är synligt och granskbart. Ni ser vad som hänt, varför, och kan ingripa när ni vill.</p>
+        </article>
+        <article class="card card--wide" data-reveal>
+          <h3>Ni äger lösningen</h3>
+          <p>Ingen inlåsning. När vi lämnar över är dokumentationen komplett och ert team kan driva vidare på egen hand.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="section" id="faq">
+      <div class="section__head">
+        <p class="eyebrow" data-reveal>FAQ</p>
+        <h2 data-reveal>Vanliga frågor.</h2>
+      </div>
+      <div class="faq__list" data-reveal>
+        <details class="faq__item">
+          <summary>Hur snabbt kan vi se resultat?<span class="faq__icon" aria-hidden="true">+</span></summary>
+          <p>Inom två veckor har ni normalt en körbar prototyp på riktig data. Ni ser värdet innan ni fattar några större beslut.</p>
+        </details>
+        <details class="faq__item">
+          <summary>Vad händer med vår data?<span class="faq__icon" aria-hidden="true">+</span></summary>
+          <p>Er data stannar i era system. Vi designar varje lösning med behörigheter, loggning och GDPR i åtanke från dag ett — och ni godkänner alltid vilka tjänster som används.</p>
+        </details>
+        <details class="faq__item">
+          <summary>Vilka system kan ni integrera mot?<span class="faq__icon" aria-hidden="true">+</span></summary>
+          <p>De flesta moderna system med API:er — CRM, ärendehantering, e-post, ekonomisystem, interna databaser. Saknas API hittar vi oftast en annan väg.</p>
+        </details>
+        <details class="faq__item">
+          <summary>Behöver vi egen AI-kompetens?<span class="faq__icon" aria-hidden="true">+</span></summary>
+          <p>Nej. Vi bygger, dokumenterar och lämnar över en lösning som ert team kan använda och äga utan specialistkunskap.</p>
+        </details>
+        <details class="faq__item">
+          <summary>Hur ser upplägget ut?<span class="faq__icon" aria-hidden="true">+</span></summary>
+          <p>Vi börjar alltid med ett kort samtal och en kartläggning. Därefter arbetar vi i tydliga faser — design, prototyp, driftsättning — med fasta leveranser i varje steg.</p>
+        </details>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta">
+      <div class="cta__glow" aria-hidden="true"></div>
+      <p class="eyebrow" data-reveal>KONTAKT</p>
+      <h2 data-reveal>Redo att låta arbetet köra sig självt?</h2>
+      <p class="cta__sub" data-reveal>Ett samtal räcker för att veta om det finns ett flöde värt att automatisera.</p>
+      <a class="btn btn--primary btn--lg" data-reveal href="https://www.linkedin.com/in/johan-studt/" target="_blank" rel="noreferrer">Boka ett samtal med Johan</a>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <div class="footer__inner">
+      <div class="footer__brand">
+        <a class="nav__logo" href="#top">
+          <span class="nav__mark" aria-hidden="true"></span>
+          VECTORPOINT
+        </a>
+        <p>AI &amp; automation för verksamheter som vill att arbetet ska köra sig självt.</p>
+      </div>
+      <div class="footer__col">
+        <h4>Sidan</h4>
+        <a href="#services">Tjänster</a>
+        <a href="#work">Utvalda arbeten</a>
+        <a href="#approach">Metod</a>
+        <a href="#faq">FAQ</a>
+      </div>
+      <div class="footer__col">
+        <h4>Kontakt</h4>
+        <a href="https://www.linkedin.com/in/johan-studt/" target="_blank" rel="noreferrer">LinkedIn</a>
+        <a href="https://vectorpoint.se">vectorpoint.se</a>
       </div>
     </div>
-    <div class="b-wrap b-footbar">
-      <span>© 2025 Vector Point AB</span>
-      <span>Stockholm · Sverige</span>
+    <div class="footer__base">
+      <span>© 2026 Vectorpoint · vectorpoint.se</span>
+      <span>Göteborg, Sverige</span>
     </div>
   </footer>
 
-  <script src="script.js" defer></script>
+  <script src="script.js"></script>
 </body>
 </html>
