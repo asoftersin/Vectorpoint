@@ -842,13 +842,24 @@ a { color: inherit; }
 [data-reveal="fade"]  { transform: none; transition-duration: 1.4s; }
 
 /* principkorten (2-kolumn) kommer växelvis från sidorna */
-.grid--2 > [data-reveal]:nth-child(odd)  { transform: translateX(-40px); }
-.grid--2 > [data-reveal]:nth-child(even) { transform: translateX(40px); }
+.grid--2 > [data-reveal]:nth-child(odd):not(.is-visible)  { transform: translateX(-40px); }
+.grid--2 > [data-reveal]:nth-child(even):not(.is-visible) { transform: translateX(40px); }
 
 [data-reveal].is-visible {
   opacity: 1;
   transform: none;
   filter: none;
+}
+
+/* mobil: enkolumnslayout — sidled-glidningar byts mot stillsam fade-up
+   (hindrar också horisontell overflow) */
+@media (max-width: 860px) {
+  [data-reveal="left"]:not(.is-visible),
+  [data-reveal="right"]:not(.is-visible),
+  .grid--2 > [data-reveal]:nth-child(odd):not(.is-visible),
+  .grid--2 > [data-reveal]:nth-child(even):not(.is-visible) {
+    transform: translateY(24px);
+  }
 }
 
 /* korten i en grid landar i kaskad, inte samtidigt */
