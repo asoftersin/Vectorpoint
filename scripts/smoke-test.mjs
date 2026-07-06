@@ -71,6 +71,8 @@ const checks = [
   ["reveal stagger", css.includes("transition-delay: 0.12s")],
   ["scroll reduced motion", css.includes(".scroll-progress { display: none; }") && js.includes("scrubEnabled = !prefersReducedMotion")],
   ["hero scrub", html.includes('id="heroScrub"') && html.includes('id="heroWire"') && js.includes("heroScrubOn") && css.includes(".hero-scrub.is-scrub")],
+  ["reveal variants", html.includes('data-reveal="blur"') && html.includes('data-reveal="scale"') && html.includes('data-reveal="left"') && css.includes('[data-reveal="blur"]') && css.includes(".grid--2 > [data-reveal]:nth-child(odd)")],
+  ["faq cascade", html.includes('<details class="faq__item" data-reveal>') && css.includes(".faq__list > [data-reveal]:nth-child(5)")],
 ];
 
 const failed = checks.filter(([, passed]) => !passed);

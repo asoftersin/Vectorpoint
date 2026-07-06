@@ -831,18 +831,48 @@ a { color: inherit; }
 [data-reveal] {
   opacity: 0;
   transform: translateY(24px);
-  transition: opacity 0.7s ease, transform 0.7s ease;
+  transition: opacity 0.7s ease, transform 0.7s ease, filter 0.7s ease;
 }
+
+/* varianter — varje sektion får sin egen karaktär */
+[data-reveal="blur"]  { transform: translateY(16px); filter: blur(10px); }
+[data-reveal="scale"] { transform: scale(0.94) translateY(14px); }
+[data-reveal="left"]  { transform: translateX(-40px); }
+[data-reveal="right"] { transform: translateX(40px); }
+[data-reveal="fade"]  { transform: none; transition-duration: 1.4s; }
+
+/* principkorten (2-kolumn) kommer växelvis från sidorna */
+.grid--2 > [data-reveal]:nth-child(odd)  { transform: translateX(-40px); }
+.grid--2 > [data-reveal]:nth-child(even) { transform: translateX(40px); }
 
 [data-reveal].is-visible {
   opacity: 1;
   transform: none;
+  filter: none;
 }
 
 /* korten i en grid landar i kaskad, inte samtidigt */
 .grid > [data-reveal]:nth-child(2) { transition-delay: 0.06s; }
 .grid > [data-reveal]:nth-child(3) { transition-delay: 0.12s; }
 .grid > [data-reveal]:nth-child(4) { transition-delay: 0.18s; }
+
+/* FAQ-frågorna landar i kaskad */
+.faq__list > [data-reveal]:nth-child(2) { transition-delay: 0.07s; }
+.faq__list > [data-reveal]:nth-child(3) { transition-delay: 0.14s; }
+.faq__list > [data-reveal]:nth-child(4) { transition-delay: 0.21s; }
+.faq__list > [data-reveal]:nth-child(5) { transition-delay: 0.28s; }
+
+/* kortens nummerbricka tänds strax efter kortet */
+.card[data-reveal] .card__num {
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.5s ease 0.35s, transform 0.5s ease 0.35s;
+}
+
+.card[data-reveal].is-visible .card__num {
+  opacity: 1;
+  transform: none;
+}
 
 /* ---------- scroll experience ---------- */
 
@@ -1042,6 +1072,13 @@ a { color: inherit; }
     transform: none;
     transition: none;
     transition-delay: 0s;
+    filter: none;
+  }
+
+  .card[data-reveal] .card__num {
+    opacity: 1;
+    transform: none;
+    transition: none;
   }
 
   .marquee__track { animation: none; }
