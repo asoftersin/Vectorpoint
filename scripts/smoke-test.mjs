@@ -12,9 +12,6 @@ const requiredFiles = [
   "robots.txt",
   "sitemap.xml",
   "404.html",
-  "hitta-felet/index.html",
-  "hitta-felet/game.js",
-  "hitta-felet/game.css",
 ];
 
 for (const file of requiredFiles) {
@@ -26,8 +23,6 @@ for (const file of requiredFiles) {
 const html = await readFile("index.html", "utf8");
 const css = await readFile("styles.css", "utf8");
 const js = await readFile("script.js", "utf8");
-const gameHtml = await readFile("hitta-felet/index.html", "utf8");
-const gameJs = await readFile("hitta-felet/game.js", "utf8");
 const sitemap = await readFile("sitemap.xml", "utf8");
 
 const checks = [
@@ -67,13 +62,9 @@ const checks = [
   ["faq schema", html.includes('"FAQPage"') && html.includes("Hur snabbt kan vi se resultat?")],
   ["difference section", html.includes('id="difference"') && html.includes("Integrationstester") && html.includes("Uppföljningsbart")],
   ["about section", html.includes('id="about"') && html.includes("Johan Studt") && css.includes(".about__inner")],
-  ["game teaser", html.includes('id="spel"') && html.includes('href="/hitta-felet/"')],
-  ["game page shell", gameHtml.includes("Godkänn") && gameHtml.includes("Flagga") && gameHtml.includes("screenResult")],
-  ["game booking cta", gameHtml.includes("https://cal.com/johan-studt/15min") && gameHtml.includes('data-goatcounter-click="cta-spel"')],
-  ["game analytics", gameHtml.includes("data-goatcounter=") && gameJs.includes("spel-start") && gameJs.includes("spel-klar")],
-  ["game card pool", gameJs.includes("POOL") && gameJs.includes("error: true") && gameJs.includes("error: false")],
-  ["game reduced motion", gameJs.includes("prefers-reduced-motion")],
-  ["game in sitemap", sitemap.includes("https://vectorpoint.se/hitta-felet/")],
+  ["game removed", !html.includes("hitta-felet") && !sitemap.includes("hitta-felet") && !existsSync("hitta-felet")],
+  ["pipeline flow", html.includes('id="flowSvg4"') && html.includes("ISOLERAT PR-NAMESPACE") && html.includes("INT_TEST_URL")],
+  ["pipeline flow config", js.includes("flowSvg4") && js.includes("wire4-o2") && css.includes(".flow__boundary")],
 ];
 
 const failed = checks.filter(([, passed]) => !passed);

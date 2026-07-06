@@ -194,6 +194,57 @@
         },
       ],
     },
+    {
+      // 04 — delivery pipeline: PR → build → isolated k8s namespace → gate → merge/stop
+      svg: "flowSvg4",
+      caption: "flowCaption4",
+      phases: [
+        {
+          caption: "En pull request öppnas — ny kod, allt oftare skriven av en AI-agent. Att den bygger bevisar inte att den fungerar.",
+          mode: "sequence",
+          duration: 600,
+          travels: [
+            { wire: "wire4-a", pulse: "pulse4-a", node: "node4-in1", next: "node4-c1" },
+          ],
+        },
+        {
+          caption: "Tjänsten och testerna deployas i ett isolerat Kubernetes-namespace — en riktig, körande miljö som inte påverkar någon annan.",
+          mode: "parallel",
+          stagger: 200,
+          duration: 800,
+          travels: [
+            { wire: "wire4-b1", pulse: "pulse4-b1", node: "node4-c1", next: "node4-k1" },
+            { wire: "wire4-b2", pulse: "pulse4-b2", node: "node4-c1", next: "node4-k2" },
+          ],
+        },
+        {
+          caption: "Testpodden anropar den levande tjänsten med riktiga HTTP-anrop. Svarar den rätt — på riktigt, inte i teorin?",
+          mode: "sequence",
+          duration: 800,
+          travels: [
+            { wire: "wire4-t", pulse: "pulse4-t", node: "node4-k2", next: "node4-k1" },
+          ],
+        },
+        {
+          caption: "Resultatet avgör: grönt mergas vidare mot dev och E2E — rött stannar i pull requesten och når aldrig kund.",
+          mode: "sequence",
+          duration: 700,
+          travels: [
+            { wire: "wire4-g", pulse: "pulse4-g", node: "node4-k1", next: "node4-gate" },
+          ],
+        },
+        {
+          caption: null,
+          mode: "parallel",
+          stagger: 220,
+          duration: 700,
+          travels: [
+            { wire: "wire4-o1", pulse: "pulse4-o1", node: "node4-gate", next: "node4-o1" },
+            { wire: "wire4-o2", pulse: "pulse4-o2", node: "node4-gate", next: "node4-o2" },
+          ],
+        },
+      ],
+    },
   ];
 
   const travel = ({ path, pulse, node, next }, duration = 650) =>

@@ -542,6 +542,20 @@ a { color: inherit; }
   fill: var(--muted);
 }
 
+.flow__boundary {
+  fill: rgba(0, 153, 255, 0.03);
+  stroke: var(--line);
+  stroke-width: 1;
+  stroke-dasharray: 6 6;
+}
+
+.flow__boundarylabel {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  fill: var(--muted);
+}
+
 .wire {
   fill: none;
   stroke: var(--line);
