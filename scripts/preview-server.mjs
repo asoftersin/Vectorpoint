@@ -12,11 +12,15 @@ const types = new Map([
   [".jpg", "image/jpeg"],
   [".jpeg", "image/jpeg"],
   [".png", "image/png"],
+  [".svg", "image/svg+xml"],
+  [".xml", "application/xml; charset=utf-8"],
+  [".mp4", "video/mp4"],
 ]);
 
 createServer(async (request, response) => {
   try {
-    const rawPath = request.url === "/" ? "/index.html" : request.url.split("?")[0];
+    let rawPath = request.url.split("?")[0];
+    if (rawPath.endsWith("/")) rawPath += "index.html"; // katalog-index, som GitHub Pages
     const filePath = normalize(join(root, decodeURIComponent(rawPath)));
 
     if (!filePath.startsWith(root)) {

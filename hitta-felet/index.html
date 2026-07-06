@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="sv">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hitta felet — hinner du innan kunden gör det? | Vectorpoint</title>
+  <meta name="description" content="Ett litet spel om en stor sak: AI-automation producerar output snabbare än någon hinner granska den. Du är kvalitetskontrollen. Hittar du felen innan de når kund?">
+  <meta name="theme-color" content="#060606">
+  <meta property="og:title" content="Hittar du felen innan kunden gör det?">
+  <meta property="og:description" content="Du är kvalitetskontrollen. 12 kort från en AI-automation — några innehåller fel. Godkänn eller flagga innan tiden går ut. Ett spel från Vectorpoint om varför AI-output behöver granskas.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://vectorpoint.se/hitta-felet/">
+  <meta property="og:image" content="https://vectorpoint.se/assets/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Hittar du felen innan kunden gör det?">
+  <meta name="twitter:description" content="Du är kvalitetskontrollen. 12 kort från en AI-automation — några innehåller fel. Ett spel från Vectorpoint.">
+  <meta name="twitter:image" content="https://vectorpoint.se/assets/og-image.png">
+  <link rel="canonical" href="https://vectorpoint.se/hitta-felet/">
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Gasoek+One&family=Geist+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../styles.css">
+  <link rel="stylesheet" href="game.css">
+</head>
+<body class="game-body">
+
+  <header class="nav game-nav" id="siteNav">
+    <div class="nav__inner">
+      <a class="nav__logo" href="/">
+        <span class="nav__mark" aria-hidden="true"></span>
+        VECTORPOINT
+      </a>
+      <a class="btn btn--primary nav__cta game-nav__cta" href="https://cal.com/johan-studt/15min" target="_blank" rel="noreferrer" data-goatcounter-click="cta-spel-nav">Boka ett samtal</a>
+    </div>
+  </header>
+
+  <main class="game-main">
+
+    <!-- INTRO -->
+    <section class="game-screen is-active" id="screenIntro">
+      <p class="eyebrow">HITTA FELET</p>
+      <h1 class="game-title">Hinner du innan kunden gör det?</h1>
+      <p class="game-lead">En AI-automation har producerat 12 leveranser — fakturor, kundsvar, rapportrader. Några innehåller fel. Du är kvalitetskontrollen: jämför output mot underlaget och <strong>godkänn</strong> eller <strong>flagga</strong> varje kort innan tiden går ut.</p>
+      <p class="game-lead game-lead--dim">Allt du behöver för att avgöra finns på kortet. Inga kuggfrågor.</p>
+      <button class="btn btn--primary btn--lg" id="btnStart">Starta granskningen</button>
+      <p class="game-meta">12 KORT · 10 SEKUNDER PER KORT · KÖRS HELT I DIN WEBBLÄSARE</p>
+    </section>
+
+    <!-- GAME -->
+    <section class="game-screen" id="screenGame" aria-live="polite">
+      <div class="game-hud">
+        <span class="game-hud__progress" id="hudProgress">KORT 1/12</span>
+        <span class="game-hud__score" id="hudScore"></span>
+      </div>
+      <div class="game-timer"><div class="game-timer__bar" id="timerBar"></div></div>
+
+      <article class="game-card" id="gameCard">
+        <div class="game-card__zone game-card__zone--source">
+          <p class="game-card__zonelabel">UNDERLAG</p>
+          <p class="game-card__kind" id="cardSourceKind"></p>
+          <div class="game-card__content" id="cardSource"></div>
+        </div>
+        <div class="game-card__zone game-card__zone--output">
+          <p class="game-card__zonelabel">✦ AUTOMATIONENS OUTPUT</p>
+          <p class="game-card__kind" id="cardOutputKind"></p>
+          <div class="game-card__content" id="cardOutput"></div>
+        </div>
+      </article>
+
+      <div class="game-actions">
+        <button class="game-btn game-btn--approve" id="btnApprove">Godkänn<span>ser korrekt ut</span></button>
+        <button class="game-btn game-btn--flag" id="btnFlag">Flagga<span>något stämmer inte</span></button>
+      </div>
+
+      <p class="game-feedback" id="feedback" aria-live="assertive"></p>
+    </section>
+
+    <!-- RESULT -->
+    <section class="game-screen" id="screenResult">
+      <p class="eyebrow">GRANSKNING SLUTFÖRD</p>
+      <h2 class="game-title game-title--result" id="resultHeadline"></h2>
+
+      <div class="game-result" id="resultRows">
+        <div class="game-result__row">
+          <span class="game-result__num game-result__num--good" id="resCaught">0</span>
+          <span class="game-result__label">fel fångade innan de nådde kund</span>
+        </div>
+        <div class="game-result__row">
+          <span class="game-result__num game-result__num--bad" id="resMissed">0</span>
+          <span class="game-result__label">fel som nådde kund</span>
+        </div>
+        <div class="game-result__row">
+          <span class="game-result__num" id="resFalse">0</span>
+          <span class="game-result__label">korrekta leveranser stoppade i onödan</span>
+        </div>
+      </div>
+
+      <div class="game-punchline">
+        <p>Du granskade 12 kort på ett par minuter — skärpt och fokuserad.</p>
+        <p>En verklig automation producerar hundratals om dagen. Automatiska kvalitetskontroller tröttnar inte, blir inte stressade och jobbar även fredag 16:58. Det är så vi bygger.</p>
+      </div>
+
+      <div class="game-result__actions">
+        <a class="btn btn--primary btn--lg" href="https://cal.com/johan-studt/15min" target="_blank" rel="noreferrer" data-goatcounter-click="cta-spel">Boka ett samtal</a>
+        <button class="btn game-btn--again" id="btnAgain">Spela igen</button>
+        <button class="btn game-btn--again" id="btnShare">Kopiera länk</button>
+      </div>
+      <p class="game-meta"><a href="/">← Till vectorpoint.se</a></p>
+    </section>
+
+  </main>
+
+  <footer class="footer game-footer">
+    <div class="footer__base">
+      <span>© 2026 Vectorpoint · <a href="/">vectorpoint.se</a></span>
+      <span>Göteborg, Sverige</span>
+    </div>
+  </footer>
+
+  <script src="game.js"></script>
+  <script data-goatcounter="https://vectorpoint.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
+</body>
+</html>
