@@ -80,6 +80,11 @@
 </head>
 <body>
 
+  <!-- SCROLL PROGRESS -->
+  <div class="scroll-progress" aria-hidden="true">
+    <div class="scroll-progress__fill" id="scrollProgressFill"></div>
+  </div>
+
   <!-- NAV -->
   <header class="nav" id="siteNav">
     <div class="nav__inner">
@@ -131,6 +136,10 @@
           </div>
           <p class="hero__meta" data-reveal>VECTORPOINT.SE · GÖTEBORG, SVERIGE</p>
         </div>
+      </div>
+      <div class="hero__cue" id="heroCue" aria-hidden="true">
+        <span>SCROLLA</span>
+        <span class="hero__cue-tick"></span>
       </div>
     </section>
 
@@ -624,6 +633,7 @@
 
     <!-- PIPELINE: how every delivery is tested -->
     <section class="section section--flow" id="pipeline">
+      <div class="pipeline__sticky" id="pipelineSticky">
       <div class="section__head">
         <p class="eyebrow" data-reveal>SKILLNADEN · I PRAKTIKEN</p>
         <h2 data-reveal>Så testas varje leverans innan den släpps.</h2>
@@ -729,6 +739,7 @@
           <circle class="pulse" id="pulse4-o1" r="5"/>
           <circle class="pulse" id="pulse4-o2" r="5"/>
         </svg>
+      </div>
       </div>
     </section>
 

@@ -65,6 +65,11 @@ const checks = [
   ["game removed", !html.includes("hitta-felet") && !sitemap.includes("hitta-felet") && !existsSync("hitta-felet")],
   ["pipeline flow", html.includes('id="flowSvg4"') && html.includes("ISOLERAT PR-NAMESPACE") && html.includes("INT_TEST_URL")],
   ["pipeline flow config", js.includes("flowSvg4") && js.includes("wire4-o2") && css.includes(".flow__boundary")],
+  ["scroll progress", html.includes('id="scrollProgressFill"') && css.includes(".scroll-progress__fill")],
+  ["pipeline scrub", js.includes("buildScrubber") && js.includes("is-scrub") && css.includes("#pipeline.is-scrub") && html.includes('id="pipelineSticky"')],
+  ["hero scroll cue", html.includes('id="heroCue"') && css.includes("cueTick")],
+  ["reveal stagger", css.includes("transition-delay: 0.12s")],
+  ["scroll reduced motion", css.includes(".scroll-progress { display: none; }") && js.includes("scrubEnabled = !prefersReducedMotion")],
 ];
 
 const failed = checks.filter(([, passed]) => !passed);

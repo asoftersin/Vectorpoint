@@ -333,5 +333,126 @@
     observer.observe(svg);
   };
 
-  FLOWS.forEach(setupFlow);
+  // ---------- scroll experience: one rAF-driven engine ----------
+  // Scrub-läget (pinnad pipeline) körs bara på desktop utan reduced motion.
+  const scrubEnabled = !prefersReducedMotion && window.matchMedia("(min-width: 861px)").matches;
+
+  // Flöde 1–3 autoplayar alltid; flöde 4 scrubbas när det går, annars autoplay.
+  FLOWS.slice(0, 3).forEach(setupFlow);
+  if (!scrubEnabled) setupFlow(FLOWS[3]);
+
+  // Bygger en scrubber: global progress 0–1 mappas på faserna, helt reversibelt —
+  // varje frame räknas allt om från p, så bakåtscroll släcker det som inte hänt än.
+  const buildScrubber = (cfg) => {
+    const svg = document.getElementById(cfg.svg);
+    const captionEl = document.getElementById(cfg.caption);
+    if (!svg) return null;
+
+    const phases = cfg.phases.map((phase) => ({
+      caption: phase.caption,
+      travels: phase.travels.map((t) => {
+        const path = document.getElementById(t.wire);
+        return {
+          path,
+          length: path.getTotalLength(),
+          pulse: document.getElementById(t.pulse),
+          node: document.getElementById(t.node),
+          next: document.getElementById(t.next),
+        };
+      }),
+    }));
+
+    let lastCaption = null;
+    return (p) => {
+      const pos = Math.min(Math.max(p, 0), 1) * phases.length;
+      let currentCaption = phases[0].caption;
+      phases.forEach((phase, i) => {
+        const t = Math.min(Math.max(pos - i, 0), 1);
+        phase.travels.forEach((tr) => {
+          tr.node.classList.toggle("is-active", t > 0);
+          tr.path.classList.toggle("is-active", t > 0);
+          tr.next.classList.toggle("is-active", t >= 1);
+          if (t > 0 && t < 1) {
+            const point = tr.path.getPointAtLength(tr.length * t);
+            tr.pulse.setAttribute("cx", point.x);
+            tr.pulse.setAttribute("cy", point.y);
+            tr.pulse.style.opacity = "1";
+          } else {
+            tr.pulse.style.opacity = "0";
+          }
+        });
+        // senast startade fas med text vinner; null ärver föregående
+        if (t > 0 && phase.caption) currentCaption = phase.caption;
+      });
+      if (captionEl && currentCaption && lastCaption !== currentCaption) {
+        captionEl.textContent = currentCaption;
+        lastCaption = currentCaption;
+      }
+    };
+  };
+
+  if (!prefersReducedMotion) {
+    const progressFill = document.getElementById("scrollProgressFill");
+    const heroFrame = document.querySelector(".hero__frame");
+    const heroVideoEl = document.querySelector(".hero__video");
+    const heroCue = document.getElementById("heroCue");
+    const marqueeTrack = document.querySelector(".marquee__track");
+    const pipelineSection = document.getElementById("pipeline");
+    const scrub = scrubEnabled ? buildScrubber(FLOWS[3]) : null;
+    if (scrub && pipelineSection) {
+      pipelineSection.classList.add("is-scrub");
+      scrub(0);
+    }
+
+    // Marqueen tar över från CSS-animationen och drivs per frame,
+    // så scrollfarten kan addera tillfällig hastighet.
+    let marqueeHalf = 0;
+    if (marqueeTrack) {
+      marqueeTrack.style.animation = "none";
+      marqueeHalf = marqueeTrack.scrollWidth / 2;
+    }
+
+    let lastY = window.scrollY;
+    let velocity = 0;
+    let marqueeOffset = 0;
+
+    const frame = () => {
+      const y = window.scrollY;
+      const doc = document.documentElement;
+      const maxScroll = doc.scrollHeight - window.innerHeight;
+
+      velocity += (Math.abs(y - lastY) - velocity) * 0.1; // lerp-dämpad scrollfart
+      lastY = y;
+
+      if (progressFill) {
+        const p = maxScroll > 0 ? y / maxScroll : 0;
+        progressFill.style.transform = `translateX(${(p - 1) * 100}%)`;
+      }
+
+      if (heroFrame) {
+        const heroH = heroFrame.offsetHeight || window.innerHeight;
+        const exit = Math.min(y / (heroH * 0.9), 1);
+        heroFrame.style.transform = `translateY(${y * 0.35}px)`;
+        heroFrame.style.opacity = String(1 - exit * 0.9);
+        if (heroVideoEl) heroVideoEl.style.transform = `translateY(${y * 0.15}px)`;
+      }
+
+      if (heroCue) heroCue.classList.toggle("is-hidden", y > 40);
+
+      if (marqueeTrack && marqueeHalf > 0) {
+        marqueeOffset -= 0.6 + Math.min(velocity * 0.12, 4);
+        if (marqueeOffset <= -marqueeHalf) marqueeOffset += marqueeHalf;
+        marqueeTrack.style.transform = `translateX(${marqueeOffset}px)`;
+      }
+
+      if (scrub && pipelineSection) {
+        const rect = pipelineSection.getBoundingClientRect();
+        const range = rect.height - window.innerHeight;
+        if (range > 0) scrub(-rect.top / range);
+      }
+
+      requestAnimationFrame(frame);
+    };
+    requestAnimationFrame(frame);
+  }
 })();
