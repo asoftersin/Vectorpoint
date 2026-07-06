@@ -7,6 +7,11 @@ const requiredFiles = [
   "script.js",
   "assets/hero-bg.mp4",
   "assets/hero-bg-poster.jpg",
+  "assets/og-image.png",
+  "favicon.svg",
+  "robots.txt",
+  "sitemap.xml",
+  "404.html",
 ];
 
 for (const file of requiredFiles) {
@@ -45,6 +50,14 @@ const checks = [
   ["reveal on scroll", css.includes("[data-reveal]") && js.includes("IntersectionObserver")],
   ["reduced motion support", css.includes("prefers-reduced-motion") && js.includes("prefers-reduced-motion")],
   ["responsive layout", css.includes("@media")],
+  ["booking cta", html.includes("https://cal.com/") && html.includes('data-goatcounter-click="cta-hero"')],
+  ["analytics snippet", html.includes("data-goatcounter=") && html.includes("gc.zgo.at/count.js")],
+  ["no placeholders left", !html.includes("PLACEHOLDER")],
+  ["favicon link", html.includes('rel="icon"') && html.includes("favicon.svg")],
+  ["og image", html.includes('property="og:image"') && html.includes("assets/og-image.png")],
+  ["twitter card", html.includes('name="twitter:card"')],
+  ["canonical", html.includes('rel="canonical"') && html.includes("https://vectorpoint.se/")],
+  ["json-ld", html.includes("application/ld+json") && html.includes("ProfessionalService")],
 ];
 
 const failed = checks.filter(([, passed]) => !passed);
