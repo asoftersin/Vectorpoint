@@ -58,6 +58,9 @@ const checks = [
   ["twitter card", html.includes('name="twitter:card"')],
   ["canonical", html.includes('rel="canonical"') && html.includes("https://vectorpoint.se/")],
   ["json-ld", html.includes("application/ld+json") && html.includes("ProfessionalService")],
+  ["faq schema", html.includes('"FAQPage"') && html.includes("Hur snabbt kan vi se resultat?")],
+  ["difference section", html.includes('id="difference"') && html.includes("Integrationstester") && html.includes("Uppföljningsbart")],
+  ["about section", html.includes('id="about"') && html.includes("Johan Studt") && css.includes(".about__inner")],
 ];
 
 const failed = checks.filter(([, passed]) => !passed);
