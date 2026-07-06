@@ -925,6 +925,55 @@ a { color: inherit; }
   to { transform: translateY(34px); }
 }
 
+/* pinnad hero-scrub (sätts av JS på desktop) */
+.hero-scrub.is-scrub {
+  height: 220vh;
+}
+
+.hero-scrub.is-scrub .hero {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  min-height: 0;
+}
+
+.hero-scrub.is-scrub .hero__title {
+  transform-origin: left top;
+  will-change: transform;
+}
+
+.hero-scrub.is-scrub .hero__lead,
+.hero-scrub.is-scrub .hero__actions,
+.hero-scrub.is-scrub .hero__services {
+  will-change: transform, opacity;
+}
+
+.hero__wire {
+  position: absolute;
+  left: 50%;
+  top: 62%;
+  height: 38%;
+  width: 2px;
+  background: linear-gradient(to bottom, rgba(0, 153, 255, 0), var(--accent) 30%, var(--accent));
+  transform: scaleY(0);
+  transform-origin: top;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.hero__wire::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -4px;
+  width: 8px;
+  height: 8px;
+  margin-left: -4px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 12px 3px rgba(0, 153, 255, 0.7);
+}
+
 /* pinnad, scroll-scrubbad pipeline (sätts av JS på desktop) */
 #pipeline.is-scrub {
   height: 280vh;
@@ -1003,4 +1052,5 @@ a { color: inherit; }
   .hero__cue { display: none; }
   .hero__cue-tick::after { animation: none; }
   .hero__frame, .hero__video { will-change: auto; }
+  .hero__wire { display: none; }
 }

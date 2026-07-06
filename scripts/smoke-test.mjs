@@ -70,6 +70,7 @@ const checks = [
   ["hero scroll cue", html.includes('id="heroCue"') && css.includes("cueTick")],
   ["reveal stagger", css.includes("transition-delay: 0.12s")],
   ["scroll reduced motion", css.includes(".scroll-progress { display: none; }") && js.includes("scrubEnabled = !prefersReducedMotion")],
+  ["hero scrub", html.includes('id="heroScrub"') && html.includes('id="heroWire"') && js.includes("heroScrubOn") && css.includes(".hero-scrub.is-scrub")],
 ];
 
 const failed = checks.filter(([, passed]) => !passed);
