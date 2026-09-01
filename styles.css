@@ -1702,3 +1702,69 @@ a { color: inherit; }
   .demo__dot { animation: none; }
   .is-busy::after { display: none; }
 }
+
+/* ---------- verktyg och integrationer ---------- */
+
+.section--tools { padding-top: clamp(64px, 8vw, 110px); }
+
+.tools {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(136px, 1fr));
+  gap: 12px;
+}
+
+.tools__item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 18px 10px 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  transition: border-color 0.25s ease, transform 0.25s ease;
+}
+
+.tools__item:hover {
+  border-color: rgba(255, 255, 255, 0.45);
+  transform: translateY(-3px);
+}
+
+/* ljus bricka: logotyperna behåller sina originalfärger, även de mörka märkena syns */
+.tools__plate {
+  width: 64px;
+  height: 64px;
+  border-radius: 14px;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tools__plate img {
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+  display: block;
+}
+
+.tools__name {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  text-align: center;
+  line-height: 1.4;
+}
+
+@media (max-width: 560px) {
+  .tools { grid-template-columns: repeat(auto-fill, minmax(104px, 1fr)); gap: 8px; }
+  .tools__plate { width: 56px; height: 56px; }
+  .tools__plate img { width: 32px; height: 32px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tools__item { transition: none; }
+}
