@@ -343,81 +343,118 @@
 
   const srcTag = (name) => el("span", "tag tag--src", name);
 
-  // 01 — leadgenerering: hämta, klassificera, prioritera, leverera
+  // 01 — leadgenerering: hitta kontakter, researcha bolaget, poängsätt, utkast och export
+  // Speglar mönstret i ett verkligt flöde på generisk nivå. Namn, bolag och belägg är påhittade.
   const LEADS = [
-    { name: "Almbro Redovisning", domain: "almbro.se", src: "Apollo", kind: "Redovisningsbyrå · ca 35 anställda", prio: "medel", reason: "Mycket manuellt arbete, men oklart vem som beslutar" },
-    { name: "Nordkant Systems AB", domain: "nordkant.se", src: "People Data Labs", kind: "IT-konsult · ca 120 anställda", prio: "hog", reason: "Rekryterar tre utvecklare, ingen AI-roll i teamet" },
-    { name: "Talentbryggan", domain: "talentbryggan.se", src: "Webb", kind: "Rekryteringsbyrå", prio: "bort", reason: "Förmedlar utvecklare, matchar inte kriterierna" },
-    { name: "Tunbro AB", domain: "tunbro.io", src: "People Data Labs", kind: "SaaS · B2B · ca 60 anställda", prio: "hog", reason: "Beskriver manuell onboarding av kunder på hemsidan" },
-    { name: "Torneby Logistik", domain: "torneby.se", src: "Apollo", kind: "Logistik · ca 400 anställda", prio: "medel", reason: "Rekryterar, men inom lager, inte IT" },
+    { company: "Almbro Redovisning", domain: "almbro.se", person: "E. Sandvall", title: "Ekonomichef", src: "Apollo", claim: "Öppnar ett andra kontor under hösten", source: "hemsida", checks: ["ok", "ok", "svag", "ok", "ok"], prio: "medel" },
+    { company: "Nordkant Systems AB", domain: "nordkant.se", person: "J. Åkerlind", title: "IT-chef", src: "People Data Labs", claim: "Rekryterar utvecklare till ett nytt team", source: "platsannons", checks: ["ok", "ok", "ok", "ok", "ok"], prio: "hog" },
+    { company: "Talentbryggan", domain: "talentbryggan.se", person: "M. Hedenmark", title: "Driftchef", src: "Apollo", claim: null, source: null, checks: ["ok", "svag", "svag", "saknas", "svag"], prio: "lag" },
+    { company: "Tunbro AB", domain: "tunbro.io", person: "S. Brolund", title: "COO", src: "People Data Labs", claim: "Lanserar en ny plattform till kund", source: "pressmeddelande", checks: ["ok", "ok", "ok", "ok", "svag"], prio: "hog" },
+    { company: "Torneby Logistik", domain: "torneby.se", person: "K. Wennergren", title: "Logistikchef", src: "Apollo", claim: "Bygger ett nytt centrallager", source: "lokalpress", checks: ["svag", "ok", "ok", "ok", "ok"], prio: "medel" },
   ];
-  const PRIO_LABEL = { hog: "Hög prio", medel: "Medel", bort: "Bort" };
-  const PRIO_ORDER = { hog: 0, medel: 1, bort: 2 };
+  // samma kontakt en gång till från en annan källa, slås ihop i steg 1
+  const LEAD_DUPLICATE = { company: "Nordkant Systems AB", domain: "nordkant.se", person: "J. Åkerlind", title: "IT-chef", src: "Apollo" };
+  const CHECK_LABELS = ["Roll", "Senioritet", "Storlek", "Signal", "Data"];
+  const CHECK_MARK = { ok: "✓", svag: "~", saknas: "✗" };
+  const PRIO_LABEL = { hog: "Hög prio", medel: "Medel", lag: "Låg" };
+  const PRIO_ORDER = { hog: 0, medel: 1, lag: 2 };
+
+  const leadRow = (lead) => {
+    const row = el("article", "lead");
+    row.dataset.prio = lead.prio || "lag";
+    row.innerHTML =
+      `<div class="lead__head"><strong>${lead.person}</strong><span class="lead__title">${lead.title}</span><span class="lead__src">${lead.src}</span></div>` +
+      `<div class="lead__company">${lead.company}<span class="lead__domain">${lead.domain}</span></div>` +
+      `<div class="lead__state"><span class="lead__status">Hämtad</span></div>` +
+      `<div class="lead__reason"></div>`;
+    return row;
+  };
 
   setupDemo("demoLeads", async (c) => {
-    c.body.append(el("div", "lead-crit", "<span>KRITERIER</span>Sverige · 30–500 anställda · rekryterar utvecklare"));
+    c.body.append(el("div", "lead-crit", "<span>KRITERIER</span>Sverige · 30–500 anställda · roller: ekonomichef, driftchef, IT-chef"));
     const list = el("div", "lead-list");
     c.body.append(list);
-    const rows = LEADS.map((lead) => {
-      const row = el("article", "lead");
-      row.dataset.prio = lead.prio;
-      row.innerHTML =
-        `<div class="lead__head"><strong>${lead.name}</strong><span class="lead__domain">${lead.domain}</span><span class="lead__src">${lead.src}</span></div>` +
-        `<div class="lead__state"><span class="lead__status">Hämtad</span></div>` +
-        `<div class="lead__reason"></div>`;
-      return row;
-    });
+    const rows = LEADS.map(leadRow);
 
-    c.step(1, "Steg 1 av 4 · Hämtar bolag som matchar kriterierna");
+    c.step(1, "Steg 1 av 4 · Hämtar kontakter i rätt roll");
     for (const row of rows) {
       list.append(row);
-      await c.show(row, 420);
+      await c.show(row, 380);
       c.scrollDown();
     }
-    await c.wait(700);
+    // dubbletten dyker upp, känns igen och slås ihop
+    const dup = leadRow(LEAD_DUPLICATE);
+    list.append(dup);
+    await c.show(dup, 380);
+    c.scrollDown();
+    await c.wait(500);
+    c.setStatus("Steg 1 av 4 · Slår ihop dubbletter");
+    dup.querySelector(".lead__state").innerHTML = "";
+    dup.querySelector(".lead__state").append(el("span", "tag tag--arch", "Dubblett, slås ihop"));
+    dup.classList.add("is-archived");
+    await c.wait(900);
+    dup.classList.remove("is-in");
+    await c.wait(400);
+    dup.remove();
+    rows[1].querySelector(".lead__src").textContent = "People Data Labs + Apollo";
+    await c.wait(600);
 
-    c.step(2, "Steg 2 av 4 · Läser hemsidor och klassificerar");
+    c.step(2, "Steg 2 av 4 · Söker belägg om bolagen");
     for (const [i, row] of rows.entries()) {
       const state = row.querySelector(".lead__state");
       const st = row.querySelector(".lead__status");
-      st.textContent = "Läser hemsidan";
+      st.textContent = "Söker belägg på webben";
       st.classList.add("is-busy");
-      await c.wait(650);
+      await c.wait(600);
       state.innerHTML = "";
-      state.append(el("span", "tag tag--kind", LEADS[i].kind));
+      const lead = LEADS[i];
+      if (lead.claim) {
+        const line = el("span", "lead__claim", `<span class="lead__k">Belagt</span>${lead.claim}`);
+        line.append(srcTag(lead.source));
+        state.append(line);
+      } else {
+        state.append(el("span", "lead__claim lead__claim--none", "Underlaget räcker inte. Ingen research, inget gissat."));
+      }
       await c.wait(250);
     }
     await c.wait(600);
 
-    c.step(3, "Steg 3 av 4 · Prioriterar med skäl");
+    c.step(3, "Steg 3 av 4 · Poängsätter efter fasta regler");
     for (const [i, row] of rows.entries()) {
-      await c.wait(480);
-      const prio = LEADS[i].prio;
-      row.querySelector(".lead__state").append(el("span", `tag tag--prio tag--${prio}`, PRIO_LABEL[prio]));
-      const reason = row.querySelector(".lead__reason");
-      reason.textContent = LEADS[i].reason;
-      reason.classList.add("is-in");
-      row.classList.add(`lead--${prio}`);
+      await c.wait(460);
+      const lead = LEADS[i];
+      const checks = el("div", "lead__checks");
+      lead.checks.forEach((v, k) => {
+        checks.append(el("span", `lead__check lead__check--${v}`, `${CHECK_LABELS[k]} ${CHECK_MARK[v]}`));
+      });
+      checks.append(el("span", `tag tag--prio tag--${lead.prio}`, PRIO_LABEL[lead.prio]));
+      row.querySelector(".lead__reason").replaceWith(checks);
+      row.classList.add(`lead--${lead.prio}`);
     }
     await c.wait(800);
-    c.setStatus("Steg 3 av 4 · Sorterar listan efter prioritet");
+    c.setStatus("Steg 3 av 4 · Sorterar listan efter poäng");
     const sorted = rows.slice().sort((a, b) => PRIO_ORDER[a.dataset.prio] - PRIO_ORDER[b.dataset.prio]);
     c.flip(list, sorted);
     await c.wait(1000);
 
-    c.step(4, "Steg 4 av 4 · Levererar till CRM");
+    c.step(4, "Steg 4 av 4 · Skriver utkast och exporterar till CRM");
     for (const row of sorted) {
-      await c.wait(350);
+      await c.wait(380);
       const state = row.querySelector(".lead__state");
-      if (row.dataset.prio === "bort") {
-        row.classList.add("is-archived");
-        state.append(el("span", "tag tag--arch", "Arkiverad med skäl"));
-      } else {
-        state.append(el("span", "tag tag--out", "→ HubSpot"));
+      if (row.dataset.prio === "lag") {
+        state.append(el("span", "tag tag--arch", "Kvar i listan, inget utkast"));
+        continue;
       }
+      const draft = el("span", "tag is-busy", "Skriver utkast");
+      state.append(draft);
+      await c.wait(700);
+      draft.classList.remove("is-busy");
+      draft.textContent = "Utkast klart";
+      await c.wait(250);
+      state.append(el("span", "tag tag--out", "→ CRM: bolag matchat, kontakt skapad"));
     }
     await c.wait(400);
-    const note = el("p", "demo__note", "Fyra bolag i CRM med prioritet och skäl. Ett bortsorterat med motivering. Säljaren börjar överst.");
+    const note = el("p", "demo__note", "Fyra kontakter i CRM med utkast och belägg. En kvar i listan. Varje poäng går att spåra till en regel.");
     c.body.append(note);
     await c.show(note, 60);
     c.scrollDown();

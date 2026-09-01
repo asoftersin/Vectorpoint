@@ -1403,6 +1403,54 @@ a { color: inherit; }
   margin-right: 8px;
 }
 
+.lead__title { font-size: 0.8rem; color: var(--text-dim); }
+
+.lead__company {
+  font-size: 0.82rem;
+  color: var(--text-dim);
+  display: flex;
+  gap: 8px;
+  align-items: baseline;
+  flex-wrap: wrap;
+}
+
+.lead__claim {
+  font-size: 0.8rem;
+  color: var(--text-dim);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.lead__claim--none { color: var(--muted); }
+
+.lead__k {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.lead__checks { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+
+.lead__check {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 2px 6px;
+  white-space: nowrap;
+}
+
+.lead__check--ok { color: var(--text); border-color: rgba(255, 255, 255, 0.3); }
+.lead__check--saknas { color: var(--muted); text-decoration: line-through; }
+.tag--lag { color: var(--muted); }
+.lead--lag { opacity: 0.7; }
+
 /* 02 feedback-inkorg */
 .msg {
   border: 1px solid var(--line);
