@@ -87,165 +87,60 @@
   // ---------- flows: traveling pulses (config-driven, one per work case) ----------
   // Each phase: caption (or null to keep), mode "parallel" | "sequence",
   // travels: [{ wire, pulse, node (lit at start), next (lit at end), duration? }]
-  const FLOWS = [
-    {
-      // 01 — feedback pipeline: 6 sources fan in, 5-step chain
-      svg: "flowSvg",
-      caption: "flowCaption",
-      phases: [
-        {
-          caption: "Feedback strömmar in från Teams, HubSpot, e-post och enkäter.",
-          mode: "parallel",
-          stagger: 160,
-          duration: 900,
-          travels: [1, 2, 3, 4, 5, 6].map((i) => ({
-            wire: `wire-s${i}`, pulse: `pulse-s${i}`, node: `node-s${i}`, next: "node-c1",
-          })),
-        },
-        {
-          caption: "Allt normaliseras och klassificeras med AI — tusentals inlägg blir strukturerad data.",
-          mode: "sequence",
-          duration: 600,
-          travels: [1, 2].map((i) => ({
-            wire: `wire-c${i}`, pulse: `pulse-c${i}`, node: `node-c${i}`, next: `node-c${i + 1}`,
-          })),
-        },
-        {
-          caption: "Insikterna grupperas per produktområde, analyseras och blir en färdig rapport — varje fredag 09:00.",
-          mode: "sequence",
-          duration: 600,
-          travels: [3, 4].map((i) => ({
-            wire: `wire-c${i}`, pulse: `pulse-c${i}`, node: `node-c${i}`, next: `node-c${i + 1}`,
-          })),
-        },
-      ],
-    },
-    {
-      // 02 — lead generation: 3 sources fan in, 4-step chain, fan out to CRM + archive
-      svg: "flowSvg2",
-      caption: "flowCaption2",
-      phases: [
-        {
-          caption: "Prospekt hämtas från persondatabaser och webben utifrån era kriterier.",
-          mode: "parallel",
-          stagger: 200,
-          duration: 900,
-          travels: [1, 2, 3].map((i) => ({
-            wire: `wire2-s${i}`, pulse: `pulse2-s${i}`, node: `node2-s${i}`, next: "node2-c1",
-          })),
-        },
-        {
-          caption: "AI:n researchar varje bolag — utmaningar, signaler och rätt ingång.",
-          mode: "sequence",
-          duration: 650,
-          travels: [1, 2].map((i) => ({
-            wire: `wire2-c${i}`, pulse: `pulse2-c${i}`, node: `node2-c${i}`, next: `node2-c${i + 1}`,
-          })),
-        },
-        {
-          caption: "Varje lead poängsätts, får ett personligt utkast och landar direkt i CRM.",
-          mode: "sequence",
-          duration: 650,
-          travels: [
-            { wire: "wire2-c3", pulse: "pulse2-c3", node: "node2-c3", next: "node2-c4" },
-          ],
-        },
-        {
-          caption: null,
-          mode: "parallel",
-          stagger: 220,
-          duration: 800,
-          travels: [1, 2].map((i) => ({
-            wire: `wire2-o${i}`, pulse: `pulse2-o${i}`, node: "node2-c4", next: `node2-o${i}`,
-          })),
-        },
-      ],
-    },
-    {
-      // 03 — self-learning QA agent: 2 inputs, 4-step chain, learning loop back
-      svg: "flowSvg3",
-      caption: "flowCaption3",
-      phases: [
-        {
-          caption: "Ett Jira-ärende med acceptanskriterier triggar en AI-testare.",
-          mode: "parallel",
-          stagger: 220,
-          duration: 900,
-          travels: [1, 2].map((i) => ({
-            wire: `wire3-in${i}`, pulse: `pulse3-in${i}`, node: `node3-in${i}`, next: "node3-c1",
-          })),
-        },
-        {
-          caption: "Agenten klickar igenom flödet i en riktig webbläsare och samlar bevis — skärmdump för skärmdump.",
-          mode: "sequence",
-          duration: 650,
-          travels: [1, 2].map((i) => ({
-            wire: `wire3-c${i}`, pulse: `pulse3-c${i}`, node: `node3-c${i}`, next: `node3-c${i + 1}`,
-          })),
-        },
-        {
-          caption: "Resultatet rapporteras i Jira — och lärdomarna sparas i kunskapsbasen till nästa körning.",
-          mode: "sequence",
-          duration: 650,
-          travels: [
-            { wire: "wire3-c3", pulse: "pulse3-c3", node: "node3-c3", next: "node3-c4" },
-            { wire: "wire3-loop", pulse: "pulse3-loop", node: "node3-c4", next: "node3-in2", duration: 1600 },
-          ],
-        },
-      ],
-    },
-    {
-      // 04 — delivery pipeline: PR → build → isolated k8s namespace → gate → merge/stop
-      svg: "flowSvg4",
-      caption: "flowCaption4",
-      phases: [
-        {
-          caption: "En pull request öppnas — ny kod, allt oftare skriven av en AI-agent. Att den bygger bevisar inte att den fungerar.",
-          mode: "sequence",
-          duration: 600,
-          travels: [
-            { wire: "wire4-a", pulse: "pulse4-a", node: "node4-in1", next: "node4-c1" },
-          ],
-        },
-        {
-          caption: "Tjänsten och testerna deployas i ett isolerat Kubernetes-namespace — en riktig, körande miljö som inte påverkar någon annan.",
-          mode: "parallel",
-          stagger: 200,
-          duration: 800,
-          travels: [
-            { wire: "wire4-b1", pulse: "pulse4-b1", node: "node4-c1", next: "node4-k1" },
-            { wire: "wire4-b2", pulse: "pulse4-b2", node: "node4-c1", next: "node4-k2" },
-          ],
-        },
-        {
-          caption: "Testpodden anropar den levande tjänsten med riktiga HTTP-anrop. Svarar den rätt — på riktigt, inte i teorin?",
-          mode: "sequence",
-          duration: 800,
-          travels: [
-            { wire: "wire4-t", pulse: "pulse4-t", node: "node4-k2", next: "node4-k1" },
-          ],
-        },
-        {
-          caption: "Resultatet avgör: grönt mergas vidare mot dev och E2E — rött stannar i pull requesten och når aldrig kund.",
-          mode: "sequence",
-          duration: 700,
-          travels: [
-            { wire: "wire4-g", pulse: "pulse4-g", node: "node4-k1", next: "node4-gate" },
-          ],
-        },
-        {
-          caption: null,
-          mode: "parallel",
-          stagger: 220,
-          duration: 700,
-          travels: [
-            { wire: "wire4-o1", pulse: "pulse4-o1", node: "node4-gate", next: "node4-o1" },
-            { wire: "wire4-o2", pulse: "pulse4-o2", node: "node4-gate", next: "node4-o2" },
-          ],
-        },
-      ],
-    },
-  ];
+  // ---------- leveranspipelinen: vandrande pulser i SVG:n ----------
+  // phase: caption (eller null för att behålla), mode "parallel" | "sequence",
+  // travels: [{ wire, pulse, node (tänds vid start), next (tänds vid mål), duration? }]
+  const PIPELINE_FLOW = {
+    // 04 — delivery pipeline: PR → build → isolated k8s namespace → gate → merge/stop
+    svg: "flowSvg4",
+    caption: "flowCaption4",
+    phases: [
+      {
+        caption: "En pull request öppnas — ny kod, allt oftare skriven av en AI-agent. Att den bygger bevisar inte att den fungerar.",
+        mode: "sequence",
+        duration: 600,
+        travels: [
+          { wire: "wire4-a", pulse: "pulse4-a", node: "node4-in1", next: "node4-c1" },
+        ],
+      },
+      {
+        caption: "Tjänsten och testerna deployas i ett isolerat Kubernetes-namespace — en riktig, körande miljö som inte påverkar någon annan.",
+        mode: "parallel",
+        stagger: 200,
+        duration: 800,
+        travels: [
+          { wire: "wire4-b1", pulse: "pulse4-b1", node: "node4-c1", next: "node4-k1" },
+          { wire: "wire4-b2", pulse: "pulse4-b2", node: "node4-c1", next: "node4-k2" },
+        ],
+      },
+      {
+        caption: "Testpodden anropar den levande tjänsten med riktiga HTTP-anrop. Svarar den rätt — på riktigt, inte i teorin?",
+        mode: "sequence",
+        duration: 800,
+        travels: [
+          { wire: "wire4-t", pulse: "pulse4-t", node: "node4-k2", next: "node4-k1" },
+        ],
+      },
+      {
+        caption: "Resultatet avgör: grönt mergas vidare mot dev och E2E — rött stannar i pull requesten och når aldrig kund.",
+        mode: "sequence",
+        duration: 700,
+        travels: [
+          { wire: "wire4-g", pulse: "pulse4-g", node: "node4-k1", next: "node4-gate" },
+        ],
+      },
+      {
+        caption: null,
+        mode: "parallel",
+        stagger: 220,
+        duration: 700,
+        travels: [
+          { wire: "wire4-o1", pulse: "pulse4-o1", node: "node4-gate", next: "node4-o1" },
+          { wire: "wire4-o2", pulse: "pulse4-o2", node: "node4-gate", next: "node4-o2" },
+        ],
+      },
+    ],
+  };
 
   const travel = ({ path, pulse, node, next }, duration = 650) =>
     new Promise((resolve) => {
@@ -333,13 +228,413 @@
     observer.observe(svg);
   };
 
+  // ---------- exempel: skriptade UI-uppspelningar ----------
+  // Varje exempel bygger sin egen DOM i .demo__body och stegar fram med väntetider.
+  // Ett token per körning gör att "Spela upp igen" avbryter en pågående körning rent.
+  // Ingen siffra i rutorna är ett kundresultat; allt innehåll är märkt som påhittat.
+  const CANCEL = Symbol("cancel");
+  const el = (tag, className, html) => {
+    const node = document.createElement(tag);
+    if (className) node.className = className;
+    if (html !== undefined) node.innerHTML = html;
+    return node;
+  };
+
+  const setupDemo = (id, script) => {
+    const root = document.getElementById(id);
+    if (!root) return;
+    const body = root.querySelector(".demo__body");
+    const status = root.querySelector("[data-status]");
+    const block = root.closest(".demo-block");
+    const steps = block ? Array.from(block.querySelectorAll(".demo-steps__item")) : [];
+    const replay = root.querySelector(".demo__replay");
+    let token = 0;
+    let inView = false;
+    let started = false;
+    let finished = false;
+    let loopPending = false;
+    let loopTimer = null;
+
+    const makeCtx = (my) => {
+      const wait = (ms) =>
+        new Promise((resolve, reject) => {
+          setTimeout(() => (my === token ? resolve() : reject(CANCEL)), prefersReducedMotion ? 0 : ms);
+        });
+      const scrollDown = (pane) => {
+        const target = pane || body;
+        target.scrollTo({ top: target.scrollHeight, behavior: prefersReducedMotion ? "auto" : "smooth" });
+      };
+      const setStatus = (text) => {
+        if (status && text) status.textContent = text;
+      };
+      return {
+        body,
+        wait,
+        scrollDown,
+        setStatus,
+        step: (n, text) => {
+          steps.forEach((item, i) => {
+            item.classList.toggle("is-active", i + 1 === n);
+            item.classList.toggle("is-done", i + 1 < n);
+          });
+          setStatus(text);
+        },
+        done: (text) => {
+          steps.forEach((item) => {
+            item.classList.remove("is-active");
+            item.classList.add("is-done");
+          });
+          setStatus(text);
+          root.classList.add("is-done");
+        },
+        // elementet måste ligga i DOM:en innan show anropas, annars hoppar transitionen
+        show: async (node, ms = 40) => {
+          await wait(ms);
+          node.classList.add("is-in");
+        },
+        type: async (node, text, speed = 14) => {
+          if (prefersReducedMotion) {
+            node.textContent = text;
+            return;
+          }
+          node.classList.add("is-typing");
+          node.textContent = "";
+          for (let i = 0; i < text.length; i += 3) {
+            node.textContent = text.slice(0, i + 3);
+            await wait(speed);
+          }
+          node.textContent = text;
+          node.classList.remove("is-typing");
+        },
+        // FLIP: flytta om barn i DOM:en och låt dem glida till sin nya plats
+        flip: (container, ordered) => {
+          const before = new Map(ordered.map((n) => [n, n.getBoundingClientRect().top]));
+          ordered.forEach((n) => container.appendChild(n));
+          if (prefersReducedMotion) return;
+          ordered.forEach((n) => {
+            const dy = before.get(n) - n.getBoundingClientRect().top;
+            if (!dy) return;
+            n.style.transition = "none";
+            n.style.transform = `translateY(${dy}px)`;
+          });
+          requestAnimationFrame(() =>
+            requestAnimationFrame(() => {
+              ordered.forEach((n) => {
+                n.style.transition = "";
+                n.style.transform = "";
+              });
+            })
+          );
+        },
+      };
+    };
+
+    const run = async () => {
+      clearTimeout(loopTimer);
+      loopPending = false;
+      finished = false;
+      const my = ++token;
+      root.classList.remove("is-done");
+      body.innerHTML = "";
+      body.scrollTop = 0;
+      steps.forEach((item) => item.classList.remove("is-active", "is-done"));
+      try {
+        await script(makeCtx(my));
+      } catch (err) {
+        if (err !== CANCEL) console.error(err);
+        return;
+      }
+      if (my !== token) return;
+      finished = true;
+      if (prefersReducedMotion) return;
+      loopPending = true;
+      loopTimer = setTimeout(() => {
+        loopPending = false;
+        if (my === token && inView) run();
+      }, 12000);
+    };
+
+    if (replay) replay.addEventListener("click", run);
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          inView = entry.isIntersecting;
+          const restart = finished && !loopPending && !prefersReducedMotion;
+          if (inView && (!started || restart)) {
+            started = true;
+            run();
+          }
+        });
+      },
+      { threshold: 0.3 }
+    );
+    observer.observe(root);
+  };
+
+  const srcTag = (name) => el("span", "tag tag--src", name);
+
+  // 01 — leadgenerering: hämta, klassificera, prioritera, leverera
+  const LEADS = [
+    { name: "Ekelund &amp; Partner", domain: "ekelundpartner.se", src: "Apollo", kind: "Redovisningsbyrå · ca 35 anställda", prio: "medel", reason: "Mycket manuellt arbete, men oklart vem som beslutar" },
+    { name: "Nordkant Systems AB", domain: "nordkant.se", src: "People Data Labs", kind: "IT-konsult · ca 120 anställda", prio: "hog", reason: "Rekryterar tre utvecklare, ingen AI-roll i teamet" },
+    { name: "Talentbryggan", domain: "talentbryggan.se", src: "Webb", kind: "Rekryteringsbyrå", prio: "bort", reason: "Förmedlar utvecklare, matchar inte kriterierna" },
+    { name: "Vindla AB", domain: "vindla.io", src: "People Data Labs", kind: "SaaS · B2B · ca 60 anställda", prio: "hog", reason: "Beskriver manuell onboarding av kunder på hemsidan" },
+    { name: "Brivo Logistik", domain: "brivo.se", src: "Apollo", kind: "Logistik · ca 400 anställda", prio: "medel", reason: "Rekryterar, men inom lager, inte IT" },
+  ];
+  const PRIO_LABEL = { hog: "Hög prio", medel: "Medel", bort: "Bort" };
+  const PRIO_ORDER = { hog: 0, medel: 1, bort: 2 };
+
+  setupDemo("demoLeads", async (c) => {
+    c.body.append(el("div", "lead-crit", "<span>KRITERIER</span>Sverige · 30–500 anställda · rekryterar utvecklare"));
+    const list = el("div", "lead-list");
+    c.body.append(list);
+    const rows = LEADS.map((lead) => {
+      const row = el("article", "lead");
+      row.dataset.prio = lead.prio;
+      row.innerHTML =
+        `<div class="lead__head"><strong>${lead.name}</strong><span class="lead__domain">${lead.domain}</span><span class="lead__src">${lead.src}</span></div>` +
+        `<div class="lead__state"><span class="lead__status">Hämtad</span></div>` +
+        `<div class="lead__reason"></div>`;
+      return row;
+    });
+
+    c.step(1, "Steg 1 av 4 · Hämtar bolag som matchar kriterierna");
+    for (const row of rows) {
+      list.append(row);
+      await c.show(row, 420);
+      c.scrollDown();
+    }
+    await c.wait(700);
+
+    c.step(2, "Steg 2 av 4 · Läser hemsidor och klassificerar");
+    for (const [i, row] of rows.entries()) {
+      const state = row.querySelector(".lead__state");
+      const st = row.querySelector(".lead__status");
+      st.textContent = "Läser hemsidan";
+      st.classList.add("is-busy");
+      await c.wait(650);
+      state.innerHTML = "";
+      state.append(el("span", "tag tag--kind", LEADS[i].kind));
+      await c.wait(250);
+    }
+    await c.wait(600);
+
+    c.step(3, "Steg 3 av 4 · Prioriterar med skäl");
+    for (const [i, row] of rows.entries()) {
+      await c.wait(480);
+      const prio = LEADS[i].prio;
+      row.querySelector(".lead__state").append(el("span", `tag tag--prio tag--${prio}`, PRIO_LABEL[prio]));
+      const reason = row.querySelector(".lead__reason");
+      reason.textContent = LEADS[i].reason;
+      reason.classList.add("is-in");
+      row.classList.add(`lead--${prio}`);
+    }
+    await c.wait(800);
+    c.setStatus("Steg 3 av 4 · Sorterar listan efter prioritet");
+    const sorted = rows.slice().sort((a, b) => PRIO_ORDER[a.dataset.prio] - PRIO_ORDER[b.dataset.prio]);
+    c.flip(list, sorted);
+    await c.wait(1000);
+
+    c.step(4, "Steg 4 av 4 · Levererar till CRM");
+    for (const row of sorted) {
+      await c.wait(350);
+      const state = row.querySelector(".lead__state");
+      if (row.dataset.prio === "bort") {
+        row.classList.add("is-archived");
+        state.append(el("span", "tag tag--arch", "Arkiverad med skäl"));
+      } else {
+        state.append(el("span", "tag tag--out", "→ HubSpot"));
+      }
+    }
+    await c.wait(400);
+    const note = el("p", "demo__note", "Fyra bolag i CRM med prioritet och skäl. Ett bortsorterat med motivering. Säljaren börjar överst.");
+    c.body.append(note);
+    await c.show(note, 60);
+    c.scrollDown();
+    c.done("Klart. Spelas upp igen om en stund.");
+  });
+
+  // 02 — feedback och ärenden: samla in, sammanfatta, klassificera, skicka
+  const LANES = ["PO Rapportering", "PO Behörigheter", "PO Mobilapp", "Manuell granskning"];
+  const FEEDBACK = [
+    { channel: "Teams", meta: "#kundfeedback", text: "Kund hos Nordkant säger att exporten till Excel tappar formateringen på datumkolumnen varje gång. De har börjat göra det för hand igen.", summary: "Excelexport tappar datumformat, kunden gör jobbet manuellt igen", area: "Rapportering", type: "Bugg", lane: 0 },
+    { channel: "E-post", meta: "support@", text: "Hej! Vi skulle vilja ge en extern revisor läsbehörighet till ett enda projekt utan att skapa ett fullt konto. Går det? Mvh Lena", summary: "Önskar läsbehörighet per projekt för externa användare", area: "Behörigheter", type: "Önskemål", lane: 1 },
+    { channel: "Enkät", meta: "NPS 4 av 10", text: "Appen loggar ut mig hela tiden när jag byter mellan wifi och mobilnät. Störigt när man är ute hos kund.", summary: "Appen loggar ut vid byte av nätverk", area: "Mobilapp", type: "Bugg", lane: 2 },
+    { channel: "Chatt", meta: "prospekt", text: "Kan vi visa rapporterna i mobilen med samma behörigheter som på webben? Vår säljchef vill kunna göra det från bilen.", summary: "Rapporter i mobilen med samma behörighet som på webben", area: "Rapportering + Mobilapp", type: "Önskemål", lane: 3, manual: true },
+  ];
+
+  setupDemo("demoFeedback", async (c) => {
+    const inbox = el("div", "fb__in");
+    const out = el("div", "fb__out");
+    inbox.append(el("p", "demo__label", "Inkommande"));
+    out.append(el("p", "demo__label", "Skickat till"));
+    const lanes = LANES.map((name) => {
+      const lane = el("div", "lane");
+      lane.append(el("p", "lane__name", name));
+      out.append(lane);
+      return lane;
+    });
+    lanes[3].classList.add("lane--manual");
+    c.body.append(inbox, out);
+
+    const total = FEEDBACK.length;
+    for (const [i, item] of FEEDBACK.entries()) {
+      const n = i + 1;
+      c.step(1, `Inlägg ${n} av ${total} · Samlar in`);
+      const msg = el("article", "msg");
+      msg.innerHTML =
+        `<div class="msg__head"><span class="tag tag--ch">${item.channel}</span><span class="msg__meta">${item.meta}</span></div>` +
+        `<p class="msg__text">${item.text}</p><div class="msg__proc"></div>`;
+      inbox.append(msg);
+      await c.show(msg, 60);
+      c.scrollDown(inbox);
+      await c.wait(900);
+
+      c.step(2, `Inlägg ${n} av ${total} · Sammanfattar`);
+      const proc = msg.querySelector(".msg__proc");
+      const line1 = el("p", "msg__line is-busy", "Sammanfattar");
+      proc.append(line1);
+      c.scrollDown(inbox);
+      await c.wait(800);
+      line1.classList.remove("is-busy");
+      line1.innerHTML = "";
+      const sumText = el("span", "msg__v");
+      line1.append(el("span", "msg__k", "Sammanfattning"), sumText);
+      await c.type(sumText, item.summary);
+      await c.wait(300);
+
+      c.step(3, `Inlägg ${n} av ${total} · Klassificerar`);
+      const line2 = el("p", "msg__line is-busy", "Klassificerar");
+      proc.append(line2);
+      c.scrollDown(inbox);
+      await c.wait(700);
+      line2.classList.remove("is-busy");
+      line2.innerHTML = `<span class="msg__k">Område</span><span class="tag tag--kind">${item.area}</span><span class="tag">${item.type}</span>`;
+      await c.wait(500);
+
+      c.step(4, `Inlägg ${n} av ${total} · Skickar`);
+      const line3 = el(
+        "p",
+        "msg__line",
+        item.manual
+          ? `<span class="msg__k">Två områden</span><span class="msg__v">går till manuell granskning</span>`
+          : `<span class="msg__k">Skickas till</span><span class="msg__v">${LANES[item.lane]}</span>`
+      );
+      proc.append(line3);
+      c.scrollDown(inbox);
+      await c.wait(500);
+      const card = el("div", "lane__card", `<p>${item.summary}</p><span class="lane__src">${item.type} · via ${item.channel}</span>`);
+      lanes[item.lane].append(card);
+      await c.show(card, 40);
+      c.scrollDown(out);
+      msg.classList.add("is-sent");
+      await c.wait(700);
+    }
+    c.done("Klart. Tre inlägg hos rätt Product Owner, ett till manuell granskning.");
+  });
+
+  // 03 — rapportsammanställning: hämta, sammanställ, markera avvikelser, leverera
+  const SOURCES = [
+    { name: "CRM", detail: "Pipeline och aktiviteter", log: "Läser affärer i alla faser", time: "06:52" },
+    { name: "BI-rapport", detail: "Försäljning per vecka och region", log: "Läser utfall mot plan", time: "06:53" },
+    { name: "Teams", detail: "#sälj, veckans inlägg", log: "Läser trådar och beslut", time: "06:54" },
+  ];
+  const REPORT = {
+    title: "Veckounderlag sälj · måndag 07:00",
+    brief: "Pipelinen växte under veckan, men tillväxten ligger i tidiga affärer. Slutfasen stod still.",
+    briefSrc: ["CRM", "BI"],
+    deviations: [
+      ["Två affärer i slutförhandling har inte haft någon aktivitet på över tre veckor.", "CRM"],
+      ["Region Väst ligger under plan för andra veckan i rad.", "BI"],
+      ["Tre av veckans nya affärer saknar registrerad beslutsfattare.", "CRM"],
+    ],
+    decisions: [
+      ["Prisfråga från kund lyftes i #sälj i onsdags och är obesvarad.", "Teams"],
+      ["Offert till Nordkant väntar på godkännande sedan fredag.", "Teams"],
+    ],
+  };
+
+  setupDemo("demoReport", async (c) => {
+    const srcPane = el("div", "rp__src");
+    const docPane = el("div", "rp__doc");
+    srcPane.append(el("p", "demo__label", "Källor"));
+    const cards = SOURCES.map((s) => {
+      const card = el("div", "src", `<div class="src__head"><strong>${s.name}</strong><span>${s.detail}</span></div><p class="src__log">Väntar</p>`);
+      srcPane.append(card);
+      return card;
+    });
+    c.body.append(srcPane, docPane);
+
+    c.step(1, "Steg 1 av 4 · Hämtar ur tre system");
+    for (const [i, card] of cards.entries()) {
+      const log = card.querySelector(".src__log");
+      log.textContent = SOURCES[i].log;
+      log.classList.add("is-busy");
+      await c.wait(900);
+      log.classList.remove("is-busy");
+      card.classList.add("is-ok");
+      log.textContent = `Klart ${SOURCES[i].time}`;
+      await c.wait(200);
+    }
+    await c.wait(500);
+
+    c.step(2, "Steg 2 av 4 · Skriver ihop läget");
+    const doc = el("article", "doc");
+    docPane.append(doc);
+    const title = el("h4", "doc__title");
+    doc.append(title);
+    await c.type(title, REPORT.title, 18);
+    const h1 = el("p", "doc__h", "Läget i korthet");
+    doc.append(h1);
+    await c.show(h1, 300);
+    const p1 = el("p", "doc__p");
+    doc.append(p1);
+    await c.type(p1, REPORT.brief, 12);
+    REPORT.briefSrc.forEach((s) => p1.append(srcTag(s)));
+    await c.wait(500);
+
+    c.step(3, "Steg 3 av 4 · Markerar avvikelser");
+    const h2 = el("p", "doc__h doc__h--warn", "Avvikelser att ta först");
+    doc.append(h2);
+    await c.show(h2, 300);
+    c.scrollDown(docPane);
+    const addList = async (items) => {
+      const ul = el("ul", "doc__list");
+      doc.append(ul);
+      for (const [text, src] of items) {
+        const li = el("li");
+        li.append(document.createTextNode(`${text} `), srcTag(src));
+        ul.append(li);
+        await c.show(li, 500);
+        c.scrollDown(docPane);
+      }
+    };
+    await addList(REPORT.deviations);
+    const h3 = el("p", "doc__h", "Beslut som väntar");
+    doc.append(h3);
+    await c.show(h3, 400);
+    c.scrollDown(docPane);
+    await addList(REPORT.decisions);
+    await c.wait(600);
+
+    c.step(4, "Steg 4 av 4 · Levererar");
+    const foot = el("p", "doc__foot is-busy", "Skickar till Teams #ledning");
+    doc.append(foot);
+    await c.show(foot, 100);
+    c.scrollDown(docPane);
+    await c.wait(900);
+    foot.classList.remove("is-busy");
+    foot.textContent = "Skickat till Teams #ledning 07:00. Varje påstående pekar på sin källa.";
+    c.done("Klart. Ett underlag, tre källor, en person som läser en sida.");
+  });
+
   // ---------- scroll experience: one rAF-driven engine ----------
   // Scrub-läget (pinnad pipeline) körs bara på desktop utan reduced motion.
   const scrubEnabled = !prefersReducedMotion && window.matchMedia("(min-width: 861px)").matches;
 
-  // Flöde 1–3 autoplayar alltid; flöde 4 scrubbas när det går, annars autoplay.
-  FLOWS.slice(0, 3).forEach(setupFlow);
-  if (!scrubEnabled) setupFlow(FLOWS[3]);
+  // Pipelinen scrubbas när det går, annars autoplayar den.
+  if (!scrubEnabled) setupFlow(PIPELINE_FLOW);
 
   // Bygger en scrubber: global progress 0–1 mappas på faserna, helt reversibelt —
   // varje frame räknas allt om från p, så bakåtscroll släcker det som inte hänt än.
@@ -398,7 +693,7 @@
     const heroCue = document.getElementById("heroCue");
     const marqueeTrack = document.querySelector(".marquee__track");
     const pipelineSection = document.getElementById("pipeline");
-    const scrub = scrubEnabled ? buildScrubber(FLOWS[3]) : null;
+    const scrub = scrubEnabled ? buildScrubber(PIPELINE_FLOW) : null;
     if (scrub && pipelineSection) {
       pipelineSection.classList.add("is-scrub");
       scrub(0);

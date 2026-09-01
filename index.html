@@ -94,7 +94,7 @@
       </a>
       <nav class="nav__links" aria-label="Huvudmeny">
         <a href="#services">Tjänster</a>
-        <a href="#work">Utvalda arbeten</a>
+        <a href="#work">Exempel</a>
         <a href="#approach">Metod</a>
         <a href="#faq">FAQ</a>
       </nav>
@@ -105,7 +105,7 @@
     </div>
     <nav class="nav__mobile" id="mobileNav" aria-label="Mobilmeny">
       <a href="#services">Tjänster</a>
-      <a href="#work">Utvalda arbeten</a>
+      <a href="#work">Exempel</a>
       <a href="#approach">Metod</a>
       <a href="#faq">FAQ</a>
       <a class="btn btn--primary" href="https://cal.com/johan-studt/15min" target="_blank" rel="noreferrer" data-goatcounter-click="cta-mobilnav">Boka ett samtal</a>
@@ -172,11 +172,160 @@
       </div>
     </div>
 
+    <!-- EXEMPEL: tre uppspelande exempel på lösningar som byggts på riktigt -->
+    <section class="section section--examples" id="work">
+      <div class="section__head">
+        <p class="eyebrow" data-reveal>EXEMPEL</p>
+        <h2 data-reveal="blur">Vad vi bygger.</h2>
+        <p class="section__sub section__sub--wide" data-reveal>Tre lösningar som används dagligen i en organisation, återgivna som exempel. Bolagen, personerna och siffrorna i rutorna är påhittade. Stegen är de verkliga. Rutorna spelar upp sig själva, och du kan starta om dem när du vill.</p>
+      </div>
+    </section>
+
+    <!-- EXEMPEL 01: leadgenerering -->
+    <section class="section section--demo" id="work-leads">
+      <div class="section__head">
+        <p class="eyebrow" data-reveal>01 · LEADGENERERING</p>
+        <h2 data-reveal="blur">Från sökkriterier till en prioriterad lista.</h2>
+        <p class="section__sub" data-reveal>Verktyget hämtar bolag som matchar era kriterier, läser vad de faktiskt gör och sorterar dem efter hur väl de passar. Säljaren får en lista med skäl, inte en hög med namn.</p>
+      </div>
+      <div class="demo-block">
+        <div class="demo" id="demoLeads" data-reveal="scale">
+          <div class="demo__bar">
+            <span class="demo__title"><i class="demo__dot" aria-hidden="true"></i>Leadlista</span>
+            <span class="demo__chips">
+              <span class="flow__chip">EXEMPEL · PÅHITTADE BOLAG</span>
+              <span class="flow__chip flow__chip--ai">✦ AI/LLM</span>
+            </span>
+          </div>
+          <div class="demo__body" aria-hidden="true"></div>
+          <div class="demo__foot">
+            <span class="demo__status" data-status>Startar när rutan syns</span>
+            <button class="demo__replay" type="button" data-goatcounter-click="demo-replay-leads">Spela upp igen</button>
+          </div>
+        </div>
+        <ol class="demo-steps" data-reveal="right" aria-label="Så fungerar leadgenereringen">
+          <li class="demo-steps__end"><span>IN</span>Persondatabaser, bolagsregister och webben</li>
+          <li class="demo-steps__item" data-step="1">
+            <span class="demo-steps__num" aria-hidden="true">1</span>
+            <div><strong>Hämta</strong><p>Bolag som matchar kriterierna hämtas via API:er, inte genom manuell sökning.</p></div>
+          </li>
+          <li class="demo-steps__item" data-step="2">
+            <span class="demo-steps__num" aria-hidden="true">2</span>
+            <div><strong>Klassificera</strong><p>AI läser bolagets hemsida och avgör vad de faktiskt gör, inte bara vilken bransch de registrerat.</p></div>
+          </li>
+          <li class="demo-steps__item" data-step="3">
+            <span class="demo-steps__num" aria-hidden="true">3</span>
+            <div><strong>Prioritera</strong><p>Varje bolag får en prioritet och ett skäl som en människa kan kontrollera.</p></div>
+          </li>
+          <li class="demo-steps__item" data-step="4">
+            <span class="demo-steps__num" aria-hidden="true">4</span>
+            <div><strong>Leverera</strong><p>Prioriterade leads landar i CRM med motivering. Resten arkiveras med skäl.</p></div>
+          </li>
+          <li class="demo-steps__end"><span>UT</span>Prioriterad lista i ert CRM</li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- EXEMPEL 02: feedback- och ärendestyrning -->
+    <section class="section section--demo" id="work-feedback">
+      <div class="section__head">
+        <p class="eyebrow" data-reveal>02 · FEEDBACK OCH ÄRENDEN</p>
+        <h2 data-reveal="blur">Från spridd feedback till rätt person.</h2>
+        <p class="section__sub" data-reveal>Synpunkter kommer in via Teams, e-post, chatt och enkäter. Flödet sammanfattar varje inlägg, avgör vilket område det gäller och skickar det till den som äger frågan. Det som är oklart går till en människa.</p>
+      </div>
+      <div class="demo-block">
+        <div class="demo" id="demoFeedback" data-reveal="scale">
+          <div class="demo__bar">
+            <span class="demo__title"><i class="demo__dot" aria-hidden="true"></i>Feedback-inkorg</span>
+            <span class="demo__chips">
+              <span class="flow__chip">EXEMPEL · PÅHITTADE INLÄGG</span>
+              <span class="flow__chip flow__chip--ai">✦ AI/LLM</span>
+            </span>
+          </div>
+          <div class="demo__body demo__body--split" aria-hidden="true"></div>
+          <div class="demo__foot">
+            <span class="demo__status" data-status>Startar när rutan syns</span>
+            <button class="demo__replay" type="button" data-goatcounter-click="demo-replay-feedback">Spela upp igen</button>
+          </div>
+        </div>
+        <ol class="demo-steps" data-reveal="right" aria-label="Så fungerar feedbackflödet">
+          <li class="demo-steps__end"><span>IN</span>Teams, e-post, chatt och enkäter</li>
+          <li class="demo-steps__item" data-step="1">
+            <span class="demo-steps__num" aria-hidden="true">1</span>
+            <div><strong>Samla in</strong><p>Allt som skrivs i kanalerna fångas upp, oavsett form och längd.</p></div>
+          </li>
+          <li class="demo-steps__item" data-step="2">
+            <span class="demo-steps__num" aria-hidden="true">2</span>
+            <div><strong>Sammanfatta</strong><p>AI kokar ner varje inlägg till en rad som går att agera på.</p></div>
+          </li>
+          <li class="demo-steps__item" data-step="3">
+            <span class="demo-steps__num" aria-hidden="true">3</span>
+            <div><strong>Klassificera</strong><p>Inlägget kopplas till ett produktområde och en typ, som bugg eller önskemål.</p></div>
+          </li>
+          <li class="demo-steps__item" data-step="4">
+            <span class="demo-steps__num" aria-hidden="true">4</span>
+            <div><strong>Skicka</strong><p>Rätt Product Owner får det i sin kanal. Osäkra fall går till manuell granskning.</p></div>
+          </li>
+          <li class="demo-steps__end"><span>UT</span>Sammanfattat ärende hos rätt ägare</li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- EXEMPEL 03: rapportsammanställning -->
+    <section class="section section--demo" id="work-report">
+      <div class="section__head">
+        <p class="eyebrow" data-reveal>03 · RAPPORTSAMMANSTÄLLNING</p>
+        <h2 data-reveal="blur">Ett underlag i stället för fem flikar.</h2>
+        <p class="section__sub" data-reveal>Inför veckomötet hämtar flödet läget ur CRM, BI-rapporten och Teams, skriver ihop det och pekar ut vad som avviker. Den som ska fatta beslut läser en sida i stället för att klicka runt i fem system.</p>
+      </div>
+      <div class="demo-block">
+        <div class="demo" id="demoReport" data-reveal="scale">
+          <div class="demo__bar">
+            <span class="demo__title"><i class="demo__dot" aria-hidden="true"></i>Veckounderlag</span>
+            <span class="demo__chips">
+              <span class="flow__chip">EXEMPEL · PÅHITTAD DATA</span>
+              <span class="flow__chip">SCHEMA · MÅNDAG 07:00</span>
+              <span class="flow__chip flow__chip--ai">✦ AI/LLM</span>
+            </span>
+          </div>
+          <div class="demo__body demo__body--split demo__body--report" aria-hidden="true"></div>
+          <div class="demo__foot">
+            <span class="demo__status" data-status>Startar när rutan syns</span>
+            <button class="demo__replay" type="button" data-goatcounter-click="demo-replay-report">Spela upp igen</button>
+          </div>
+        </div>
+        <ol class="demo-steps" data-reveal="right" aria-label="Så fungerar rapportsammanställningen">
+          <li class="demo-steps__end"><span>IN</span>CRM, BI-rapport och Teams</li>
+          <li class="demo-steps__item" data-step="1">
+            <span class="demo-steps__num" aria-hidden="true">1</span>
+            <div><strong>Hämta</strong><p>Data läses ur varje system via deras API:er, på schema.</p></div>
+          </li>
+          <li class="demo-steps__item" data-step="2">
+            <span class="demo-steps__num" aria-hidden="true">2</span>
+            <div><strong>Sammanställ</strong><p>AI skriver ihop läget till ett underlag med källa på varje påstående.</p></div>
+          </li>
+          <li class="demo-steps__item" data-step="3">
+            <span class="demo-steps__num" aria-hidden="true">3</span>
+            <div><strong>Markera avvikelser</strong><p>Det som sticker ut lyfts överst, så mötet börjar i rätt ände.</p></div>
+          </li>
+          <li class="demo-steps__item" data-step="4">
+            <span class="demo-steps__num" aria-hidden="true">4</span>
+            <div><strong>Leverera</strong><p>Underlaget skickas till Teams eller e-post innan mötet börjar.</p></div>
+          </li>
+          <li class="demo-steps__end"><span>UT</span>En sida att fatta beslut på</li>
+        </ol>
+      </div>
+      <div class="demo-cta" data-reveal>
+        <p>Har ni ett flöde som liknar något av det här? Vi börjar med en prototypfas på er data, så ser ni mekaniken innan ni bestämmer er.</p>
+        <a class="btn btn--ghost" href="https://cal.com/johan-studt/15min" target="_blank" rel="noreferrer" data-goatcounter-click="cta-exempel">Boka ett samtal om ert flöde</a>
+      </div>
+    </section>
+
     <!-- SERVICES -->
     <section class="section" id="services">
       <div class="section__head">
         <p class="eyebrow" data-reveal>TJÄNSTER</p>
-        <h2 data-reveal="blur">Vad vi bygger.</h2>
+        <h2 data-reveal="blur">Fyra sätt vi hjälper till.</h2>
       </div>
       <div class="grid grid--4">
         <article class="card" data-reveal="scale">
@@ -217,359 +366,6 @@
           <span class="stat__value"><span class="stat__count" data-count="100">0</span>%</span>
           <span class="stat__label">Insyn i varje steg av flödet</span>
         </div>
-      </div>
-    </section>
-
-    <!-- WORK 01: feedback pipeline -->
-    <section class="section section--flow" id="work">
-      <div class="section__head">
-        <p class="eyebrow" data-reveal>UTVALDA ARBETEN · 01 — FEEDBACK-ANALYS</p>
-        <h2 data-reveal="blur">Från spridd feedback till färdig rapport.</h2>
-        <p class="section__sub" data-reveal id="flowCaption">Feedback strömmar in från Teams, HubSpot, e-post och enkäter.</p>
-      </div>
-      <div class="flow__stage" data-reveal="scale">
-        <div class="flow__meta">
-          <span class="flow__chip">SCHEMA · FREDAG 09:00</span>
-          <span class="flow__chip flow__chip--ai">✦ AI/LLM</span>
-        </div>
-        <svg id="flowSvg" viewBox="0 0 1200 560" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Automationsflöde: feedback från Teams, HubSpot, e-post och enkäter normaliseras, klassificeras med AI, grupperas per produktområde, analyseras och blir en färdig rapport varje vecka.">
-          <defs>
-            <linearGradient id="wireGrad" x1="0" y1="0" x2="1" y2="0">
-              <stop offset="0" stop-color="#f2f2f2"/>
-              <stop offset="1" stop-color="#8a8a8a"/>
-            </linearGradient>
-            <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
-              <feGaussianBlur stdDeviation="6" result="b"/>
-              <feMerge>
-                <feMergeNode in="b"/><feMergeNode in="SourceGraphic"/>
-              </feMerge>
-            </filter>
-          </defs>
-
-          <!-- source wires -->
-          <path class="wire" id="wire-s1" d="M 225 62  C 275 62,  245 277, 300 277"/>
-          <path class="wire" id="wire-s2" d="M 225 148 C 275 148, 245 277, 300 277"/>
-          <path class="wire" id="wire-s3" d="M 225 234 C 275 234, 250 277, 300 277"/>
-          <path class="wire" id="wire-s4" d="M 225 320 C 275 320, 250 277, 300 277"/>
-          <path class="wire" id="wire-s5" d="M 225 406 C 275 406, 245 277, 300 277"/>
-          <path class="wire" id="wire-s6" d="M 225 492 C 275 492, 245 277, 300 277"/>
-
-          <!-- chain wires -->
-          <path class="wire" id="wire-c1" d="M 450 277 C 462 277, 468 277, 480 277"/>
-          <path class="wire" id="wire-c2" d="M 630 277 C 642 277, 648 277, 660 277"/>
-          <path class="wire" id="wire-c3" d="M 810 277 C 822 277, 828 277, 840 277"/>
-          <path class="wire" id="wire-c4" d="M 990 277 C 1002 277, 1008 277, 1020 277"/>
-
-          <!-- source nodes -->
-          <g class="node" id="node-s1" transform="translate(30,30)">
-            <rect class="node__box" width="195" height="64" rx="10"/>
-            <circle class="node__dot" cx="20" cy="22" r="4"/>
-            <text class="node__type" x="34" y="26">KÄLLA</text>
-            <text class="node__label" x="20" y="50">Teams-kanaler</text>
-          </g>
-          <g class="node" id="node-s2" transform="translate(30,116)">
-            <rect class="node__box" width="195" height="64" rx="10"/>
-            <circle class="node__dot" cx="20" cy="22" r="4"/>
-            <text class="node__type" x="34" y="26">KÄLLA</text>
-            <text class="node__label" x="20" y="50">Mötestranskript</text>
-          </g>
-          <g class="node" id="node-s3" transform="translate(30,202)">
-            <rect class="node__box" width="195" height="64" rx="10"/>
-            <circle class="node__dot" cx="20" cy="22" r="4"/>
-            <text class="node__type" x="34" y="26">KÄLLA</text>
-            <text class="node__label" x="20" y="50">HubSpot-ärenden</text>
-          </g>
-          <g class="node" id="node-s4" transform="translate(30,288)">
-            <rect class="node__box" width="195" height="64" rx="10"/>
-            <circle class="node__dot" cx="20" cy="22" r="4"/>
-            <text class="node__type" x="34" y="26">KÄLLA</text>
-            <text class="node__label" x="20" y="50">HubSpot e-post &amp; chat</text>
-          </g>
-          <g class="node" id="node-s5" transform="translate(30,374)">
-            <rect class="node__box" width="195" height="64" rx="10"/>
-            <circle class="node__dot" cx="20" cy="22" r="4"/>
-            <text class="node__type" x="34" y="26">KÄLLA</text>
-            <text class="node__label" x="20" y="50">NPS/CSAT-enkäter</text>
-          </g>
-          <g class="node" id="node-s6" transform="translate(30,460)">
-            <rect class="node__box" width="195" height="64" rx="10"/>
-            <circle class="node__dot" cx="20" cy="22" r="4"/>
-            <text class="node__type" x="34" y="26">KÄLLA</text>
-            <text class="node__label" x="20" y="50">Användardata (SQL)</text>
-          </g>
-
-          <!-- pipeline chain -->
-          <g class="node" id="node-c1" transform="translate(300,237)">
-            <rect class="node__box" width="150" height="80" rx="10"/>
-            <circle class="node__dot" cx="20" cy="24" r="4"/>
-            <text class="node__type" x="34" y="28">STEG 1</text>
-            <text class="node__label" x="20" y="56">Normalisera</text>
-          </g>
-          <g class="node" id="node-c2" transform="translate(480,237)">
-            <rect class="node__box" width="150" height="80" rx="10"/>
-            <circle class="node__dot" cx="20" cy="24" r="4"/>
-            <text class="node__type" x="34" y="28">STEG 2</text>
-            <text class="node__label" x="20" y="52">Klassificera</text>
-            <g class="node__badge">
-              <rect x="20" y="60" width="56" height="14" rx="7"/>
-              <text x="48" y="70" text-anchor="middle">✦ AI/LLM</text>
-            </g>
-          </g>
-          <g class="node" id="node-c3" transform="translate(660,237)">
-            <rect class="node__box" width="150" height="80" rx="10"/>
-            <circle class="node__dot" cx="20" cy="24" r="4"/>
-            <text class="node__type" x="34" y="28">STEG 3</text>
-            <text class="node__label" x="20" y="56">Gruppera per PO</text>
-          </g>
-          <g class="node" id="node-c4" transform="translate(840,237)">
-            <rect class="node__box" width="150" height="80" rx="10"/>
-            <circle class="node__dot" cx="20" cy="24" r="4"/>
-            <text class="node__type" x="34" y="28">STEG 4</text>
-            <text class="node__label" x="20" y="52">Analysera</text>
-            <g class="node__badge">
-              <rect x="20" y="60" width="56" height="14" rx="7"/>
-              <text x="48" y="70" text-anchor="middle">✦ AI/LLM</text>
-            </g>
-          </g>
-          <g class="node" id="node-c5" transform="translate(1020,237)">
-            <rect class="node__box" width="150" height="80" rx="10"/>
-            <circle class="node__dot" cx="20" cy="24" r="4"/>
-            <text class="node__type" x="34" y="28">STEG 5</text>
-            <text class="node__label" x="20" y="56">Generera rapport</text>
-          </g>
-
-          <!-- traveling pulses (activated by JS) -->
-          <circle class="pulse" id="pulse-s1" r="5"/>
-          <circle class="pulse" id="pulse-s2" r="5"/>
-          <circle class="pulse" id="pulse-s3" r="5"/>
-          <circle class="pulse" id="pulse-s4" r="5"/>
-          <circle class="pulse" id="pulse-s5" r="5"/>
-          <circle class="pulse" id="pulse-s6" r="5"/>
-          <circle class="pulse" id="pulse-c1" r="5"/>
-          <circle class="pulse" id="pulse-c2" r="5"/>
-          <circle class="pulse" id="pulse-c3" r="5"/>
-          <circle class="pulse" id="pulse-c4" r="5"/>
-        </svg>
-      </div>
-    </section>
-
-    <!-- WORK 02: lead generation -->
-    <section class="section section--flow" id="work-leadgen">
-      <div class="section__head">
-        <p class="eyebrow" data-reveal>UTVALDA ARBETEN · 02 — LEADGENERERING</p>
-        <h2 data-reveal="blur">Från sökkriterier till varma leads.</h2>
-        <p class="section__sub" data-reveal id="flowCaption2">Prospekt hämtas från persondatabaser och webben utifrån era kriterier.</p>
-      </div>
-      <div class="flow__stage" data-reveal="scale">
-        <div class="flow__meta">
-          <span class="flow__chip">API · ON-DEMAND</span>
-          <span class="flow__chip flow__chip--ai">✦ AI/LLM</span>
-        </div>
-        <svg id="flowSvg2" viewBox="0 0 1200 520" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Automationsflöde: prospekt hämtas från People Data Labs, Apollo och webbsökning, AI researchar bolagens utmaningar, varje lead poängsätts och får ett personligt utkast som exporteras till HubSpot CRM.">
-          <defs>
-            <linearGradient id="wireGrad2" x1="0" y1="0" x2="1" y2="0">
-              <stop offset="0" stop-color="#f2f2f2"/>
-              <stop offset="1" stop-color="#8a8a8a"/>
-            </linearGradient>
-            <filter id="glow2" x="-60%" y="-60%" width="220%" height="220%">
-              <feGaussianBlur stdDeviation="6" result="b"/>
-              <feMerge>
-                <feMergeNode in="b"/><feMergeNode in="SourceGraphic"/>
-              </feMerge>
-            </filter>
-          </defs>
-
-          <!-- source wires -->
-          <path class="wire" id="wire2-s1" d="M 200 120 C 235 120, 220 260, 250 260"/>
-          <path class="wire" id="wire2-s2" d="M 200 260 C 220 260, 230 260, 250 260"/>
-          <path class="wire" id="wire2-s3" d="M 200 400 C 235 400, 220 260, 250 260"/>
-
-          <!-- chain wires -->
-          <path class="wire" id="wire2-c1" d="M 400 260 C 412 260, 418 260, 430 260"/>
-          <path class="wire" id="wire2-c2" d="M 580 260 C 592 260, 598 260, 610 260"/>
-          <path class="wire" id="wire2-c3" d="M 760 260 C 772 260, 778 260, 790 260"/>
-
-          <!-- output wires (fan-out) -->
-          <path class="wire" id="wire2-o1" d="M 940 260 C 965 260, 975 180, 1000 180"/>
-          <path class="wire" id="wire2-o2" d="M 940 260 C 965 260, 975 340, 1000 340"/>
-
-          <!-- source nodes -->
-          <g class="node" id="node2-s1" transform="translate(30,88)">
-            <rect class="node__box" width="170" height="64" rx="10"/>
-            <circle class="node__dot" cx="20" cy="22" r="4"/>
-            <text class="node__type" x="34" y="26">KÄLLA</text>
-            <text class="node__label" x="20" y="50">People Data Labs</text>
-          </g>
-          <g class="node" id="node2-s2" transform="translate(30,228)">
-            <rect class="node__box" width="170" height="64" rx="10"/>
-            <circle class="node__dot" cx="20" cy="22" r="4"/>
-            <text class="node__type" x="34" y="26">KÄLLA</text>
-            <text class="node__label" x="20" y="50">Apollo.io</text>
-          </g>
-          <g class="node" id="node2-s3" transform="translate(30,368)">
-            <rect class="node__box" width="170" height="64" rx="10"/>
-            <circle class="node__dot" cx="20" cy="22" r="4"/>
-            <text class="node__type" x="34" y="26">KÄLLA</text>
-            <text class="node__label" x="20" y="50">Webbsökning</text>
-          </g>
-
-          <!-- pipeline chain -->
-          <g class="node" id="node2-c1" transform="translate(250,220)">
-            <rect class="node__box" width="150" height="80" rx="10"/>
-            <circle class="node__dot" cx="20" cy="24" r="4"/>
-            <text class="node__type" x="34" y="28">STEG 1</text>
-            <text class="node__label" x="20" y="56">Hitta prospekt</text>
-          </g>
-          <g class="node" id="node2-c2" transform="translate(430,220)">
-            <rect class="node__box" width="150" height="80" rx="10"/>
-            <circle class="node__dot" cx="20" cy="24" r="4"/>
-            <text class="node__type" x="34" y="28">STEG 2</text>
-            <text class="node__label" x="20" y="52">Researcha bolag</text>
-            <g class="node__badge">
-              <rect x="20" y="60" width="56" height="14" rx="7"/>
-              <text x="48" y="70" text-anchor="middle">✦ AI/LLM</text>
-            </g>
-          </g>
-          <g class="node" id="node2-c3" transform="translate(610,220)">
-            <rect class="node__box" width="150" height="80" rx="10"/>
-            <circle class="node__dot" cx="20" cy="24" r="4"/>
-            <text class="node__type" x="34" y="28">STEG 3</text>
-            <text class="node__label" x="20" y="56">Poängsätt 0–100</text>
-          </g>
-          <g class="node" id="node2-c4" transform="translate(790,220)">
-            <rect class="node__box" width="150" height="80" rx="10"/>
-            <circle class="node__dot" cx="20" cy="24" r="4"/>
-            <text class="node__type" x="34" y="28">STEG 4</text>
-            <text class="node__label" x="20" y="52">Personligt utkast</text>
-            <g class="node__badge">
-              <rect x="20" y="60" width="56" height="14" rx="7"/>
-              <text x="48" y="70" text-anchor="middle">✦ AI/LLM</text>
-            </g>
-          </g>
-
-          <!-- output nodes -->
-          <g class="node" id="node2-o1" transform="translate(1000,148)">
-            <rect class="node__box" width="170" height="64" rx="10"/>
-            <circle class="node__dot" cx="20" cy="22" r="4"/>
-            <text class="node__type" x="34" y="26">MÅL</text>
-            <text class="node__label" x="20" y="50">HubSpot CRM</text>
-          </g>
-          <g class="node" id="node2-o2" transform="translate(1000,308)">
-            <rect class="node__box" width="170" height="64" rx="10"/>
-            <circle class="node__dot" cx="20" cy="22" r="4"/>
-            <text class="node__type" x="34" y="26">MÅL</text>
-            <text class="node__label" x="20" y="50">CSV/JSON-arkiv</text>
-          </g>
-
-          <!-- traveling pulses -->
-          <circle class="pulse" id="pulse2-s1" r="5"/>
-          <circle class="pulse" id="pulse2-s2" r="5"/>
-          <circle class="pulse" id="pulse2-s3" r="5"/>
-          <circle class="pulse" id="pulse2-c1" r="5"/>
-          <circle class="pulse" id="pulse2-c2" r="5"/>
-          <circle class="pulse" id="pulse2-c3" r="5"/>
-          <circle class="pulse" id="pulse2-o1" r="5"/>
-          <circle class="pulse" id="pulse2-o2" r="5"/>
-        </svg>
-      </div>
-    </section>
-
-    <!-- WORK 03: self-learning QA agent -->
-    <section class="section section--flow" id="work-qa">
-      <div class="section__head">
-        <p class="eyebrow" data-reveal>UTVALDA ARBETEN · 03 — KVALITETSSÄKRING</p>
-        <h2 data-reveal="blur">En AI-testare som lär sig för varje körning.</h2>
-        <p class="section__sub" data-reveal id="flowCaption3">Ett Jira-ärende med acceptanskriterier triggar en AI-testare.</p>
-      </div>
-      <div class="flow__stage" data-reveal="scale">
-        <div class="flow__meta">
-          <span class="flow__chip">AGENT · PLAYWRIGHT</span>
-          <span class="flow__chip">SJÄLVLÄRANDE</span>
-          <span class="flow__chip flow__chip--ai">✦ AI/LLM</span>
-        </div>
-        <svg id="flowSvg3" viewBox="0 0 1200 520" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Automationsflöde: ett Jira-ärende och en kunskapsbas triggar en AI-agent som testar applikationen i webbläsaren med Playwright, analyserar utfallet, rapporterar till Jira och sparar lärdomar tillbaka i kunskapsbasen.">
-          <defs>
-            <linearGradient id="wireGrad3" x1="0" y1="0" x2="1" y2="0">
-              <stop offset="0" stop-color="#f2f2f2"/>
-              <stop offset="1" stop-color="#8a8a8a"/>
-            </linearGradient>
-            <filter id="glow3" x="-60%" y="-60%" width="220%" height="220%">
-              <feGaussianBlur stdDeviation="6" result="b"/>
-              <feMerge>
-                <feMergeNode in="b"/><feMergeNode in="SourceGraphic"/>
-              </feMerge>
-            </filter>
-          </defs>
-
-          <!-- input wires -->
-          <path class="wire" id="wire3-in1" d="M 225 180 C 255 180, 255 260, 285 260"/>
-          <path class="wire" id="wire3-in2" d="M 225 340 C 255 340, 255 260, 285 260"/>
-
-          <!-- chain wires -->
-          <path class="wire" id="wire3-c1" d="M 475 260 C 487 260, 493 260, 505 260"/>
-          <path class="wire" id="wire3-c2" d="M 695 260 C 707 260, 713 260, 725 260"/>
-          <path class="wire" id="wire3-c3" d="M 915 260 C 927 260, 933 260, 945 260"/>
-
-          <!-- learning loop wire (back to the knowledge base) -->
-          <path class="wire" id="wire3-loop" d="M 1040 300 C 1050 470, 450 480, 228 358"/>
-          <text class="flow__looplabel" x="640" y="480" text-anchor="middle">LÄRDOMAR → KUNSKAPSBASEN</text>
-
-          <!-- input nodes -->
-          <g class="node" id="node3-in1" transform="translate(30,148)">
-            <rect class="node__box" width="195" height="64" rx="10"/>
-            <circle class="node__dot" cx="20" cy="22" r="4"/>
-            <text class="node__type" x="34" y="26">TRIGGER</text>
-            <text class="node__label" x="20" y="50">Jira-ärende</text>
-          </g>
-          <g class="node" id="node3-in2" transform="translate(30,308)">
-            <rect class="node__box" width="195" height="64" rx="10"/>
-            <circle class="node__dot" cx="20" cy="22" r="4"/>
-            <text class="node__type" x="34" y="26">KONTEXT</text>
-            <text class="node__label" x="20" y="50">Kunskapsbas (git)</text>
-          </g>
-
-          <!-- pipeline chain -->
-          <g class="node" id="node3-c1" transform="translate(285,220)">
-            <rect class="node__box" width="190" height="80" rx="10"/>
-            <circle class="node__dot" cx="20" cy="24" r="4"/>
-            <text class="node__type" x="34" y="28">STEG 1</text>
-            <text class="node__label" x="20" y="56">Läs acceptanskriterier</text>
-          </g>
-          <g class="node" id="node3-c2" transform="translate(505,220)">
-            <rect class="node__box" width="190" height="80" rx="10"/>
-            <circle class="node__dot" cx="20" cy="24" r="4"/>
-            <text class="node__type" x="34" y="28">STEG 2</text>
-            <text class="node__label" x="20" y="52">Testa i webbläsaren</text>
-            <g class="node__badge">
-              <rect x="20" y="60" width="56" height="14" rx="7"/>
-              <text x="48" y="70" text-anchor="middle">✦ AI/LLM</text>
-            </g>
-          </g>
-          <g class="node" id="node3-c3" transform="translate(725,220)">
-            <rect class="node__box" width="190" height="80" rx="10"/>
-            <circle class="node__dot" cx="20" cy="24" r="4"/>
-            <text class="node__type" x="34" y="28">STEG 3</text>
-            <text class="node__label" x="20" y="52">Analysera utfall</text>
-            <g class="node__badge">
-              <rect x="20" y="60" width="56" height="14" rx="7"/>
-              <text x="48" y="70" text-anchor="middle">✦ AI/LLM</text>
-            </g>
-          </g>
-          <g class="node" id="node3-c4" transform="translate(945,220)">
-            <rect class="node__box" width="190" height="80" rx="10"/>
-            <circle class="node__dot" cx="20" cy="24" r="4"/>
-            <text class="node__type" x="34" y="28">STEG 4</text>
-            <text class="node__label" x="20" y="56">Rapportera till Jira</text>
-          </g>
-
-          <!-- traveling pulses -->
-          <circle class="pulse" id="pulse3-in1" r="5"/>
-          <circle class="pulse" id="pulse3-in2" r="5"/>
-          <circle class="pulse" id="pulse3-c1" r="5"/>
-          <circle class="pulse" id="pulse3-c2" r="5"/>
-          <circle class="pulse" id="pulse3-c3" r="5"/>
-          <circle class="pulse" id="pulse3-loop" r="5"/>
-        </svg>
       </div>
     </section>
 
@@ -650,10 +446,16 @@
         </div>
         <svg id="flowSvg4" viewBox="0 0 1200 560" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Leveranspipeline: en pull request byggs till app- och testimage, deployas i ett isolerat Kubernetes-namespace där en testpod anropar den körande tjänsten med riktiga HTTP-anrop. Grönt resultat mergas vidare mot dev och E2E — rött stoppas i pull requesten och når aldrig kund.">
           <defs>
-            <linearGradient id="wireGrad4" x1="0" y1="0" x2="1" y2="0">
+            <linearGradient id="wireGrad" x1="0" y1="0" x2="1" y2="0">
               <stop offset="0" stop-color="#f2f2f2"/>
               <stop offset="1" stop-color="#8a8a8a"/>
             </linearGradient>
+            <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
+              <feGaussianBlur stdDeviation="6" result="b"/>
+              <feMerge>
+                <feMergeNode in="b"/><feMergeNode in="SourceGraphic"/>
+              </feMerge>
+            </filter>
           </defs>
 
           <!-- namespace boundary -->
@@ -842,7 +644,7 @@
       <div class="footer__col">
         <h4>Sidan</h4>
         <a href="#services">Tjänster</a>
-        <a href="#work">Utvalda arbeten</a>
+        <a href="#work">Exempel</a>
         <a href="#approach">Metod</a>
         <a href="#faq">FAQ</a>
       </div>
