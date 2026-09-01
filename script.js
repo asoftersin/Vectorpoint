@@ -53,37 +53,6 @@
     revealEls.forEach((el) => revealObserver.observe(el));
   }
 
-  // ---------- stats count-up ----------
-  const counters = document.querySelectorAll(".stat__count");
-  const runCounter = (el) => {
-    const target = Number(el.dataset.count || 0);
-    if (prefersReducedMotion) {
-      el.textContent = String(target);
-      return;
-    }
-    const duration = 1400;
-    const start = performance.now();
-    const tick = (now) => {
-      const t = Math.min((now - start) / duration, 1);
-      const eased = 1 - Math.pow(1 - t, 3);
-      el.textContent = String(Math.round(target * eased));
-      if (t < 1) requestAnimationFrame(tick);
-    };
-    requestAnimationFrame(tick);
-  };
-  const counterObserver = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          runCounter(entry.target);
-          counterObserver.unobserve(entry.target);
-        }
-      });
-    },
-    { threshold: 0.5 }
-  );
-  counters.forEach((el) => counterObserver.observe(el));
-
   // ---------- flows: traveling pulses (config-driven, one per work case) ----------
   // Each phase: caption (or null to keep), mode "parallel" | "sequence",
   // travels: [{ wire, pulse, node (lit at start), next (lit at end), duration? }]
@@ -96,7 +65,7 @@
     caption: "flowCaption4",
     phases: [
       {
-        caption: "En pull request öppnas — ny kod, allt oftare skriven av en AI-agent. Att den bygger bevisar inte att den fungerar.",
+        caption: "En pull request öppnas med ny kod, allt oftare skriven av en AI-agent. Att den bygger bevisar inte att den fungerar.",
         mode: "sequence",
         duration: 600,
         travels: [
@@ -104,7 +73,7 @@
         ],
       },
       {
-        caption: "Tjänsten och testerna deployas i ett isolerat Kubernetes-namespace — en riktig, körande miljö som inte påverkar någon annan.",
+        caption: "Tjänsten och testerna deployas i ett isolerat Kubernetes-namespace, en riktig och körande miljö som inte påverkar någon annan.",
         mode: "parallel",
         stagger: 200,
         duration: 800,
@@ -114,7 +83,7 @@
         ],
       },
       {
-        caption: "Testpodden anropar den levande tjänsten med riktiga HTTP-anrop. Svarar den rätt — på riktigt, inte i teorin?",
+        caption: "Testpodden anropar den levande tjänsten med riktiga HTTP-anrop. Svarar den rätt på riktigt, inte bara i teorin?",
         mode: "sequence",
         duration: 800,
         travels: [
@@ -122,7 +91,7 @@
         ],
       },
       {
-        caption: "Resultatet avgör: grönt mergas vidare mot dev och E2E — rött stannar i pull requesten och når aldrig kund.",
+        caption: "Resultatet avgör. Grönt mergas vidare mot dev och E2E, rött stannar i pull requesten och når aldrig kund.",
         mode: "sequence",
         duration: 700,
         travels: [
@@ -376,11 +345,11 @@
 
   // 01 — leadgenerering: hämta, klassificera, prioritera, leverera
   const LEADS = [
-    { name: "Ekelund &amp; Partner", domain: "ekelundpartner.se", src: "Apollo", kind: "Redovisningsbyrå · ca 35 anställda", prio: "medel", reason: "Mycket manuellt arbete, men oklart vem som beslutar" },
+    { name: "Almbro Redovisning", domain: "almbro.se", src: "Apollo", kind: "Redovisningsbyrå · ca 35 anställda", prio: "medel", reason: "Mycket manuellt arbete, men oklart vem som beslutar" },
     { name: "Nordkant Systems AB", domain: "nordkant.se", src: "People Data Labs", kind: "IT-konsult · ca 120 anställda", prio: "hog", reason: "Rekryterar tre utvecklare, ingen AI-roll i teamet" },
     { name: "Talentbryggan", domain: "talentbryggan.se", src: "Webb", kind: "Rekryteringsbyrå", prio: "bort", reason: "Förmedlar utvecklare, matchar inte kriterierna" },
-    { name: "Vindla AB", domain: "vindla.io", src: "People Data Labs", kind: "SaaS · B2B · ca 60 anställda", prio: "hog", reason: "Beskriver manuell onboarding av kunder på hemsidan" },
-    { name: "Brivo Logistik", domain: "brivo.se", src: "Apollo", kind: "Logistik · ca 400 anställda", prio: "medel", reason: "Rekryterar, men inom lager, inte IT" },
+    { name: "Tunbro AB", domain: "tunbro.io", src: "People Data Labs", kind: "SaaS · B2B · ca 60 anställda", prio: "hog", reason: "Beskriver manuell onboarding av kunder på hemsidan" },
+    { name: "Torneby Logistik", domain: "torneby.se", src: "Apollo", kind: "Logistik · ca 400 anställda", prio: "medel", reason: "Rekryterar, men inom lager, inte IT" },
   ];
   const PRIO_LABEL = { hog: "Hög prio", medel: "Medel", bort: "Bort" };
   const PRIO_ORDER = { hog: 0, medel: 1, bort: 2 };
