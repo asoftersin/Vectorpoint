@@ -1,5 +1,5 @@
 import { readFile } from "node:fs/promises";
-import { existsSync } from "node:fs";
+import { existsSync, readdirSync } from "node:fs";
 
 const requiredFiles = [
   "index.html",
@@ -36,6 +36,8 @@ const checks = [
   ["work anchor", html.includes('id="work"') && html.includes('href="#work"')],
   ["tools section", html.includes('id="tools"') && html.includes("VERKTYG OCH INTEGRATIONER") && css.includes(".tools__plate")],
   ["tool logos are local svg files", (() => { const refs = [...new Set(html.match(new RegExp("assets/logos/[a-z]+[.]svg", "g")) || [])]; return refs.length >= 12 && refs.every((p) => existsSync(p)); })()],
+  ["no orphan logo files", readdirSync("assets/logos").every((f) => html.includes(`assets/logos/${f}`))],
+  ["two copilots are told apart", html.includes("githubcopilot.svg") && html.includes("microsoftcopilot.svg") && html.includes(">GitHub Copilot<") && html.includes(">Microsoft Copilot<")],
   ["no runtime logo fetch from foreign hosts", !/<img[^>]+src="https?:/.test(html) && !html.includes("cdn.simpleicons.org")],
   ["example demos", ["demoLeads", "demoFeedback", "demoReport"].every((id) => html.includes(`id="${id}"`) && js.includes(`"${id}"`))],
   ["demo engine", js.includes("setupDemo") && js.includes("CANCEL") && js.includes("flip:") && css.includes(".demo__body")],
