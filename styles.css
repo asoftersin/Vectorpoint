@@ -334,6 +334,10 @@ a { color: inherit; }
   font-weight: 500;
   line-height: 1.06;
   letter-spacing: -0.03em;
+  /* Inters innehallsyta ar 1.21em men radhojden 1.06em, sa halvskotet blir
+     negativt och versalringar och prickar i a, a och o hamnar ovanfor
+     radboxens topp. Paddingen ger dem plats utan att gora radavstandet losare. */
+  padding-top: 0.09em;
 }
 
 .hero__lead {
@@ -1210,7 +1214,7 @@ a { color: inherit; }
   .grid--tight .card { padding: 16px 14px; }
   .grid--tight .card h3 { font-size: 0.9rem; }
   .grid--tight .card p { font-size: 0.82rem; }
-  .hero { padding-top: 72px; }
+  .hero { padding-top: 68px; }
   .hero__actions { flex-direction: column; width: 100%; }
   .hero__actions .btn { width: 100%; }
   .ask { gap: 8px; }
