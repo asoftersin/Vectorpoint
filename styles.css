@@ -347,6 +347,78 @@ a { color: inherit; }
   flex-wrap: wrap;
 }
 
+/* frågefält: tar besökarens text med till bokningen, ingen modell inblandad */
+.ask {
+  width: 100%;
+  max-width: 640px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.ask__label {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+.ask__row {
+  display: flex;
+  gap: 8px;
+  padding: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 10px;
+  background: rgba(6, 6, 6, 0.6);
+  backdrop-filter: blur(8px);
+}
+
+.ask__row:focus-within { border-color: #f2f2f2; }
+
+.ask__input {
+  flex: 1;
+  min-width: 0;
+  background: none;
+  border: none;
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  padding: 8px 10px;
+}
+
+.ask__input::placeholder { color: var(--muted); }
+.ask__input:focus { outline: none; }
+.ask__row .btn { white-space: nowrap; padding: 10px 16px; }
+
+.ask__chips { display: flex; gap: 8px; flex-wrap: wrap; }
+
+.ask__chip {
+  background: rgba(6, 6, 6, 0.5);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--text-dim);
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  padding: 6px 12px;
+  cursor: pointer;
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+
+.ask__chip:hover { border-color: #f2f2f2; color: #f2f2f2; }
+
+.ask__note {
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.ask__note a { color: var(--text-dim); }
+
+@media (max-width: 560px) {
+  .ask__row { flex-direction: column; }
+  .ask__row .btn { width: 100%; }
+}
+
 .hero__meta {
   font-family: var(--font-mono);
   font-size: 0.72rem;
@@ -1047,6 +1119,7 @@ a { color: inherit; }
 }
 
 .hero-scrub.is-scrub .hero__lead,
+.hero-scrub.is-scrub .hero__ask,
 .hero-scrub.is-scrub .hero__actions,
 .hero-scrub.is-scrub .hero__services {
   will-change: transform, opacity;

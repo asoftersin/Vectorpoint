@@ -34,6 +34,25 @@
     });
   }
 
+  // ---------- frågefältet i hero: chips fyller fältet, titeln förifylls vid bokning ----------
+  const askForm = document.getElementById("askForm");
+  if (askForm) {
+    const askInput = document.getElementById("askInput");
+    const askTitle = document.getElementById("askTitle");
+    askForm.querySelectorAll(".ask__chip").forEach((chip) => {
+      chip.addEventListener("click", () => {
+        askInput.value = chip.textContent.trim();
+        askInput.focus();
+      });
+    });
+    askForm.addEventListener("submit", () => {
+      const text = askInput.value.trim();
+      // cal.com-eventet kräver en mötesrubrik; en kort version av texten duger, annars ett standardvärde
+      askTitle.value = text ? text.slice(0, 60) : "Samtal om ett flöde att automatisera";
+      if (text) askInput.value = text + " (skrivet på vectorpoint.se)";
+    });
+  }
+
   // ---------- reveal on scroll ----------
   const revealEls = document.querySelectorAll("[data-reveal]");
   if (prefersReducedMotion) {
@@ -658,7 +677,7 @@
     const heroScrubOn = scrubEnabled && !!heroScrubWrap;
     const heroTitle = document.querySelector(".hero__title");
     const heroLead = document.querySelector(".hero__lead");
-    const heroActions = document.querySelector(".hero__actions");
+    const heroActions = document.querySelector(".hero__ask") || document.querySelector(".hero__actions");
     const heroMeta = document.querySelector(".hero__meta");
     const heroServices = document.querySelector(".hero__services");
     const heroWire = document.getElementById("heroWire");

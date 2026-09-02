@@ -146,9 +146,20 @@
         <div class="hero__main">
           <h1 class="hero__title" data-reveal>Från manuellt arbete till självkörande processer.</h1>
           <p class="hero__lead" data-reveal>Vi bygger AI-lösningar och automationer i kod som tar bort manuellt arbete, oavsett bransch.<br>Ingången är en prototypfas på er egen data.</p>
-          <div class="hero__actions" data-reveal>
-            <a class="btn btn--primary" href="https://cal.com/johan-studt/15min" target="_blank" rel="noreferrer" data-goatcounter-click="cta-hero"><span class="btn__ico" aria-hidden="true">▶</span>Boka ett samtal</a>
-          </div>
+          <form class="hero__ask ask" id="askForm" action="https://cal.com/johan-studt/15min" method="get" target="_blank" rel="noreferrer" data-reveal>
+            <label class="ask__label" for="askInput">Vad gör ni för hand idag?</label>
+            <div class="ask__row">
+              <input class="ask__input" id="askInput" name="notes" type="text" maxlength="400" autocomplete="off" placeholder="Beskriv ett manuellt moment ni vill bli av med">
+              <input type="hidden" name="title" id="askTitle" value="">
+              <button class="btn btn--primary" type="submit" data-goatcounter-click="cta-hero">Ta med det till ett samtal</button>
+            </div>
+            <div class="ask__chips" aria-label="Exempel att utgå från">
+              <button type="button" class="ask__chip">Rapporter klipps ihop för hand varje vecka</button>
+              <button type="button" class="ask__chip">Supporten sorterar ärenden manuellt</button>
+              <button type="button" class="ask__chip">Säljteamet researchar leads en och en</button>
+            </div>
+            <p class="ask__note">Texten följer med som notering till bokningen hos cal.com. Ingen AI läser den, det gör Johan inför samtalet. <a href="https://cal.com/johan-studt/15min" target="_blank" rel="noreferrer" data-goatcounter-click="cta-hero-direkt">Boka utan att skriva något</a></p>
+          </form>
           <p class="hero__meta" data-reveal>VECTORPOINT.SE · GÖTEBORG, SVERIGE</p>
         </div>
       </div>
