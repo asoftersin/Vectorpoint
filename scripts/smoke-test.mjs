@@ -49,6 +49,13 @@ const checks = [
   ["old svg flows removed", !html.includes('id="flowSvg"') && !html.includes('id="flowSvg2"') && !html.includes('id="flowSvg3"') && !js.includes("FLOWS")],
   ["pipeline svg self-contained defs", html.includes('id="wireGrad"') && html.includes('id="glow"') && !html.includes("wireGrad4")],
   ["example cta", html.includes('data-goatcounter-click="cta-exempel"')],
+  // Navraden är fixed. Blir hero-paddingen på mobil mindre än navradens höjd
+  // hamnar rubriken under headern, vilket hände i praktiken på iOS Safari.
+  // Navraden är 11 + 44 + 11 + 1 = 67 px där, så paddingen behöver marginal.
+  ["hero clears fixed nav on mobile", (() => {
+    const m = css.match(/@media \(max-width: 560px\)[^}]*\{[\s\S]*?\.hero \{ padding-top: (\d+)px/);
+    return m ? Number(m[1]) >= 90 : false;
+  })()],
   ["no em dash in prose", !html.split("\n").some((l) => l.includes("\u2014") && !l.includes("<title>") && !l.includes('property="og:title"') && !l.includes('name="twitter:title"'))],
   ["flow animation", js.includes("getPointAtLength") && js.includes("runPhase")],
   ["approach section", html.includes('id="approach"') && html.includes("Kartlägg")],
