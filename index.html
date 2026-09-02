@@ -415,7 +415,7 @@
         <p class="eyebrow" data-reveal>METOD</p>
         <h2 data-reveal="blur">Från idé till drift.</h2>
       </div>
-      <div class="grid grid--4">
+      <div class="grid grid--4 grid--tight">
         <article class="card card--step" data-reveal="left">
           <span class="card__num">01</span>
           <h3>Kartlägg</h3>
@@ -439,152 +439,131 @@
       </div>
     </section>
 
-    <!-- DIFFERENCE -->
+    <!-- DIFFERENCE: varför det håller, med leveranspipelinen i praktiken -->
     <section class="section" id="difference">
       <div class="section__head">
         <p class="eyebrow" data-reveal>SKILLNADEN</p>
         <h2 data-reveal="blur">Automation som tål verkligheten.</h2>
         <p class="section__sub" data-reveal>Att få en AI-automation att fungera i en demo är enkelt. Skillnaden ligger i hur den testas innan den släpps och i hur den går att följa upp efteråt.</p>
       </div>
-      <div class="grid grid--4">
-        <article class="card" data-reveal="scale">
-          <span class="card__num">01</span>
-          <h3>Testat före leverans</h3>
-          <p>Att koden bygger bevisar inte att den fungerar. Varje ändring körs upp som en riktig, levande tjänst och verifieras innan den släpps vidare.</p>
-        </article>
-        <article class="card" data-reveal="scale">
-          <span class="card__num">02</span>
-          <h3>Integrationstester</h3>
-          <p>Flödet testas med riktiga anrop mot riktiga system, redan på ändringsnivå och inte först när något gått sönder hos er.</p>
-        </article>
-        <article class="card" data-reveal="scale">
-          <span class="card__num">03</span>
-          <h3>Kvalitet i pipelinen</h3>
-          <p>Automatiska kvalitetskontroller är inbyggda i leveransflödet och fångar fel innan de når kund. Inget "hoppas det går bra".</p>
-        </article>
-        <article class="card" data-reveal="scale">
-          <span class="card__num">04</span>
-          <h3>Uppföljningsbart</h3>
-          <p>Det som byggs går att följa upp och kvalitetssäkra i drift. Ni ser vad som körs, vad det gör och kan lita på resultatet över tid.</p>
-        </article>
-      </div>
-    </section>
+      <ul class="points" data-reveal>
+        <li class="point"><h3>Testat före leverans</h3><p>Att koden bygger bevisar inte att den fungerar. Varje ändring körs upp som en riktig, levande tjänst och verifieras innan den släpps vidare.</p></li>
+        <li class="point"><h3>Integrationstester</h3><p>Flödet testas med riktiga anrop mot riktiga system, redan på ändringsnivå och inte först när något gått sönder hos er.</p></li>
+        <li class="point"><h3>Kvalitet i pipelinen</h3><p>Automatiska kvalitetskontroller är inbyggda i leveransflödet och fångar fel innan de når kund. Inget "hoppas det går bra".</p></li>
+        <li class="point"><h3>Uppföljningsbart</h3><p>Det som byggs går att följa upp och kvalitetssäkra i drift. Ni ser vad som körs, vad det gör och kan lita på resultatet över tid.</p></li>
+      </ul>
+      <div class="pipeline" id="pipeline">
+        <p class="eyebrow pipeline__label" data-reveal>I PRAKTIKEN · SÅ TESTAS VARJE ÄNDRING INNAN DEN SLÄPPS</p>
+        <div class="flow__stage" data-reveal="scale">
+          <div class="flow__meta">
+            <span class="flow__chip">PIPELINE · VARJE PULL REQUEST</span>
+            <span class="flow__chip">KUBERNETES</span>
+            <span class="flow__chip flow__chip--ai">✦ INTEGRATIONSTEST</span>
+          </div>
+          <div class="flow__scroll">
+          <svg id="flowSvg4" viewBox="20 95 1185 415" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Leveranspipeline: en pull request byggs till app- och testimage, deployas i ett isolerat Kubernetes-namespace där en testpod anropar den körande tjänsten med riktiga HTTP-anrop. Grönt resultat mergas vidare mot dev och E2E. Rött stoppas i pull requesten och når aldrig kund.">
+            <defs>
+              <linearGradient id="wireGrad" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0" stop-color="#f2f2f2"/>
+                <stop offset="1" stop-color="#8a8a8a"/>
+              </linearGradient>
+              <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
+                <feGaussianBlur stdDeviation="6" result="b"/>
+                <feMerge>
+                  <feMergeNode in="b"/><feMergeNode in="SourceGraphic"/>
+                </feMerge>
+              </filter>
+            </defs>
 
-    <!-- PIPELINE: how every delivery is tested -->
-    <section class="section section--flow" id="pipeline">
-      <div class="pipeline__sticky" id="pipelineSticky">
-      <div class="section__head">
-        <p class="eyebrow" data-reveal>SKILLNADEN · I PRAKTIKEN</p>
-        <h2 data-reveal="blur">Så testas varje leverans innan den släpps.</h2>
-        <p class="section__sub" data-reveal id="flowCaption4">En pull request öppnas med ny kod, allt oftare skriven av en AI-agent.</p>
-      </div>
-      <div class="flow__stage" data-reveal="scale">
-        <div class="flow__meta">
-          <span class="flow__chip">PIPELINE · VARJE PULL REQUEST</span>
-          <span class="flow__chip">KUBERNETES</span>
-          <span class="flow__chip flow__chip--ai">✦ INTEGRATIONSTEST</span>
+            <!-- namespace boundary -->
+            <rect class="flow__boundary" x="450" y="100" width="430" height="400" rx="14"/>
+            <text class="flow__boundarylabel" x="465" y="130">ISOLERAT PR-NAMESPACE · KUBERNETES</text>
+
+            <!-- wires -->
+            <path class="wire" id="wire4-a"  d="M 210 280 C 225 280, 225 280, 240 280"/>
+            <path class="wire" id="wire4-b1" d="M 410 280 C 445 280, 452 200, 490 200"/>
+            <path class="wire" id="wire4-b2" d="M 410 280 C 445 280, 452 420, 490 420"/>
+            <path class="wire" id="wire4-t"  d="M 580 380 C 580 335, 580 285, 580 240"/>
+            <path class="wire" id="wire4-g"  d="M 670 200 C 790 200, 780 280, 860 280"/>
+            <path class="wire" id="wire4-o1" d="M 1010 280 C 1026 280, 1024 160, 1040 160"/>
+            <path class="wire" id="wire4-o2" d="M 1010 280 C 1026 280, 1024 440, 1040 440"/>
+
+            <text class="flow__looplabel" x="640" y="316">HTTP · INT_TEST_URL</text>
+
+            <!-- nodes -->
+            <g class="node" id="node4-in1" transform="translate(30,240)">
+              <rect class="node__box" width="180" height="80" rx="10"/>
+              <circle class="node__dot" cx="20" cy="24" r="4"/>
+              <text class="node__type" x="34" y="28">TRIGGER</text>
+              <text class="node__label" x="20" y="52">Pull request</text>
+              <g class="node__badge">
+                <rect x="20" y="60" width="56" height="14" rx="7"/>
+                <text x="48" y="70" text-anchor="middle">✦ AI-KOD</text>
+              </g>
+            </g>
+
+            <g class="node" id="node4-c1" transform="translate(240,240)">
+              <rect class="node__box" width="170" height="80" rx="10"/>
+              <circle class="node__dot" cx="20" cy="24" r="4"/>
+              <text class="node__type" x="34" y="28">STEG 1</text>
+              <text class="node__label" x="20" y="56">Bygg + testimage</text>
+            </g>
+
+            <g class="node" id="node4-k1" transform="translate(490,160)">
+              <rect class="node__box" width="180" height="80" rx="10"/>
+              <circle class="node__dot" cx="20" cy="24" r="4"/>
+              <text class="node__type" x="34" y="28">TJÄNST</text>
+              <text class="node__label" x="20" y="56">Körande release</text>
+            </g>
+
+            <g class="node" id="node4-k2" transform="translate(490,380)">
+              <rect class="node__box" width="180" height="80" rx="10"/>
+              <circle class="node__dot" cx="20" cy="24" r="4"/>
+              <text class="node__type" x="34" y="28">TESTPOD</text>
+              <text class="node__label" x="20" y="52">Integrationstester</text>
+              <g class="node__badge">
+                <rect x="20" y="60" width="76" height="14" rx="7"/>
+                <text x="58" y="70" text-anchor="middle">RIKTIGA ANROP</text>
+              </g>
+            </g>
+
+            <g class="node" id="node4-gate" transform="translate(860,240)">
+              <rect class="node__box" width="150" height="80" rx="10"/>
+              <circle class="node__dot" cx="20" cy="24" r="4"/>
+              <text class="node__type" x="34" y="28">GRIND</text>
+              <text class="node__label" x="20" y="56">Grönt / rött</text>
+            </g>
+
+            <g class="node" id="node4-o1" transform="translate(1040,120)">
+              <rect class="node__box" width="150" height="80" rx="10"/>
+              <circle class="node__dot" cx="20" cy="24" r="4"/>
+              <text class="node__type" x="34" y="28">GRÖNT</text>
+              <text class="node__label" x="20" y="56">Merge → dev + E2E</text>
+            </g>
+
+            <g class="node" id="node4-o2" transform="translate(1040,400)">
+              <rect class="node__box" width="150" height="80" rx="10"/>
+              <circle class="node__dot" cx="20" cy="24" r="4"/>
+              <text class="node__type" x="34" y="28">RÖTT</text>
+              <text class="node__label" x="20" y="52">Stoppat i PR:en</text>
+              <g class="node__badge">
+                <rect x="20" y="60" width="76" height="14" rx="7"/>
+                <text x="58" y="70" text-anchor="middle">NÅR EJ KUND</text>
+              </g>
+            </g>
+
+            <!-- traveling pulses -->
+            <circle class="pulse" id="pulse4-a" r="5"/>
+            <circle class="pulse" id="pulse4-b1" r="5"/>
+            <circle class="pulse" id="pulse4-b2" r="5"/>
+            <circle class="pulse" id="pulse4-t" r="5"/>
+            <circle class="pulse" id="pulse4-g" r="5"/>
+            <circle class="pulse" id="pulse4-o1" r="5"/>
+            <circle class="pulse" id="pulse4-o2" r="5"/>
+          </svg>
+          </div>
+          <p class="flow__caption" id="flowCaption4">Följ en ändring från pull request till grind. Pulsen visar var koden befinner sig just nu, och texten här förklarar varje steg.</p>
         </div>
-        <svg id="flowSvg4" viewBox="0 0 1200 560" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Leveranspipeline: en pull request byggs till app- och testimage, deployas i ett isolerat Kubernetes-namespace där en testpod anropar den körande tjänsten med riktiga HTTP-anrop. Grönt resultat mergas vidare mot dev och E2E. Rött stoppas i pull requesten och når aldrig kund.">
-          <defs>
-            <linearGradient id="wireGrad" x1="0" y1="0" x2="1" y2="0">
-              <stop offset="0" stop-color="#f2f2f2"/>
-              <stop offset="1" stop-color="#8a8a8a"/>
-            </linearGradient>
-            <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
-              <feGaussianBlur stdDeviation="6" result="b"/>
-              <feMerge>
-                <feMergeNode in="b"/><feMergeNode in="SourceGraphic"/>
-              </feMerge>
-            </filter>
-          </defs>
-
-          <!-- namespace boundary -->
-          <rect class="flow__boundary" x="450" y="100" width="430" height="400" rx="14"/>
-          <text class="flow__boundarylabel" x="465" y="130">ISOLERAT PR-NAMESPACE · KUBERNETES</text>
-
-          <!-- wires -->
-          <path class="wire" id="wire4-a"  d="M 210 280 C 225 280, 225 280, 240 280"/>
-          <path class="wire" id="wire4-b1" d="M 410 280 C 445 280, 452 200, 490 200"/>
-          <path class="wire" id="wire4-b2" d="M 410 280 C 445 280, 452 420, 490 420"/>
-          <path class="wire" id="wire4-t"  d="M 580 380 C 580 335, 580 285, 580 240"/>
-          <path class="wire" id="wire4-g"  d="M 670 200 C 790 200, 780 280, 860 280"/>
-          <path class="wire" id="wire4-o1" d="M 1010 280 C 1026 280, 1024 160, 1040 160"/>
-          <path class="wire" id="wire4-o2" d="M 1010 280 C 1026 280, 1024 440, 1040 440"/>
-
-          <text class="flow__looplabel" x="640" y="316">HTTP · INT_TEST_URL</text>
-
-          <!-- nodes -->
-          <g class="node" id="node4-in1" transform="translate(30,240)">
-            <rect class="node__box" width="180" height="80" rx="10"/>
-            <circle class="node__dot" cx="20" cy="24" r="4"/>
-            <text class="node__type" x="34" y="28">TRIGGER</text>
-            <text class="node__label" x="20" y="52">Pull request</text>
-            <g class="node__badge">
-              <rect x="20" y="60" width="56" height="14" rx="7"/>
-              <text x="48" y="70" text-anchor="middle">✦ AI-KOD</text>
-            </g>
-          </g>
-
-          <g class="node" id="node4-c1" transform="translate(240,240)">
-            <rect class="node__box" width="170" height="80" rx="10"/>
-            <circle class="node__dot" cx="20" cy="24" r="4"/>
-            <text class="node__type" x="34" y="28">STEG 1</text>
-            <text class="node__label" x="20" y="56">Bygg + testimage</text>
-          </g>
-
-          <g class="node" id="node4-k1" transform="translate(490,160)">
-            <rect class="node__box" width="180" height="80" rx="10"/>
-            <circle class="node__dot" cx="20" cy="24" r="4"/>
-            <text class="node__type" x="34" y="28">TJÄNST</text>
-            <text class="node__label" x="20" y="56">Körande release</text>
-          </g>
-
-          <g class="node" id="node4-k2" transform="translate(490,380)">
-            <rect class="node__box" width="180" height="80" rx="10"/>
-            <circle class="node__dot" cx="20" cy="24" r="4"/>
-            <text class="node__type" x="34" y="28">TESTPOD</text>
-            <text class="node__label" x="20" y="52">Integrationstester</text>
-            <g class="node__badge">
-              <rect x="20" y="60" width="76" height="14" rx="7"/>
-              <text x="58" y="70" text-anchor="middle">RIKTIGA ANROP</text>
-            </g>
-          </g>
-
-          <g class="node" id="node4-gate" transform="translate(860,240)">
-            <rect class="node__box" width="150" height="80" rx="10"/>
-            <circle class="node__dot" cx="20" cy="24" r="4"/>
-            <text class="node__type" x="34" y="28">GRIND</text>
-            <text class="node__label" x="20" y="56">Grönt / rött</text>
-          </g>
-
-          <g class="node" id="node4-o1" transform="translate(1040,120)">
-            <rect class="node__box" width="150" height="80" rx="10"/>
-            <circle class="node__dot" cx="20" cy="24" r="4"/>
-            <text class="node__type" x="34" y="28">GRÖNT</text>
-            <text class="node__label" x="20" y="56">Merge → dev + E2E</text>
-          </g>
-
-          <g class="node" id="node4-o2" transform="translate(1040,400)">
-            <rect class="node__box" width="150" height="80" rx="10"/>
-            <circle class="node__dot" cx="20" cy="24" r="4"/>
-            <text class="node__type" x="34" y="28">RÖTT</text>
-            <text class="node__label" x="20" y="52">Stoppat i PR:en</text>
-            <g class="node__badge">
-              <rect x="20" y="60" width="76" height="14" rx="7"/>
-              <text x="58" y="70" text-anchor="middle">NÅR EJ KUND</text>
-            </g>
-          </g>
-
-          <!-- traveling pulses -->
-          <circle class="pulse" id="pulse4-a" r="5"/>
-          <circle class="pulse" id="pulse4-b1" r="5"/>
-          <circle class="pulse" id="pulse4-b2" r="5"/>
-          <circle class="pulse" id="pulse4-t" r="5"/>
-          <circle class="pulse" id="pulse4-g" r="5"/>
-          <circle class="pulse" id="pulse4-o1" r="5"/>
-          <circle class="pulse" id="pulse4-o2" r="5"/>
-        </svg>
-      </div>
       </div>
     </section>
 

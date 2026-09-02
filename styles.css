@@ -395,7 +395,7 @@ a { color: inherit; }
 /* ---------- sections ---------- */
 
 .section {
-  padding: clamp(80px, 10vw, 140px) var(--pad-x);
+  padding: clamp(56px, 7vw, 96px) var(--pad-x);
   max-width: 1400px;
   margin: 0 auto;
 }
@@ -417,7 +417,7 @@ a { color: inherit; }
   display: flex;
   flex-direction: column;
   gap: 16px;
-  margin-bottom: clamp(40px, 5vw, 64px);
+  margin-bottom: clamp(28px, 4vw, 44px);
 }
 
 .section__sub {
@@ -439,10 +439,10 @@ a { color: inherit; }
   background: var(--surface);
   border: 1px solid var(--line);
   border-radius: var(--radius);
-  padding: 28px 24px;
+  padding: 22px 20px;
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 10px;
   transition: border-color 0.25s ease, transform 0.25s ease, background 0.25s ease;
 }
 
@@ -473,10 +473,10 @@ a { color: inherit; }
 
 .card p {
   color: var(--muted);
-  font-size: 0.95rem;
+  font-size: 0.9rem;
 }
 
-.card--wide { padding: 36px 32px; }
+.card--wide { padding: 24px; }
 
 /* ---------- stats ---------- */
 
@@ -528,8 +528,46 @@ a { color: inherit; }
   background:
     radial-gradient(ellipse 60% 50% at 50% 50%, rgba(255, 255, 255, 0.03), transparent),
     var(--bg-alt);
-  padding: clamp(16px, 3vw, 40px);
+  padding: clamp(12px, 2vw, 24px);
 }
+
+.flow__scroll { overflow-x: auto; scrollbar-width: thin; scrollbar-color: var(--line) transparent; }
+
+.flow__caption {
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+  color: var(--text-dim);
+  font-size: 0.95rem;
+  min-height: 2.6em;
+}
+
+.pipeline { margin-top: clamp(28px, 4vw, 44px); }
+.pipeline__label { margin-bottom: 16px; }
+
+/* Skillnadens fyra punkter som tät lista i stället för kort */
+.points {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18px clamp(24px, 4vw, 56px);
+}
+
+.point {
+  padding-left: 16px;
+  border-left: 2px solid var(--line);
+}
+
+.point h3 {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  font-size: 0.85rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.point p { color: var(--muted); font-size: 0.9rem; }
 
 .flow__meta {
   display: flex;
@@ -687,7 +725,7 @@ a { color: inherit; }
 .cta {
   position: relative;
   text-align: center;
-  padding: clamp(100px, 12vw, 180px) var(--pad-x);
+  padding: clamp(72px, 9vw, 120px) var(--pad-x);
   overflow: hidden;
   border-top: 1px solid var(--line);
   display: flex;
@@ -993,7 +1031,7 @@ a { color: inherit; }
 
 /* pinnad hero-scrub (sätts av JS på desktop) */
 .hero-scrub.is-scrub {
-  height: 220vh;
+  height: 160vh;
 }
 
 .hero-scrub.is-scrub .hero {
@@ -1040,32 +1078,6 @@ a { color: inherit; }
   box-shadow: 0 0 12px 3px rgba(0, 153, 255, 0.7);
 }
 
-/* pinnad, scroll-scrubbad pipeline (sätts av JS på desktop) */
-#pipeline.is-scrub {
-  height: 280vh;
-  padding-top: 0;
-  padding-bottom: 0;
-}
-
-#pipeline.is-scrub .pipeline__sticky {
-  position: sticky;
-  top: 0;
-  height: 100svh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding-top: 118px;
-  padding-bottom: 28px;
-  box-sizing: border-box;
-}
-
-#pipeline.is-scrub .flow__stage svg {
-  max-height: calc(100svh - 400px);
-  width: auto;
-  max-width: 100%;
-  margin: 0 auto;
-}
-
 /* ---------- responsive ---------- */
 
 @media (max-width: 1100px) {
@@ -1073,8 +1085,10 @@ a { color: inherit; }
 }
 
 @media (max-width: 860px) {
-  .nav__links, .nav__cta { display: none; }
-  .nav__burger { display: flex; }
+  .nav__links { display: none; }
+  .nav__inner { gap: 12px; }
+  .nav__cta { margin-left: auto; padding: 9px 14px; font-size: 0.85rem; }
+  .nav__burger { display: flex; margin-left: 0; }
   .hero__services { display: none; }
   .nav {
     background: rgba(6, 6, 6, 0.86);
@@ -1093,6 +1107,10 @@ a { color: inherit; }
 
 @media (max-width: 560px) {
   .grid--4 { grid-template-columns: 1fr; }
+  .grid--4.grid--tight { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .grid--tight .card { padding: 16px 14px; }
+  .grid--tight .card h3 { font-size: 0.9rem; }
+  .grid--tight .card p { font-size: 0.82rem; }
   .hero { padding-top: 120px; }
   .hero__actions { flex-direction: column; width: 100%; }
   .hero__actions .btn { width: 100%; }
@@ -1755,9 +1773,14 @@ a { color: inherit; }
 
 @media (max-width: 1100px) {
   .demo-block { grid-template-columns: 1fr; }
+  /* staplad layout: skenan visar bara det aktiva stegets text, resten är rubriker */
+  .demo-steps__item { padding: 8px 0; }
+  .demo-steps__item p { display: none; }
+  .demo-steps__item.is-active p { display: block; }
 }
 
 @media (max-width: 640px) {
+  .flow__scroll svg { min-width: 720px; }
   .demo { height: 440px; }
   .demo__body--split,
   .demo__body--report { grid-template-columns: 1fr; grid-template-rows: 1fr 1fr; }
@@ -1772,6 +1795,7 @@ a { color: inherit; }
     transition: none !important;
     animation: none !important;
   }
+  .demo-steps__item p { display: block; }
   .demo__dot { animation: none; }
   .is-busy::after { display: none; }
 }
@@ -1833,9 +1857,12 @@ a { color: inherit; }
 }
 
 @media (max-width: 560px) {
-  .tools { grid-template-columns: repeat(auto-fill, minmax(104px, 1fr)); gap: 8px; }
-  .tools__plate { width: 56px; height: 56px; }
-  .tools__plate img { width: 32px; height: 32px; }
+  .tools { grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap: 8px; }
+  .tools__item { padding: 12px 6px 10px; gap: 8px; }
+  .tools__plate { width: 48px; height: 48px; border-radius: 10px; }
+  .tools__plate img { width: 28px; height: 28px; }
+  .tools__name { font-size: 0.58rem; letter-spacing: 0.06em; }
+  .points { grid-template-columns: 1fr; }
 }
 
 @media (prefers-reduced-motion: reduce) {

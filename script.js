@@ -144,6 +144,7 @@
     }
 
     const caption = document.getElementById(cfg.caption);
+    const introCaption = caption ? caption.textContent : "";
     const resolveTravel = (t) => ({
       path: document.getElementById(t.wire),
       pulse: document.getElementById(t.pulse),
@@ -176,11 +177,14 @@
       for (const phase of cfg.phases) {
         await runPhase(phase);
       }
-      // idle, then loop
+      // paus med introtexten, sedan loop
+      setTimeout(() => {
+        if (caption && introCaption) caption.textContent = introCaption;
+      }, 2500);
       setTimeout(() => {
         running = false;
         run();
-      }, 4000);
+      }, 6000);
     };
 
     const observer = new IntersectionObserver(
@@ -639,58 +643,7 @@
   // Scrub-läget (pinnad pipeline) körs bara på desktop utan reduced motion.
   const scrubEnabled = !prefersReducedMotion && window.matchMedia("(min-width: 861px)").matches;
 
-  // Pipelinen scrubbas när det går, annars autoplayar den.
-  if (!scrubEnabled) setupFlow(PIPELINE_FLOW);
-
-  // Bygger en scrubber: global progress 0–1 mappas på faserna, helt reversibelt —
-  // varje frame räknas allt om från p, så bakåtscroll släcker det som inte hänt än.
-  const buildScrubber = (cfg) => {
-    const svg = document.getElementById(cfg.svg);
-    const captionEl = document.getElementById(cfg.caption);
-    if (!svg) return null;
-
-    const phases = cfg.phases.map((phase) => ({
-      caption: phase.caption,
-      travels: phase.travels.map((t) => {
-        const path = document.getElementById(t.wire);
-        return {
-          path,
-          length: path.getTotalLength(),
-          pulse: document.getElementById(t.pulse),
-          node: document.getElementById(t.node),
-          next: document.getElementById(t.next),
-        };
-      }),
-    }));
-
-    let lastCaption = null;
-    return (p) => {
-      const pos = Math.min(Math.max(p, 0), 1) * phases.length;
-      let currentCaption = phases[0].caption;
-      phases.forEach((phase, i) => {
-        const t = Math.min(Math.max(pos - i, 0), 1);
-        phase.travels.forEach((tr) => {
-          tr.node.classList.toggle("is-active", t > 0);
-          tr.path.classList.toggle("is-active", t > 0);
-          tr.next.classList.toggle("is-active", t >= 1);
-          if (t > 0 && t < 1) {
-            const point = tr.path.getPointAtLength(tr.length * t);
-            tr.pulse.setAttribute("cx", point.x);
-            tr.pulse.setAttribute("cy", point.y);
-            tr.pulse.style.opacity = "1";
-          } else {
-            tr.pulse.style.opacity = "0";
-          }
-        });
-        // senast startade fas med text vinner; null ärver föregående
-        if (t > 0 && phase.caption) currentCaption = phase.caption;
-      });
-      if (captionEl && currentCaption && lastCaption !== currentCaption) {
-        captionEl.textContent = currentCaption;
-        lastCaption = currentCaption;
-      }
-    };
-  };
+  setupFlow(PIPELINE_FLOW);
 
   if (!prefersReducedMotion) {
     const progressFill = document.getElementById("scrollProgressFill");
@@ -698,12 +651,6 @@
     const heroVideoEl = document.querySelector(".hero__video");
     const heroCue = document.getElementById("heroCue");
     const marqueeTrack = document.querySelector(".marquee__track");
-    const pipelineSection = document.getElementById("pipeline");
-    const scrub = scrubEnabled ? buildScrubber(PIPELINE_FLOW) : null;
-    if (scrub && pipelineSection) {
-      pipelineSection.classList.add("is-scrub");
-      scrub(0);
-    }
 
     // Pinnad hero: första scrollgesten berättar — video zoomar, sidoinnehåll
     // viker undan, rubriken krymper och en tråd lämnar över pulsen till sidan.
@@ -787,12 +734,6 @@
         marqueeOffset -= 0.6 + Math.min(velocity * 0.12, 4);
         if (marqueeOffset <= -marqueeHalf) marqueeOffset += marqueeHalf;
         marqueeTrack.style.transform = `translateX(${marqueeOffset}px)`;
-      }
-
-      if (scrub && pipelineSection) {
-        const rect = pipelineSection.getBoundingClientRect();
-        const range = rect.height - window.innerHeight;
-        if (range > 0) scrub(-rect.top / range);
       }
 
       requestAnimationFrame(frame);
