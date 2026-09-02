@@ -415,8 +415,34 @@ a { color: inherit; }
 .ask__note a { color: var(--text-dim); }
 
 @media (max-width: 560px) {
-  .ask__row { flex-direction: column; }
-  .ask__row .btn { width: 100%; }
+  /* Ramen flyttas fran raden till sjalva faltet, annars hamnar knappen inuti
+     inmatningsrutan nar raden staplas. */
+  .ask__row {
+    flex-direction: column;
+    gap: 10px;
+    padding: 0;
+    border: none;
+    background: none;
+    backdrop-filter: none;
+  }
+
+  .ask__row:focus-within { border-color: transparent; }
+
+  .ask__input {
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 10px;
+    background: rgba(6, 6, 6, 0.6);
+    backdrop-filter: blur(8px);
+    padding: 13px 14px;
+    min-height: 46px;
+  }
+
+  .ask__input:focus { border-color: #f2f2f2; }
+  .ask__row .btn { width: 100%; min-height: 46px; }
+  .ask__chip { min-height: 36px; }
+
+  /* Tva exempel racker pa mobil, det tredje kostar en rad hojd. */
+  .ask__chips > :nth-child(3) { display: none; }
 }
 
 .hero__meta {
@@ -1160,7 +1186,7 @@ a { color: inherit; }
 @media (max-width: 860px) {
   .nav__links { display: none; }
   .nav__inner { gap: 12px; }
-  .nav__cta { margin-left: auto; padding: 9px 14px; font-size: 0.85rem; }
+  .nav__cta { margin-left: auto; padding: 9px 14px; font-size: 0.85rem; white-space: nowrap; }
   .nav__burger { display: flex; margin-left: 0; }
   .hero__services { display: none; }
   .nav {
@@ -1184,9 +1210,13 @@ a { color: inherit; }
   .grid--tight .card { padding: 16px 14px; }
   .grid--tight .card h3 { font-size: 0.9rem; }
   .grid--tight .card p { font-size: 0.82rem; }
-  .hero { padding-top: 120px; }
+  .hero { padding-top: 72px; }
   .hero__actions { flex-direction: column; width: 100%; }
   .hero__actions .btn { width: 100%; }
+  .ask { gap: 8px; }
+  .nav__cta { padding: 8px 12px; font-size: 0.78rem; min-height: 44px; }
+  /* Scrollmarkoren krockar med adressraden och behovs inte pa mobil. */
+  .hero__cue { display: none; }
 }
 
 /* ---------- reduced motion ---------- */
