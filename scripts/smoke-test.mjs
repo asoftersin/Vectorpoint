@@ -83,7 +83,16 @@ const checks = [
   ["scroll reduced motion", css.includes(".scroll-progress { display: none; }") && js.includes("scrubEnabled = !prefersReducedMotion")],
   ["hero scrub", html.includes('id="heroScrub"') && html.includes('id="heroWire"') && js.includes("heroScrubOn") && css.includes(".hero-scrub.is-scrub")],
   ["reveal variants", html.includes('data-reveal="blur"') && html.includes('data-reveal="scale"') && html.includes('data-reveal="left"') && css.includes('[data-reveal="blur"]') && css.includes(".grid--2 > [data-reveal]:nth-child(odd)")],
-  ["faq cascade", html.includes('<details class="faq__item" data-reveal>') && css.includes(".faq__list > [data-reveal]:nth-child(5)")],
+  ["faq cascade", html.includes('<details class="faq__item" data-reveal>') && css.includes(".faq__list > [data-reveal]:nth-child(7)")],
+  ["faq covers breadth and trust", ["Vilka bolag passar det här för?", "Varför ska vi lita på att det ni bygger håller?"].every((q) => html.split(q).length === 3)],
+  ["no untested delivery-time promises", !/inom (två veckor|dagar|[0-9]+ (dagar|veckor))/i.test(html)],
+  ["no 'produktion' cliché", !/produktion/i.test(html) && !/produktion/i.test(js)],
+  ["no 'tränade på' claim", !html.includes("tränade på")],
+  ["hero tools line removed", !html.includes("hero__tools") && !css.includes(".hero__tools")],
+  ["meta reflects broad positioning", html.includes("oavsett bransch") && html.includes('"legalName": "Vector Point AB"')],
+  ["skip link and focus styles", html.includes('class="skip-link"') && css.includes(":focus-visible")],
+  ["footer heading level", html.includes("<h3>Kontakt</h3>") && !html.includes("<h4>")],
+  ["marquee hidden from assistive tech", html.includes('class="marquee" aria-hidden="true"')],
 ];
 
 const failed = checks.filter(([, passed]) => !passed);

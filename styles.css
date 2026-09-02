@@ -70,6 +70,36 @@ a { color: inherit; }
   display: inline-block;
 }
 
+/* ---------- tillgänglighet ---------- */
+
+.skip-link {
+  position: absolute;
+  left: 16px;
+  top: -60px;
+  z-index: 300;
+  background: #f2f2f2;
+  color: #060606;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  padding: 10px 16px;
+  border-radius: 6px;
+  text-decoration: none;
+  transition: top 0.2s ease;
+}
+
+.skip-link:focus { top: 16px; }
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.btn:focus-visible {
+  outline: 2px solid #f2f2f2;
+  outline-offset: 3px;
+}
+
 /* ---------- buttons ---------- */
 
 .btn {
@@ -270,13 +300,6 @@ a { color: inherit; }
 
 .hero__services a:hover { color: var(--muted); }
 
-.hero__tools {
-  margin-top: 28px;
-  font-family: var(--font-mono);
-  font-size: 0.7rem;
-  letter-spacing: 0.18em;
-  color: var(--muted);
-}
 
 .hero__main {
   margin-top: auto;
@@ -719,7 +742,7 @@ a { color: inherit; }
   gap: 12px;
 }
 
-.footer__col h4 {
+.footer__col h3 {
   font-family: var(--font-mono);
   font-size: 0.75rem;
   font-weight: 600;
@@ -872,6 +895,8 @@ a { color: inherit; }
 .faq__list > [data-reveal]:nth-child(3) { transition-delay: 0.14s; }
 .faq__list > [data-reveal]:nth-child(4) { transition-delay: 0.21s; }
 .faq__list > [data-reveal]:nth-child(5) { transition-delay: 0.28s; }
+.faq__list > [data-reveal]:nth-child(6) { transition-delay: 0.35s; }
+.faq__list > [data-reveal]:nth-child(7) { transition-delay: 0.42s; }
 
 /* kortens nummerbricka tänds strax efter kortet */
 .card[data-reveal] .card__num {
