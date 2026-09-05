@@ -1219,6 +1219,11 @@ a { color: inherit; }
   .grid--tight .card h3 { font-size: 0.9rem; }
   .grid--tight .card p { font-size: 0.82rem; }
   .hero { padding-top: 96px; }
+  /* "Prospekteringsagenter." ar ett enda ord som inte kan brytas, sa pa smala
+     skarmar maste rubriken folja viewportbredden i stallet for att sta kvar pa
+     clampens golv (2.3rem) och sticka ut utanfor spalten. Taket ar samma 2.3rem,
+     sa allt over ~450px ser ut precis som forut. */
+  .hero__title { font-size: clamp(1.5rem, 8.2vw, 2.3rem); }
   .hero__actions { flex-direction: column; width: 100%; }
   .hero__actions .btn { width: 100%; }
   .ask { gap: 8px; }
