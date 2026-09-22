@@ -24,6 +24,8 @@
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
+[hidden] { display: none !important; }
+
 html { scroll-behavior: smooth; }
 
 body {
@@ -608,6 +610,22 @@ a { color: inherit; }
 }
 
 .pipeline { margin-top: clamp(28px, 4vw, 44px); }
+.pipeline > summary {
+  cursor: pointer;
+  padding: 18px 0;
+  border-top: 1px solid var(--line);
+  color: var(--text);
+  font-weight: 500;
+}
+.pipeline > summary::marker { color: var(--accent); }
+.pipeline__hint {
+  display: block;
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 0.85rem;
+  font-weight: 400;
+}
+.pipeline[open] > summary { margin-bottom: 16px; }
 .pipeline__label { margin-bottom: 16px; }
 
 /* Skillnadens fyra punkter som tät lista i stället för kort */
@@ -1220,13 +1238,48 @@ a { color: inherit; }
 
 /* ---------- exempel: uppspelande UI-rutor ---------- */
 
-.section--examples { padding-bottom: 0; }
 .section--examples .section__head { margin-bottom: 0; }
 .section__sub--wide { max-width: 720px; }
 
+.builder-proof {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 24px;
+  text-decoration: none;
+  font-size: 0.95rem;
+}
+.builder-proof img { border-radius: 50%; object-fit: cover; flex-shrink: 0; }
+.builder-proof__detail { display: block; color: var(--muted); font-size: 0.8rem; }
+.builder-proof__link { white-space: nowrap; }
+.builder-proof:hover .builder-proof__detail { color: var(--text); }
+
+.example-tabs {
+  display: flex;
+  gap: 6px;
+  margin-top: 32px;
+  border-bottom: 1px solid var(--line);
+}
+.example-tabs__tab {
+  appearance: none;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  background: transparent;
+  color: var(--muted);
+  padding: 14px clamp(10px, 2vw, 24px);
+  font: inherit;
+  font-size: clamp(0.85rem, 3.8vw, 1rem);
+  font-weight: 500;
+  cursor: pointer;
+  min-height: 48px;
+}
+.example-tabs__tab:hover { color: var(--text); background: var(--surface); }
+.example-tabs__tab[aria-selected="true"] { color: var(--text); border-bottom-color: var(--accent); }
+.example-panel { scroll-margin-top: 100px; }
+
 .section--demo {
-  padding-top: clamp(48px, 6vw, 88px);
-  padding-bottom: clamp(32px, 4vw, 56px);
+  padding-top: clamp(28px, 4vw, 44px);
+  padding-bottom: 0;
 }
 
 .section--demo .section__head { margin-bottom: clamp(24px, 3vw, 40px); }
@@ -1827,6 +1880,7 @@ a { color: inherit; }
 
 .demo-steps__item p { font-size: 0.86rem; color: var(--muted); margin-top: 4px; line-height: 1.5; }
 .demo-steps__item.is-active p { color: var(--text-dim); }
+html:not(.vectorpoint-loaded) .demo-steps__item p { display: block; }
 
 .demo-cta {
   margin-top: clamp(40px, 5vw, 64px);
@@ -1842,6 +1896,21 @@ a { color: inherit; }
 }
 
 .demo-cta p { color: var(--text-dim); max-width: 560px; }
+.prototype__copy { flex: 1 1 480px; min-width: 0; }
+.prototype__copy h3 {
+  font-size: clamp(1.35rem, 2.3vw, 1.8rem);
+  font-weight: 500;
+  line-height: 1.3;
+  margin-top: 12px;
+  max-width: 580px;
+}
+.prototype__deliverables {
+  padding-left: 20px;
+  margin: 18px 0;
+  color: var(--text-dim);
+}
+.prototype__deliverables li + li { margin-top: 8px; }
+.prototype__copy > p:last-child { color: var(--muted); font-size: 0.9rem; }
 
 @media (max-width: 1100px) {
   .demo-block { grid-template-columns: 1fr; }

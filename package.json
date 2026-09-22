@@ -8,7 +8,8 @@
   },
   "scripts": {
     "preview": "node scripts/preview-server.mjs",
-    "test": "node scripts/smoke-test.mjs"
+    "test": "node scripts/smoke-test.mjs",
+    "test:browser": "node scripts/browser-test.mjs"
   },
   "keywords": [],
   "author": "",

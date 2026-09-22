@@ -53,6 +53,50 @@
     });
   }
 
+  // Enhance the existing sections; without JS every example remains readable.
+  const exampleTabs = document.getElementById("exampleTabs");
+  if (exampleTabs) {
+    const tabs = Array.from(exampleTabs.querySelectorAll('[role="tab"]'));
+    const panels = tabs.map((tab) => document.getElementById(tab.getAttribute("aria-controls")));
+    const selectExample = (index) => {
+      tabs.forEach((tab, i) => {
+        tab.setAttribute("aria-selected", String(i === index));
+        tab.tabIndex = i === index ? 0 : -1;
+        panels[i].hidden = i !== index;
+      });
+      document.dispatchEvent(new CustomEvent("examplechange"));
+    };
+    const selectHashExample = () => {
+      const index = panels.findIndex((panel) => `#${panel.id}` === window.location.hash);
+      if (index < 0) return false;
+      selectExample(index);
+      panels[index].scrollIntoView({ behavior: "instant", block: "start" });
+      return true;
+    };
+    panels.forEach((panel, i) => {
+      panel.setAttribute("role", "tabpanel");
+      panel.setAttribute("aria-labelledby", tabs[i].id);
+      panel.tabIndex = 0;
+    });
+    tabs.forEach((tab, index) => {
+      tab.addEventListener("click", () => selectExample(index));
+      tab.addEventListener("keydown", (event) => {
+        let next;
+        if (event.key === "ArrowRight") next = (index + 1) % tabs.length;
+        else if (event.key === "ArrowLeft") next = (index - 1 + tabs.length) % tabs.length;
+        else if (event.key === "Home") next = 0;
+        else if (event.key === "End") next = tabs.length - 1;
+        else return;
+        event.preventDefault();
+        selectExample(next);
+        tabs[next].focus();
+      });
+    });
+    exampleTabs.hidden = false;
+    if (!selectHashExample()) selectExample(0);
+    window.addEventListener("hashchange", selectHashExample);
+  }
+
   // ---------- reveal on scroll ----------
   const revealEls = document.querySelectorAll("[data-reveal]");
   if (prefersReducedMotion) {
@@ -146,7 +190,7 @@
     ],
   };
 
-  const travel = ({ path, pulse, node, next }, duration = 650) =>
+  const travel = ({ path, pulse, node, next }, duration = 650, isCurrent = () => true) =>
     new Promise((resolve) => {
       const length = path.getTotalLength();
       path.classList.add("is-active");
@@ -154,6 +198,11 @@
       pulse.style.opacity = "1";
       const start = performance.now();
       const step = (now) => {
+        if (!isCurrent()) {
+          pulse.style.opacity = "0";
+          resolve();
+          return;
+        }
         const t = Math.min((now - start) / duration, 1);
         const point = path.getPointAtLength(length * t);
         pulse.setAttribute("cx", point.x);
@@ -188,35 +237,56 @@
       duration: t.duration,
     });
 
-    const runPhase = async (phase) => {
+    const runPhase = async (phase, isCurrent) => {
       if (phase.caption && caption) caption.textContent = phase.caption;
       const travels = phase.travels.map(resolveTravel);
       if (phase.mode === "parallel") {
         await Promise.all(
           travels.map((t, i) =>
-            new Promise((r) => setTimeout(() => travel(t, t.duration || phase.duration).then(r), i * (phase.stagger || 0)))
+            new Promise((r) => setTimeout(() => {
+              if (!isCurrent()) return r();
+              travel(t, t.duration || phase.duration, isCurrent).then(r);
+            }, i * (phase.stagger || 0)))
           )
         );
       } else {
         for (const t of travels) {
-          await travel(t, t.duration || phase.duration);
+          if (!isCurrent()) return;
+          await travel(t, t.duration || phase.duration, isCurrent);
         }
       }
     };
 
+    const disclosure = svg.closest("details");
     let running = false;
+    let inView = false;
+    let generation = 0;
+    let introTimer;
+    let loopTimer;
+    const stop = () => {
+      generation++;
+      running = false;
+      clearTimeout(introTimer);
+      clearTimeout(loopTimer);
+      svg.querySelectorAll(".pulse").forEach((pulse) => { pulse.style.opacity = "0"; });
+      if (caption) caption.textContent = introCaption;
+    };
     const run = async () => {
-      if (running) return;
+      if (running || !inView || (disclosure && !disclosure.open)) return;
       running = true;
+      const current = ++generation;
+      const isCurrent = () => current === generation;
       svg.querySelectorAll(".is-active").forEach((el) => el.classList.remove("is-active"));
       for (const phase of cfg.phases) {
-        await runPhase(phase);
+        if (!isCurrent()) return;
+        await runPhase(phase, isCurrent);
       }
+      if (!isCurrent()) return;
       // paus med introtexten, sedan loop
-      setTimeout(() => {
+      introTimer = setTimeout(() => {
         if (caption && introCaption) caption.textContent = introCaption;
       }, 2500);
-      setTimeout(() => {
+      loopTimer = setTimeout(() => {
         running = false;
         run();
       }, 6000);
@@ -225,15 +295,20 @@
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            run();
-            observer.unobserve(entry.target);
-          }
+          inView = entry.isIntersecting;
+          if (inView) run();
+          else stop();
         });
       },
       { threshold: 0.35 }
     );
     observer.observe(svg);
+    if (disclosure) {
+      disclosure.addEventListener("toggle", () => {
+        if (disclosure.open) run();
+        else stop();
+      });
+    }
   };
 
   // ---------- exempel: skriptade UI-uppspelningar ----------
@@ -363,6 +438,16 @@
     };
 
     if (replay) replay.addEventListener("click", run);
+
+    document.addEventListener("examplechange", () => {
+      if (!root.closest("[hidden]")) return;
+      token++;
+      clearTimeout(loopTimer);
+      inView = false;
+      started = false;
+      finished = false;
+      loopPending = false;
+    });
 
     const observer = new IntersectionObserver(
       (entries) => {

@@ -17,7 +17,7 @@ const types = new Map([
   [".mp4", "video/mp4"],
 ]);
 
-createServer(async (request, response) => {
+const server = createServer(async (request, response) => {
   try {
     let rawPath = request.url.split("?")[0];
     if (rawPath.endsWith("/")) rawPath += "index.html"; // katalog-index, som GitHub Pages
@@ -37,5 +37,5 @@ createServer(async (request, response) => {
     response.end("Not found");
   }
 }).listen(port, "127.0.0.1", () => {
-  console.log(`Vectorpoint preview: http://localhost:${port}/`);
+  console.log(`Vectorpoint preview: http://127.0.0.1:${server.address().port}/`);
 });
