@@ -186,6 +186,17 @@ try {
     check(await mobilePage.locator("#navBurger").getAttribute("aria-expanded") === "false",
       `Menu closes after navigation at ${width}px`);
   }
+  for (const width of [320, 375, 390, 600, 768, 1024, 1280, 1400]) {
+    await mobilePage.setViewportSize({ width, height: 900 });
+    await mobilePage.evaluate(() => scrollTo({ top: 0, behavior: "instant" }));
+    check(await mobilePage.locator(".hero__line").evaluateAll((lines) => lines.every((line) => {
+      const range = document.createRange();
+      range.selectNodeContents(line);
+      const text = range.getBoundingClientRect();
+      const box = line.getBoundingClientRect();
+      return text.height < parseFloat(getComputedStyle(line).lineHeight) * 1.5 && text.right <= box.right + 1;
+    })), `Each hero sentence stays on one line inside its column at ${width}px`);
+  }
   await mobile.close();
 
   const noJs = await newContext({ javaScriptEnabled: false });

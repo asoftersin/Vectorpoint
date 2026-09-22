@@ -26,7 +26,7 @@ const js = await readFile("script.js", "utf8");
 const sitemap = await readFile("sitemap.xml", "utf8");
 
 const checks = [
-  ["outcome-led hero headline", html.includes('class="hero__title" data-reveal>Mindre manuellt arbete.<br>Mer tid för kunderna.</h1>')],
+  ["outcome-led hero headline", html.includes('class="hero__title" data-reveal><span class="hero__line">Mindre manuellt arbete.</span> <span class="hero__line">Mer tid för kunderna.</span></h1>')],
   ["examples are progressively enhanced tabs", html.includes('id="exampleTabs" role="tablist"') && html.includes('aria-controls="work-report"') && js.includes('panel.setAttribute("role", "tabpanel")') && css.includes("[hidden] { display: none !important; }")],
   ["prototype offer outside every panel", html.indexOf('id="prototype"') > html.indexOf('id="demoReport"') && html.includes("Fast pris och omfattning bestäms före start.")],
   ["early founder proof", html.indexOf('class="builder-proof"') < html.indexOf('id="demoLeads"')],
