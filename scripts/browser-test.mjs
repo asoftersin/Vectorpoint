@@ -142,6 +142,12 @@ try {
   check(await page.locator("#tools .tools__item:visible").count() === 6, "Keyboard collapses the secondary tools");
 
   await page.goto(url);
+  check(await page.locator("#askInput").evaluate(() => {
+    const tops = [...document.querySelectorAll(".ask__chip")].map((chip) => Math.round(chip.getBoundingClientRect().top));
+    return tops.length === 3 && new Set(tops).size === 1;
+  }), "All three hero example chips share one row on desktop");
+  await page.locator(".ask__chip").first().click();
+  check(await page.locator("#askInput").inputValue() === "Veckorapporter klipps ihop", "Example chip fills the hero input");
   await page.locator("#askInput").fill("Test av ett manuellt moment");
   const popupPromise = page.waitForEvent("popup");
   await page.locator('#askForm button[type="submit"]').click();
