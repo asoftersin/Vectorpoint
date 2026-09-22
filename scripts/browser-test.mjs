@@ -156,6 +156,25 @@ try {
   await mobilePage.locator("#exampleTabs").scrollIntoViewIfNeeded();
   check(await mobilePage.locator("#exampleTabs").evaluate((el) =>
     el.scrollWidth <= el.clientWidth), "Tabs fit a 320px viewport");
+  for (const width of [320, 375, 390]) {
+    await mobilePage.setViewportSize({ width, height: 812 });
+    check(await mobilePage.locator(".nav__inner").evaluate((nav) => {
+      const controls = [".nav__logo", ".nav__cta", ".nav__burger"]
+        .map((selector) => nav.querySelector(selector).getBoundingClientRect());
+      return controls.every((rect, i) => rect.left >= 0 && rect.right <= innerWidth &&
+        (i === 0 || rect.left >= controls[i - 1].right));
+    }), `Header controls fit without overlap at ${width}px`);
+    check(await mobilePage.locator("#navBurger").evaluate((el) => {
+      const rect = el.getBoundingClientRect();
+      return rect.width >= 44 && rect.height >= 44;
+    }), `Menu keeps a 44px touch target at ${width}px`);
+    await mobilePage.locator("#navBurger").click();
+    check(await mobilePage.locator("#navBurger").getAttribute("aria-expanded") === "true",
+      `Menu opens at ${width}px`);
+    await mobilePage.locator("#mobileNav a[href='#work']").click();
+    check(await mobilePage.locator("#navBurger").getAttribute("aria-expanded") === "false",
+      `Menu closes after navigation at ${width}px`);
+  }
   await mobile.close();
 
   const noJs = await newContext({ javaScriptEnabled: false });
