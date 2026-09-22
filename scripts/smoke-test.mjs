@@ -26,12 +26,12 @@ const js = await readFile("script.js", "utf8");
 const sitemap = await readFile("sitemap.xml", "utf8");
 
 const checks = [
-  ["hero headline", html.includes("Från manuellt arbete till självkörande processer.")],
+  ["hero headline", html.includes("Supportagenter. Prospekteringsagenter. Rapportagenter.")],
   ["LinkedIn CTA", html.includes("https://www.linkedin.com/in/johan-studt/")],
   ["nav links", html.includes('href="#services"') && html.includes('href="#faq"') && html.includes('<a href="#work">Exempel</a>')],
   ["mobile menu", html.includes('id="navBurger"') && js.includes("navBurger")],
   ["services section", html.includes('id="services"') && html.includes("AI-strategi")],
-  ["stats section", html.includes('class="stat__value"') && html.includes("Dygnet runt") && html.includes("Spårbart")],
+  ["stats filler removed", !html.includes('class="stats"') && !html.includes('class="stat__value"')],
   ["no count-up metrics in stats", !html.includes("stat__count") && !html.includes("data-count") && !js.includes("runCounter")],
   ["work anchor", html.includes('id="work"') && html.includes('href="#work"')],
   ["tools section", html.includes('id="tools"') && html.includes("VERKTYG OCH INTEGRATIONER") && css.includes(".tools__plate")],
