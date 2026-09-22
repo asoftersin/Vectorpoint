@@ -220,6 +220,18 @@ a { color: inherit; }
 
 .nav__cta { gap: 0; }
 
+/* While the hero form is on screen it is the main action; the header button steps back. */
+.nav.is-hero-cta .nav__cta {
+  background: transparent;
+  color: var(--text);
+  border-color: rgba(242, 242, 242, 0.28);
+}
+
+.nav.is-hero-cta .nav__cta:hover {
+  background: rgba(242, 242, 242, 0.08);
+  border-color: rgba(242, 242, 242, 0.5);
+}
+
 .nav__burger {
   display: none;
   margin-left: auto;

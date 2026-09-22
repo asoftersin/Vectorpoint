@@ -75,6 +75,7 @@ const checks = [
   ["faq accordion", html.includes('class="faq__item"') && html.includes("<details")],
   ["marquee", html.includes("marquee__track") && css.includes("@keyframes marquee")],
   ["hero video", html.includes("assets/hero-bg.mp4") && html.includes("playsinline") && js.includes("heroVideo")],
+  ["header CTA yields to hero form", js.includes('nav.classList.toggle("is-hero-cta"') && js.includes('"IntersectionObserver" in window') && css.includes(".nav.is-hero-cta .nav__cta {") && !html.includes("is-hero-cta")],
   ["no external js deps", !html.includes("cdn.jsdelivr.net")],
   ["design tokens", css.includes("--accent: #0099ff") && css.includes("Gasoek One")],
   ["load hook", js.includes("vectorpoint-loaded")],

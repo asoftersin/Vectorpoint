@@ -70,6 +70,13 @@ try {
   }), "Founder proof is visible in the first desktop viewport");
   check(await page.locator(".hero-peek").getAttribute("href") === "#work-leads" &&
     await page.locator(".hero-peek").isVisible(), "Hero example preview links to the sales example on desktop");
+  const navCtaBackground = () => page.locator(".nav__cta").evaluate((el) => getComputedStyle(el).backgroundColor);
+  await page.waitForFunction(() => document.getElementById("siteNav").classList.contains("is-hero-cta"));
+  check(await navCtaBackground() === "rgba(0, 0, 0, 0)", "Header booking button is a quiet outline while the hero form is visible");
+  await page.evaluate(() => scrollTo({ top: document.getElementById("work").offsetTop, behavior: "instant" }));
+  await page.waitForFunction(() => !document.getElementById("siteNav").classList.contains("is-hero-cta"));
+  check(await navCtaBackground() === "rgb(242, 242, 242)", "Header booking button turns primary once the hero form scrolls away");
+  await page.evaluate(() => scrollTo({ top: 0, behavior: "instant" }));
   for (const selector of [".builder-proof img", ".about__avatar img"]) {
     check(await page.locator(selector).evaluate((img) => {
       const style = getComputedStyle(img);

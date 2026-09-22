@@ -19,6 +19,14 @@
   window.addEventListener("scroll", onScroll, { passive: true });
   onScroll();
 
+  // ---------- nav: softer booking button while the hero form is visible ----------
+  const heroAskForm = document.getElementById("askForm");
+  if (heroAskForm && "IntersectionObserver" in window) {
+    new IntersectionObserver(([entry]) => {
+      nav.classList.toggle("is-hero-cta", entry.isIntersecting);
+    }).observe(heroAskForm);
+  }
+
   // ---------- nav: mobile menu ----------
   const burger = document.getElementById("navBurger");
   if (burger) {
