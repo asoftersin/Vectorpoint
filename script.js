@@ -828,7 +828,6 @@
 
   if (!prefersReducedMotion) {
     const progressFill = document.getElementById("scrollProgressFill");
-    const heroCue = document.getElementById("heroCue");
     const marqueeTrack = document.querySelector(".marquee__track");
 
     // Marqueen tar över från CSS-animationen och drivs per frame,
@@ -855,8 +854,6 @@
         const p = maxScroll > 0 ? y / maxScroll : 0;
         progressFill.style.transform = `translateX(${(p - 1) * 100}%)`;
       }
-
-      if (heroCue) heroCue.classList.toggle("is-hidden", y > 40);
 
       if (marqueeTrack && marqueeHalf > 0) {
         marqueeOffset -= 0.6 + Math.min(velocity * 0.12, 4);

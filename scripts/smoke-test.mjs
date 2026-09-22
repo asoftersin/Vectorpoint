@@ -102,7 +102,7 @@ const checks = [
   ["difference points list", html.split('class="point"').length === 5 && css.includes(".points {")],
   ["tighter page rhythm", css.includes("padding: clamp(56px, 7vw, 96px) var(--pad-x)") && css.includes("min-height: min(780px, 100svh)")],
   ["mobile nav keeps booking cta", !css.includes(".nav__links, .nav__cta { display: none; }") && css.includes(".nav__cta { margin-left: auto;")],
-  ["hero scroll cue", html.includes('id="heroCue"') && css.includes("cueTick")],
+  ["hero drops redundant meta and scroll cue", !html.includes("hero__meta") && !html.includes("heroCue") && !css.includes("cueTick") && !js.includes("heroCue")],
   ["reveal stagger", css.includes("transition-delay: 0.12s")],
   ["scroll reduced motion", css.includes(".scroll-progress { display: none; }") && js.includes("if (!prefersReducedMotion)")],
   ["hero stays in document flow", !html.includes('id="heroScrub"') && !js.includes("heroScrubOn") && !css.includes(".hero-scrub.is-scrub")],
