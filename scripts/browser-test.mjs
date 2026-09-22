@@ -68,6 +68,8 @@ try {
     const rect = el.getBoundingClientRect();
     return rect.height > 0 && rect.bottom <= innerHeight && el.closest(".hero") !== null;
   }), "Founder proof is visible in the first desktop viewport");
+  check(await page.locator(".hero-peek").getAttribute("href") === "#work-leads" &&
+    await page.locator(".hero-peek").isVisible(), "Hero example preview links to the sales example on desktop");
   for (const selector of [".builder-proof img", ".about__avatar img"]) {
     check(await page.locator(selector).evaluate((img) => {
       const style = getComputedStyle(img);
@@ -195,7 +197,7 @@ try {
     check(await mobilePage.locator("#navBurger").getAttribute("aria-expanded") === "false",
       `Menu closes after navigation at ${width}px`);
   }
-  for (const width of [320, 375, 390, 600, 768, 1024, 1280, 1400]) {
+  for (const width of [320, 375, 390, 600, 768, 1024, 1100, 1180, 1280, 1400]) {
     await mobilePage.setViewportSize({ width, height: 900 });
     await mobilePage.evaluate(() => scrollTo({ top: 0, behavior: "instant" }));
     check(await mobilePage.locator(".hero__line").evaluateAll((lines) => lines.every((line) => {
@@ -205,6 +207,13 @@ try {
       const box = line.getBoundingClientRect();
       return text.height < parseFloat(getComputedStyle(line).lineHeight) * 1.5 && text.right <= box.right + 1;
     })), `Each hero sentence stays on one line inside its column at ${width}px`);
+    check(await mobilePage.locator(".hero-peek").evaluate((peek, wide) => {
+      const rect = peek.getBoundingClientRect();
+      if (!wide) return rect.height === 0;
+      const main = document.querySelector(".hero__main").getBoundingClientRect();
+      return rect.height > 0 && rect.left >= main.right + 24 && rect.right <= innerWidth &&
+        rect.bottom <= innerHeight;
+    }, width >= 1100), `Hero example preview is ${width >= 1100 ? "beside the text" : "hidden"} at ${width}px`);
   }
   await mobile.close();
 

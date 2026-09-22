@@ -30,6 +30,12 @@ const checks = [
   ["examples are progressively enhanced tabs", html.includes('id="exampleTabs" role="tablist"') && html.includes('aria-controls="work-report"') && js.includes('panel.setAttribute("role", "tabpanel")') && css.includes("[hidden] { display: none !important; }")],
   ["prototype offer outside every panel", html.indexOf('id="prototype"') > html.indexOf('id="demoReport"') && html.includes("Fast pris och omfattning bestäms före start.")],
   ["founder proof in hero", html.indexOf('class="builder-proof hero__proof"') > html.indexOf('class="hero__lead"') && html.indexOf('class="builder-proof hero__proof"') < html.indexOf('id="askForm"') && html.includes("Göteborg · <span class=\"builder-proof__link\">")],
+  ["hero example preview", (() => {
+    const peek = html.slice(html.indexOf('class="hero-peek"'), html.indexOf("</a>", html.indexOf('class="hero-peek"')));
+    return html.indexOf('class="hero-peek"') > html.indexOf('id="askForm"') && html.indexOf('class="hero-peek"') < html.indexOf("</section>") &&
+      peek.includes('href="#work-leads"') && peek.includes("EXEMPEL · PÅHITTAT") && peek.includes("Nordkant Systems AB") &&
+      css.includes(".hero-peek { display: none; }") && css.includes("@media (min-width: 1100px)");
+  })()],
   ["optional technical deep dive", html.includes('<details class="pipeline" id="pipeline">') && html.includes("<summary>Se hur vi kvalitetssäkrar")],
   ["data processing described without absolute residency promise", !html.includes("Den stannar i era system.") && html.split("även externa AI-tjänster").length === 3],
   ["LinkedIn CTA", html.includes("https://www.linkedin.com/in/johan-studt/")],
