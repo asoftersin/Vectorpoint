@@ -23,7 +23,7 @@ npm run test:browser
 ```
 
 The browser checks cover example tabs (mouse, keyboard and direct links), mobile
-layout, reduced motion, the optional QA diagram, booking handoff and the no-JS
+layout, demo pause/resume, reduced motion, optional disclosures, booking handoff and the no-JS
 fallback. Install Playwright Chromium with `npx playwright install chromium` if
 the browser executable is missing.
 
@@ -39,6 +39,11 @@ The examples start as readable sections. JavaScript enhances them into tabs;
 `#work-leads`, `#work-feedback` and `#work-report` still open the relevant example.
 Hidden examples stop replaying. The QA diagram lives in a native disclosure and
 only animates while it is open and in view.
+Each demo has pause/resume and replay controls. Pausing preserves the current
+step, typing progress, visual animations and remaining replay delay. Replay
+starts afresh; switching tabs cancels the hidden demo and resets its pause state.
+Reduced motion shows the completed example without looping or a pause button.
+Playback controls stay hidden when JavaScript is unavailable.
 
 GoatCounter tracks booking-link clicks (`cta-*`) and example clicks
 (`example-sales`, `example-support`, `example-reporting`). These are intent

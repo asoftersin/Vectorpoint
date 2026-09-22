@@ -331,18 +331,75 @@
     const block = root.closest(".demo-block");
     const steps = block ? Array.from(block.querySelectorAll(".demo-steps__item")) : [];
     const replay = root.querySelector(".demo__replay");
+    const pause = root.querySelector(".demo__pause");
+    root.querySelector(".demo__controls").hidden = false;
+    pause.hidden = prefersReducedMotion;
     let token = 0;
     let inView = false;
     let started = false;
     let finished = false;
     let loopPending = false;
-    let loopTimer = null;
+    let paused = false;
+    let pendingWait = null;
+    let pausedAnimations = [];
+
+    const scheduleWait = () => {
+      const waiting = pendingWait;
+      if (!waiting || paused) return;
+      waiting.startedAt = performance.now();
+      waiting.timer = setTimeout(() => {
+        pendingWait = null;
+        if (waiting.token === token) waiting.resolve();
+        else waiting.reject(CANCEL);
+      }, waiting.remaining);
+    };
+
+    const wait = (my, ms) => new Promise((resolve, reject) => {
+      if (my !== token) {
+        reject(CANCEL);
+        return;
+      }
+      pendingWait = {
+        token: my, remaining: prefersReducedMotion ? 0 : ms,
+        resolve, reject, timer: null, startedAt: 0,
+      };
+      scheduleWait();
+    });
+
+    const cancelWait = () => {
+      if (!pendingWait) return;
+      clearTimeout(pendingWait.timer);
+      pendingWait.reject(CANCEL);
+      pendingWait = null;
+    };
+
+    const setPaused = (value) => {
+      if (paused === value) return;
+      paused = value;
+      root.classList.toggle("is-paused", paused);
+      pause.textContent = paused ? "Fortsätt" : "Pausa";
+      if (paused) {
+        if (pendingWait && pendingWait.timer !== null) {
+          clearTimeout(pendingWait.timer);
+          pendingWait.remaining = Math.max(0, pendingWait.remaining - (performance.now() - pendingWait.startedAt));
+          pendingWait.timer = null;
+        }
+        pausedAnimations = body.getAnimations({ subtree: true })
+          .filter((animation) => animation.playState === "running");
+        pausedAnimations.forEach((animation) => animation.pause());
+        [body, ...body.children].forEach((pane) =>
+          pane.scrollTo({ top: pane.scrollTop, left: pane.scrollLeft, behavior: "instant" }));
+      } else {
+        pausedAnimations.forEach((animation) => {
+          if (animation.playState === "paused") animation.play();
+        });
+        pausedAnimations = [];
+        scheduleWait();
+      }
+    };
 
     const makeCtx = (my) => {
-      const wait = (ms) =>
-        new Promise((resolve, reject) => {
-          setTimeout(() => (my === token ? resolve() : reject(CANCEL)), prefersReducedMotion ? 0 : ms);
-        });
+      const delay = (ms) => wait(my, ms);
       const scrollDown = (pane) => {
         const target = pane || body;
         target.scrollTo({ top: target.scrollHeight, behavior: prefersReducedMotion ? "auto" : "smooth" });
@@ -352,7 +409,7 @@
       };
       return {
         body,
-        wait,
+        wait: delay,
         scrollDown,
         setStatus,
         step: (n, text) => {
@@ -372,7 +429,7 @@
         },
         // elementet måste ligga i DOM:en innan show anropas, annars hoppar transitionen
         show: async (node, ms = 40) => {
-          await wait(ms);
+          await delay(ms);
           node.classList.add("is-in");
         },
         type: async (node, text, speed = 14) => {
@@ -384,13 +441,13 @@
           node.textContent = "";
           for (let i = 0; i < text.length; i += 3) {
             node.textContent = text.slice(0, i + 3);
-            await wait(speed);
+            await delay(speed);
           }
           node.textContent = text;
           node.classList.remove("is-typing");
         },
         // FLIP: flytta om barn i DOM:en och låt dem glida till sin nya plats
-        flip: (container, ordered) => {
+        flip: async (container, ordered) => {
           const before = new Map(ordered.map((n) => [n, n.getBoundingClientRect().top]));
           ordered.forEach((n) => container.appendChild(n));
           if (prefersReducedMotion) return;
@@ -400,22 +457,21 @@
             n.style.transition = "none";
             n.style.transform = `translateY(${dy}px)`;
           });
-          requestAnimationFrame(() =>
-            requestAnimationFrame(() => {
-              ordered.forEach((n) => {
-                n.style.transition = "";
-                n.style.transform = "";
-              });
-            })
-          );
+          // Keep the inverse transform for a frame, using the same pausable clock.
+          await delay(32);
+          ordered.forEach((n) => {
+            n.style.transition = "";
+            n.style.transform = "";
+          });
         },
       };
     };
 
     const run = async () => {
-      clearTimeout(loopTimer);
+      cancelWait();
       loopPending = false;
       finished = false;
+      started = true;
       const my = ++token;
       root.classList.remove("is-done");
       body.innerHTML = "";
@@ -423,26 +479,30 @@
       steps.forEach((item) => item.classList.remove("is-active", "is-done"));
       try {
         await script(makeCtx(my));
+        if (my !== token) return;
+        finished = true;
+        if (prefersReducedMotion) return;
+        loopPending = true;
+        await wait(my, 12000);
+        loopPending = false;
+        if (my === token && inView) run();
       } catch (err) {
         if (err !== CANCEL) console.error(err);
         return;
       }
-      if (my !== token) return;
-      finished = true;
-      if (prefersReducedMotion) return;
-      loopPending = true;
-      loopTimer = setTimeout(() => {
-        loopPending = false;
-        if (my === token && inView) run();
-      }, 12000);
     };
 
-    if (replay) replay.addEventListener("click", run);
+    replay.addEventListener("click", () => {
+      setPaused(false);
+      run();
+    });
+    pause.addEventListener("click", () => setPaused(!paused));
 
     document.addEventListener("examplechange", () => {
       if (root.closest("[hidden]")) {
         token++;
-        clearTimeout(loopTimer);
+        cancelWait();
+        setPaused(false);
         inView = false;
         started = false;
         finished = false;
@@ -562,7 +622,7 @@
     await c.wait(800);
     c.setStatus("Steg 3 av 4 · Sorterar listan efter poäng");
     const sorted = rows.slice().sort((a, b) => PRIO_ORDER[a.dataset.prio] - PRIO_ORDER[b.dataset.prio]);
-    c.flip(list, sorted);
+    await c.flip(list, sorted);
     await c.wait(1000);
 
     c.step(4, "Steg 4 av 4 · Skriver utkast och exporterar till CRM");

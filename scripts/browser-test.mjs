@@ -92,6 +92,7 @@ try {
   await page.locator("#demoReport").scrollIntoViewIfNeeded();
   await page.waitForFunction(() => document.querySelector("#demoReport").classList.contains("is-done"));
   check(await page.locator("#demoReport .demo__body").innerText() !== "", "Selected demo completes in reduced motion");
+  check(!await page.locator("#demoReport .demo__pause").isVisible(), "Reduced motion has no unnecessary pause control");
   await page.locator("#demoReport .demo__replay").click();
   await page.waitForFunction(() => document.querySelector("#demoReport").classList.contains("is-done"));
   check(true, "Replay still completes");
@@ -189,6 +190,7 @@ try {
   const fallback = await noJs.newPage();
   await fallback.goto(url);
   check(!await fallback.locator("#exampleTabs").isVisible(), "No dead tab controls without JS");
+  check(await fallback.locator(".demo__controls:visible").count() === 0, "No dead playback controls without JS");
   for (const id of ["leads", "feedback", "report"]) {
     check(await fallback.locator(`#work-${id}`).isVisible(), `No-JS ${id} content remains readable`);
   }
@@ -221,6 +223,79 @@ try {
   await motionPage.locator("#demoLeads").scrollIntoViewIfNeeded();
   await motionPage.waitForFunction(() => document.querySelector("#work-leads .demo-steps__item.is-active") !== null);
   check(true, "Returning to a cancelled example restarts it");
+  for (const [tab, id] of [["leads", "demoLeads"], ["feedback", "demoFeedback"], ["report", "demoReport"]]) {
+    await motionPage.locator(`#tab-${tab}`).click();
+    const demo = motionPage.locator(`#${id}`);
+    await demo.scrollIntoViewIfNeeded();
+    await motionPage.waitForFunction(({ id, tab }) => {
+      const body = document.querySelector(`#${id} .demo__body`);
+      return tab === "leads" ? body.querySelector(".lead.is-in") : body.querySelector(".is-typing");
+    }, { id, tab });
+    const toggle = demo.locator(".demo__pause");
+    await toggle.focus();
+    await toggle.press("Space");
+    check(await toggle.textContent() === "Fortsätt", `${tab}: keyboard pauses with a clear resume action`);
+    await motionPage.evaluate(() => new Promise((resolve) =>
+      requestAnimationFrame(() => requestAnimationFrame(resolve))));
+    const pausedState = await demo.evaluate((el) => ({
+      body: el.querySelector(".demo__body").innerHTML,
+      status: el.querySelector("[data-status]").textContent,
+      steps: [...el.closest(".demo-block").querySelectorAll(".demo-steps__item")].map((step) => step.className),
+      animations: el.querySelector(".demo__body").getAnimations({ subtree: true }).map((animation) => animation.currentTime),
+    }));
+    await motionPage.waitForTimeout(1000);
+    const stillPaused = await demo.evaluate((el) => ({
+      body: el.querySelector(".demo__body").innerHTML,
+      status: el.querySelector("[data-status]").textContent,
+      steps: [...el.closest(".demo-block").querySelectorAll(".demo-steps__item")].map((step) => step.className),
+      animations: el.querySelector(".demo__body").getAnimations({ subtree: true }).map((animation) => animation.currentTime),
+    }));
+    check(JSON.stringify(stillPaused) === JSON.stringify(pausedState),
+      `${tab}: pause freezes DOM, status, steps and visual animations`);
+    const originalNode = await demo.locator(".demo__body > *").first().elementHandle();
+    await toggle.press("Enter");
+    check(await originalNode.evaluate((el) => el.isConnected), `${tab}: resume preserves the existing demo`);
+    await motionPage.waitForFunction(({ id, html }) =>
+      document.querySelector(`#${id} .demo__body`).innerHTML !== html, { id, html: pausedState.body });
+    check(await toggle.textContent() === "Pausa", `${tab}: progress continues after resume`);
+    await toggle.click();
+    await demo.locator(".demo__replay").click();
+    check(!await originalNode.evaluate((el) => el.isConnected), `${tab}: replay deliberately starts fresh`);
+    check(!await demo.evaluate((el) => el.classList.contains("is-paused")), `${tab}: replay clears pause`);
+  }
+  const report = motionPage.locator("#demoReport");
+  await report.locator(".demo__pause").click();
+  await motionPage.evaluate(() => {
+    document.querySelector("#tab-feedback").click();
+    document.querySelector("#tab-report").click();
+  });
+  await report.scrollIntoViewIfNeeded();
+  await motionPage.waitForFunction(() =>
+    document.querySelector("#work-report .demo-steps__item.is-active") !== null);
+  check(!await report.evaluate((el) => el.classList.contains("is-paused")),
+    "Rapid tab switches cancel a paused timer and restart unpaused");
+  await motionPage.waitForFunction(() => document.querySelector("#demoReport").classList.contains("is-done"),
+    null, { timeout: 60000 });
+  await report.locator(".demo__pause").click();
+  const completedReport = await report.locator(".demo__body").innerHTML();
+  await motionPage.waitForTimeout(12500);
+  check(await report.locator(".demo__body").innerHTML() === completedReport,
+    "Pausing a completed demo also freezes the automatic replay delay");
+  await report.locator(".demo__pause").click();
+  await motionPage.waitForTimeout(500);
+  check(await report.evaluate((el) => el.classList.contains("is-done")),
+    "Resuming keeps the remaining delay instead of immediately replaying");
+  await motionPage.waitForFunction(() => !document.querySelector("#demoReport").classList.contains("is-done"),
+    null, { timeout: 14000 });
+  check(true, "Automatic replay resumes after its remaining delay");
+  await motionPage.setViewportSize({ width: 320, height: 812 });
+  await report.scrollIntoViewIfNeeded();
+  check(await report.locator(".demo__controls").evaluate((el) => {
+    const controls = [...el.querySelectorAll("button")].map((button) => button.getBoundingClientRect());
+    return controls.every((rect, i) => rect.left >= 0 && rect.right <= innerWidth && rect.height >= 44 &&
+      (i === 0 || rect.left >= controls[i - 1].right));
+  }), "Both playback controls fit at 320px with 44px touch targets");
+  await motionPage.setViewportSize({ width: 1400, height: 900 });
   await motionPage.locator("#pipeline summary").click();
   await motionPage.locator("#flowSvg4").scrollIntoViewIfNeeded();
   await motionPage.waitForFunction(() => document.querySelector("#flowSvg4 .node.is-active") !== null);
