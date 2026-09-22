@@ -64,7 +64,10 @@ try {
   check(await panels.count() === 1, "Only one panel is exposed to assistive technology");
   check(await page.locator("#work-leads").isVisible(), "Sales is selected by default");
   check(await page.locator("#prototype").isVisible(), "Offer is outside hidden examples");
-  check(await page.locator(".builder-proof").isVisible(), "Early founder proof is present");
+  check(await page.locator(".hero__proof").evaluate((el) => {
+    const rect = el.getBoundingClientRect();
+    return rect.height > 0 && rect.bottom <= innerHeight && el.closest(".hero") !== null;
+  }), "Founder proof is visible in the first desktop viewport");
   for (const selector of [".builder-proof img", ".about__avatar img"]) {
     check(await page.locator(selector).evaluate((img) => {
       const style = getComputedStyle(img);

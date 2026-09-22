@@ -1182,10 +1182,10 @@ a { color: inherit; }
   display: inline-flex;
   align-items: center;
   gap: 14px;
-  margin-top: 24px;
   text-decoration: none;
   font-size: 0.95rem;
 }
+.hero__proof { align-self: flex-start; gap: 12px; margin-top: -8px; }
 .builder-proof img { border-radius: 50%; flex-shrink: 0; }
 .builder-proof img,
 .about__avatar img {
