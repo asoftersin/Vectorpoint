@@ -440,19 +440,23 @@
     if (replay) replay.addEventListener("click", run);
 
     document.addEventListener("examplechange", () => {
-      if (!root.closest("[hidden]")) return;
-      token++;
-      clearTimeout(loopTimer);
-      inView = false;
-      started = false;
-      finished = false;
-      loopPending = false;
+      if (root.closest("[hidden]")) {
+        token++;
+        clearTimeout(loopTimer);
+        inView = false;
+        started = false;
+        finished = false;
+        loopPending = false;
+      }
+      // Rapid tab switches can hide and restore a panel between observer frames.
+      observer.unobserve(root);
+      observer.observe(root);
     });
 
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          inView = entry.isIntersecting;
+          inView = entry.isIntersecting && !root.closest("[hidden]");
           const restart = finished && !loopPending && !prefersReducedMotion;
           if (inView && (!started || restart)) {
             started = true;

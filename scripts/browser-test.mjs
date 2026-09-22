@@ -95,6 +95,12 @@ try {
   await page.locator("#demoReport .demo__replay").click();
   await page.waitForFunction(() => document.querySelector("#demoReport").classList.contains("is-done"));
   check(true, "Replay still completes");
+  await page.evaluate(() => {
+    document.querySelector("#tab-feedback").click();
+    document.querySelector("#tab-report").click();
+  });
+  await page.waitForFunction(() => document.querySelector("#demoReport").classList.contains("is-done"));
+  check(true, "Rapid hide and restore between observer frames restarts the demo");
 
   await page.goto(`${url}#work-feedback`);
   check(await page.locator("#work-feedback").isVisible(), "Initial direct link opens support");
