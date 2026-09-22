@@ -269,7 +269,7 @@ a { color: inherit; }
 
 .hero {
   position: relative;
-  min-height: 100svh;
+  min-height: min(780px, 100svh);
   display: flex;
   padding: 130px var(--pad-x) 72px;
   overflow: hidden;
@@ -284,28 +284,8 @@ a { color: inherit; }
   flex-direction: column;
 }
 
-.hero__services {
-  align-self: flex-end;
-  display: flex;
-  flex-direction: column;
-  text-align: left;
-}
-
-.hero__services a {
-  font-size: clamp(1.3rem, 2.1vw, 1.9rem);
-  font-weight: 500;
-  letter-spacing: -0.01em;
-  line-height: 1.75;
-  color: var(--text);
-  text-decoration: none;
-  transition: color 0.2s ease;
-}
-
-.hero__services a:hover { color: var(--muted); }
-
-
 .hero__main {
-  margin-top: auto;
+  margin: auto 0;
   max-width: 760px;
   display: flex;
   flex-direction: column;
@@ -1111,56 +1091,6 @@ a { color: inherit; }
   to { transform: translateY(34px); }
 }
 
-/* pinnad hero-scrub (sätts av JS på desktop) */
-.hero-scrub.is-scrub {
-  height: 160vh;
-}
-
-.hero-scrub.is-scrub .hero {
-  position: sticky;
-  top: 0;
-  height: 100svh;
-  min-height: 0;
-}
-
-.hero-scrub.is-scrub .hero__title {
-  transform-origin: left top;
-  will-change: transform;
-}
-
-.hero-scrub.is-scrub .hero__lead,
-.hero-scrub.is-scrub .hero__ask,
-.hero-scrub.is-scrub .hero__actions,
-.hero-scrub.is-scrub .hero__services {
-  will-change: transform, opacity;
-}
-
-.hero__wire {
-  position: absolute;
-  left: 50%;
-  top: 62%;
-  height: 38%;
-  width: 2px;
-  background: linear-gradient(to bottom, rgba(0, 153, 255, 0), var(--accent) 30%, var(--accent));
-  transform: scaleY(0);
-  transform-origin: top;
-  z-index: 2;
-  pointer-events: none;
-}
-
-.hero__wire::after {
-  content: "";
-  position: absolute;
-  left: 50%;
-  bottom: -4px;
-  width: 8px;
-  height: 8px;
-  margin-left: -4px;
-  border-radius: 50%;
-  background: var(--accent);
-  box-shadow: 0 0 12px 3px rgba(0, 153, 255, 0.7);
-}
-
 /* ---------- responsive ---------- */
 
 @media (max-width: 1100px) {
@@ -1173,7 +1103,6 @@ a { color: inherit; }
   .nav__cta { margin-left: auto; padding: 9px 14px; font-size: 0.85rem; white-space: nowrap; }
   .nav__inner { padding-top: 11px; padding-bottom: 11px; }
   .nav__burger { display: flex; margin-left: 0; }
-  .hero__services { display: none; }
   .nav {
     background: rgba(6, 6, 6, 0.86);
     backdrop-filter: blur(14px);
@@ -1192,10 +1121,6 @@ a { color: inherit; }
   .grid--tight .card h3 { font-size: 0.9rem; }
   .grid--tight .card p { font-size: 0.82rem; }
   .hero { padding-top: 96px; }
-  /* "Prospekteringsagenter." ar ett enda ord som inte kan brytas, sa pa smala
-     skarmar maste rubriken folja viewportbredden i stallet for att sta kvar pa
-     clampens golv (2.3rem) och sticka ut utanfor spalten. Taket ar samma 2.3rem,
-     sa allt over ~450px ser ut precis som forut. */
   .hero__title { font-size: clamp(1.5rem, 8.2vw, 2.3rem); }
   .hero__actions { flex-direction: column; width: 100%; }
   .hero__actions .btn { width: 100%; }
@@ -1237,7 +1162,6 @@ a { color: inherit; }
   .hero__cue { display: none; }
   .hero__cue-tick::after { animation: none; }
   .hero__frame, .hero__video { will-change: auto; }
-  .hero__wire { display: none; }
 }
 
 /* ---------- exempel: uppspelande UI-rutor ---------- */

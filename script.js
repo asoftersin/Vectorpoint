@@ -764,35 +764,12 @@
   });
 
   // ---------- scroll experience: one rAF-driven engine ----------
-  // Scrub-läget (pinnad pipeline) körs bara på desktop utan reduced motion.
-  const scrubEnabled = !prefersReducedMotion && window.matchMedia("(min-width: 861px)").matches;
-
   setupFlow(PIPELINE_FLOW);
 
   if (!prefersReducedMotion) {
     const progressFill = document.getElementById("scrollProgressFill");
-    const heroFrame = document.querySelector(".hero__frame");
-    const heroVideoEl = document.querySelector(".hero__video");
     const heroCue = document.getElementById("heroCue");
     const marqueeTrack = document.querySelector(".marquee__track");
-
-    // Pinnad hero: första scrollgesten berättar — video zoomar, sidoinnehåll
-    // viker undan, rubriken krymper och en tråd lämnar över pulsen till sidan.
-    const heroScrubWrap = document.getElementById("heroScrub");
-    const heroScrubOn = scrubEnabled && !!heroScrubWrap;
-    const heroTitle = document.querySelector(".hero__title");
-    const heroLead = document.querySelector(".hero__lead");
-    const heroActions = document.querySelector(".hero__ask") || document.querySelector(".hero__actions");
-    const heroMeta = document.querySelector(".hero__meta");
-    const heroServices = document.querySelector(".hero__services");
-    const heroWire = document.getElementById("heroWire");
-    if (heroScrubOn) heroScrubWrap.classList.add("is-scrub");
-
-    // andel av h inom [a, b], mjukad
-    const seg = (h, a, b) => {
-      const t = Math.min(Math.max((h - a) / (b - a), 0), 1);
-      return t * t * (3 - 2 * t);
-    };
 
     // Marqueen tar över från CSS-animationen och drivs per frame,
     // så scrollfarten kan addera tillfällig hastighet.
@@ -817,39 +794,6 @@
       if (progressFill) {
         const p = maxScroll > 0 ? y / maxScroll : 0;
         progressFill.style.transform = `translateX(${(p - 1) * 100}%)`;
-      }
-
-      if (heroScrubOn) {
-        const rect = heroScrubWrap.getBoundingClientRect();
-        const range = rect.height - window.innerHeight;
-        const h = range > 0 ? Math.min(Math.max(-rect.top / range, 0), 1) : 0;
-        if (heroVideoEl) {
-          heroVideoEl.style.transform = `scale(${1 + h * 0.15})`;
-          heroVideoEl.style.filter = `brightness(${1 - h * 0.45})`;
-        }
-        if (heroServices) heroServices.style.opacity = String(1 - seg(h, 0.05, 0.3));
-        if (heroLead) {
-          const t = seg(h, 0.1, 0.4);
-          heroLead.style.opacity = String(1 - t);
-          heroLead.style.transform = `translateY(${-26 * t}px)`;
-        }
-        if (heroActions) {
-          const t = seg(h, 0.18, 0.48);
-          heroActions.style.opacity = String(1 - t);
-          heroActions.style.transform = `translateY(${-26 * t}px)`;
-        }
-        if (heroMeta) heroMeta.style.opacity = String(1 - seg(h, 0.24, 0.5));
-        if (heroTitle) {
-          const t = seg(h, 0.15, 0.8);
-          heroTitle.style.transform = `translateY(${-48 * t}px) scale(${1 - 0.12 * t})`;
-        }
-        if (heroWire) heroWire.style.transform = `scaleY(${seg(h, 0.4, 1)})`;
-      } else if (heroFrame) {
-        const heroH = heroFrame.offsetHeight || window.innerHeight;
-        const exit = Math.min(y / (heroH * 0.9), 1);
-        heroFrame.style.transform = `translateY(${y * 0.35}px)`;
-        heroFrame.style.opacity = String(1 - exit * 0.9);
-        if (heroVideoEl) heroVideoEl.style.transform = `translateY(${y * 0.15}px)`;
       }
 
       if (heroCue) heroCue.classList.toggle("is-hidden", y > 40);

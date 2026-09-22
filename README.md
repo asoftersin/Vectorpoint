@@ -29,6 +29,10 @@ the browser executable is missing.
 
 ## Page behaviour and measurement
 
+The hero scrolls with the document rather than pinning visitors through an
+animation. On narrow screens the header shortens its booking label while
+keeping the booking link and a 44px menu button visible.
+
 The examples start as readable sections. JavaScript enhances them into tabs;
 `#work-leads`, `#work-feedback` and `#work-report` still open the relevant example.
 Hidden examples stop replaying. The QA diagram lives in a native disclosure and

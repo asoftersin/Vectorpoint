@@ -194,6 +194,13 @@ try {
   const animated = await newContext({ reducedMotion: "no-preference" });
   const motionPage = await animated.newPage();
   await motionPage.goto(url);
+  check(await motionPage.locator(".hero").evaluate((el) =>
+    el.getBoundingClientRect().height <= innerHeight && getComputedStyle(el).position !== "sticky"),
+    "Desktop hero fits one viewport without pinning");
+  const heroTop = await motionPage.locator(".hero").evaluate((el) => el.getBoundingClientRect().top);
+  await motionPage.evaluate(() => scrollTo({ top: 200, behavior: "instant" }));
+  check(await motionPage.locator(".hero").evaluate((el) => el.getBoundingClientRect().top) <= heroTop - 199,
+    "Hero scrolls away immediately with the document");
   await motionPage.locator("#demoLeads").scrollIntoViewIfNeeded();
   await motionPage.waitForFunction(() => document.querySelector("#demoLeads .demo__body").children.length > 0);
   await motionPage.locator("#tab-feedback").click();
