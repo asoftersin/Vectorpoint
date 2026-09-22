@@ -218,6 +218,8 @@ a { color: inherit; }
 
 .nav__links a:hover { color: var(--text); }
 
+.nav__cta { gap: 0; }
+
 .nav__burger {
   display: none;
   margin-left: auto;

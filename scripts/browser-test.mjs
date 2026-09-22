@@ -56,6 +56,8 @@ try {
   const context = await newContext();
   const page = await context.newPage();
   await page.goto(url);
+  check(await page.locator(".nav__cta").evaluate((el) => getComputedStyle(el).columnGap === "0px"),
+    "Booking label keeps normal word spacing when the long label is shown");
   const tabs = page.getByRole("tab");
   const panels = page.getByRole("tabpanel");
   check(await tabs.count() === 3, "Three named example tabs");
