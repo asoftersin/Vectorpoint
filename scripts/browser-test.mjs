@@ -56,6 +56,8 @@ try {
   const context = await newContext();
   const page = await context.newPage();
   await page.goto(url);
+  check(await page.locator("#heroVideo").evaluate((video) => !video.getAttribute("src") && video.networkState !== 2),
+    "Hero video is not loaded when the visitor prefers reduced motion");
   check(await page.locator(".nav__cta").evaluate((el) => getComputedStyle(el).columnGap === "0px"),
     "Booking label keeps normal word spacing when the long label is shown");
   const tabs = page.getByRole("tab");
@@ -244,6 +246,14 @@ try {
   const animated = await newContext({ reducedMotion: "no-preference" });
   const motionPage = await animated.newPage();
   await motionPage.goto(url);
+  check(await motionPage.locator("#heroVideo").getAttribute("src") === "assets/hero-bg.mp4",
+    "Hero video loads on a wide screen with motion allowed");
+  const narrowMotionPage = await animated.newPage();
+  await narrowMotionPage.setViewportSize({ width: 390, height: 844 });
+  await narrowMotionPage.goto(url);
+  check(await narrowMotionPage.locator("#heroVideo").getAttribute("src") === null,
+    "Hero video stays a still poster on narrow screens");
+  await narrowMotionPage.close();
   check(await motionPage.locator(".hero").evaluate((el) =>
     el.getBoundingClientRect().height <= innerHeight && getComputedStyle(el).position !== "sticky"),
     "Desktop hero fits one viewport without pinning");

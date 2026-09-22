@@ -4,11 +4,16 @@
 
   document.documentElement.classList.add("vectorpoint-loaded");
 
-  // ---------- hero video: respect reduced motion ----------
+  // ---------- hero video: only on wide screens that can afford ~2 MB of motion ----------
   const heroVideo = document.getElementById("heroVideo");
-  if (heroVideo && prefersReducedMotion) {
-    heroVideo.pause();
-    heroVideo.removeAttribute("autoplay");
+  const canPlayHeroVideo = !prefersReducedMotion &&
+    !(navigator.connection && navigator.connection.saveData) &&
+    !window.matchMedia("(prefers-reduced-data: reduce)").matches &&
+    window.matchMedia("(min-width: 861px)").matches;
+  if (heroVideo && heroVideo.dataset.src && canPlayHeroVideo) {
+    heroVideo.muted = true;
+    heroVideo.src = heroVideo.dataset.src;
+    heroVideo.play().catch(() => {});
   }
 
   // ---------- nav: scrolled state ----------

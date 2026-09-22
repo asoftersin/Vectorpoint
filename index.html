@@ -79,6 +79,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Gasoek+One&family=Geist+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="preload" as="image" href="assets/hero-bg-poster.jpg" fetchpriority="high">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -121,9 +122,7 @@
 
     <!-- HERO -->
     <section class="hero">
-      <video class="hero__video" id="heroVideo" autoplay muted loop playsinline preload="metadata" poster="assets/hero-bg-poster.jpg" aria-hidden="true">
-        <source src="assets/hero-bg.mp4" type="video/mp4">
-      </video>
+      <video class="hero__video" id="heroVideo" muted loop playsinline preload="none" poster="assets/hero-bg-poster.jpg" data-src="assets/hero-bg.mp4" aria-hidden="true"></video>
       <div class="hero__scrim" aria-hidden="true"></div>
       <div class="hero__frame">
         <div class="hero__main">

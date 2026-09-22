@@ -74,7 +74,8 @@ const checks = [
   ["principles section", html.includes('id="principles"') && html.includes("Säkerhet först")],
   ["faq accordion", html.includes('class="faq__item"') && html.includes("<details")],
   ["marquee", html.includes("marquee__track") && css.includes("@keyframes marquee")],
-  ["hero video", html.includes("assets/hero-bg.mp4") && html.includes("playsinline") && js.includes("heroVideo")],
+  ["hero video", html.includes('data-src="assets/hero-bg.mp4"') && html.includes('preload="none"') && html.includes("playsinline") && !/<video[^>]*\sautoplay/.test(html) && !html.includes('<source src="assets/hero-bg.mp4"') &&
+    html.includes('<link rel="preload" as="image" href="assets/hero-bg-poster.jpg"') && js.includes("heroVideo.dataset.src") && js.includes("saveData") && js.includes("(min-width: 861px)")],
   ["header CTA yields to hero form", js.includes('nav.classList.toggle("is-hero-cta"') && js.includes('"IntersectionObserver" in window') && css.includes(".nav.is-hero-cta .nav__cta {") && !html.includes("is-hero-cta")],
   ["no external js deps", !html.includes("cdn.jsdelivr.net")],
   ["design tokens", css.includes("--accent: #0099ff") && css.includes("Gasoek One")],
