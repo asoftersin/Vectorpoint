@@ -110,6 +110,22 @@
         ],
       },
       {
+        caption: "När de skriptade testerna är gröna startar en andra pod: en AI-agent med samma adress till tjänsten, en stegbudget och kunskap om produkten.",
+        mode: "sequence",
+        duration: 600,
+        travels: [
+          { wire: "wire4-s", pulse: "pulse4-s", node: "node4-k2", next: "node4-k3" },
+        ],
+      },
+      {
+        caption: "Agenten öppnar en riktig webbläsare och utforskar tjänsten som en användare. Den hittar det ingen skrev ett test för och skriver en läsbar rapport direkt i pull requesten.",
+        mode: "sequence",
+        duration: 900,
+        travels: [
+          { wire: "wire4-t2", pulse: "pulse4-t2", node: "node4-k3", next: "node4-k1" },
+        ],
+      },
+      {
         caption: "Resultatet avgör. Grönt mergas vidare mot dev och E2E, rött stannar i pull requesten och når aldrig kund.",
         mode: "sequence",
         duration: 700,
