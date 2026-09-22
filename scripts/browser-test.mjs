@@ -127,6 +127,14 @@ try {
   });
   check(faqMatches, "FAQ copy and structured data agree");
 
+  check(await page.locator("#tools .tools__item:visible").count() === 6, "Six familiar systems are shown initially");
+  await page.locator("#moreTools summary").focus();
+  await page.keyboard.press("Enter");
+  check(await page.locator("#tools .tools__item:visible").count() === 15, "Keyboard reveals all fifteen tools");
+  check(await page.locator("#moreTools summary").innerText() === "Visa färre verktyg", "Expanded label offers collapse");
+  await page.keyboard.press("Space");
+  check(await page.locator("#tools .tools__item:visible").count() === 6, "Keyboard collapses the secondary tools");
+
   await page.goto(url);
   await page.locator("#askInput").fill("Test av ett manuellt moment");
   const popupPromise = page.waitForEvent("popup");
@@ -186,6 +194,8 @@ try {
   }
   await fallback.locator("#pipeline summary").click();
   check(await fallback.locator("#flowSvg4").isVisible(), "Native disclosure works without JS");
+  await fallback.locator("#moreTools summary").click();
+  check(await fallback.locator("#tools .tools__item:visible").count() === 15, "All tools are accessible without JS");
   await fallback.setViewportSize({ width: 375, height: 812 });
   check(await fallback.locator("#work-leads .demo-steps__item p").first().isVisible(),
     "Mobile no-JS fallback exposes the step descriptions");

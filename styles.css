@@ -1881,7 +1881,7 @@ html:not(.vectorpoint-loaded) .demo-steps__item p { display: block; }
 .tools {
   list-style: none;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(136px, 1fr));
+  grid-template-columns: repeat(6, minmax(0, 1fr));
   gap: 12px;
 }
 
@@ -1930,8 +1930,25 @@ html:not(.vectorpoint-loaded) .demo-steps__item p { display: block; }
   line-height: 1.4;
 }
 
+.tools-more { margin-top: 16px; }
+.tools-more summary {
+  width: fit-content;
+  padding: 12px 0;
+  min-height: 44px;
+  cursor: pointer;
+  color: var(--text-dim);
+}
+.tools-more .tools { margin-top: 12px; }
+.tools-more__collapse,
+.tools-more[open] .tools-more__expand { display: none; }
+.tools-more[open] .tools-more__collapse { display: inline; }
+
+@media (max-width: 860px) {
+  .tools { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
 @media (max-width: 560px) {
-  .tools { grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap: 8px; }
+  .tools { gap: 8px; }
   .tools__item { padding: 12px 6px 10px; gap: 8px; }
   .tools__plate { width: 48px; height: 48px; border-radius: 10px; }
   .tools__plate img { width: 28px; height: 28px; }
