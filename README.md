@@ -30,7 +30,14 @@ the browser executable is missing.
 ## Page behaviour and measurement
 
 The hero scrolls with the document rather than pinning visitors through an
-animation. On narrow screens the header shortens its booking label while
+animation. Its headline keeps each sentence on one line, the founder's portrait
+and background sit directly under the lead, and wide screens (1100px and up)
+show a small, clearly fictional lead card that links to `#work-leads`. While the
+hero form is visible the header booking button is an outline, so the form is the
+single primary action; it turns primary once the form scrolls away. The 1.9 MB
+background video is only attached on screens 861px and wider, without reduced
+motion or data saving; everyone else sees the preloaded poster image.
+On narrow screens the header shortens its booking label while
 keeping the booking link and a 44px menu button visible.
 Six familiar systems appear first; a native "Visa alla" disclosure exposes the
 remaining tools, including without JavaScript.
