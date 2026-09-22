@@ -63,6 +63,14 @@ try {
   check(await page.locator("#work-leads").isVisible(), "Sales is selected by default");
   check(await page.locator("#prototype").isVisible(), "Offer is outside hidden examples");
   check(await page.locator(".builder-proof").isVisible(), "Early founder proof is present");
+  for (const selector of [".builder-proof img", ".about__avatar img"]) {
+    check(await page.locator(selector).evaluate((img) => {
+      const style = getComputedStyle(img);
+      const rect = img.getBoundingClientRect();
+      return style.objectFit === "cover" && style.objectPosition === "50% 0%" &&
+        Math.abs(rect.width - rect.height) < 1;
+    }), `${selector} uses a square, top-aligned portrait crop with headroom`);
+  }
   await tabs.nth(1).click();
   check(await page.locator("#work-feedback").isVisible(), "Click opens support");
   check(!await page.locator("#work-leads").isVisible(), "Previous example is hidden");
