@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Peter's Kakel – Kakel &amp; plattsättning i Göteborg</title>
+<meta name="description" content="Peter Båth's Kakel & Plattsättning AB i Billdal. Badrumsrenovering som totalentreprenad, nyproduktion och plattsättning sedan 1990.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cg id='l'%3E%3Cpolygon fill='%236b757b' points='50,2 50,50 41.5,41.5'/%3E%3Cpolygon fill='%2322272b' points='50,2 58.5,41.5 50,50'/%3E%3C/g%3E%3Cuse href='%23l' transform='rotate(90 50 50)'/%3E%3Cuse href='%23l' transform='rotate(180 50 50)'/%3E%3Cuse href='%23l' transform='rotate(270 50 50)'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f7f4ef;
+    --surface: #ffffff;
+    --ink: #22272b;
+    --muted: #5f666c;
+    --line: #e4ded5;
+    --accent: #b5603c;
+    --accent-dark: #974b2c;
+    --dark: #1f2528;
+    --radius: 14px;
+    --max: 1160px;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; scroll-padding-top: 76px; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font: 400 17px/1.6 Inter, system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  img { max-width: 100%; display: block; }
+  a { color: inherit; }
+  h1, h2, h3 { font-family: Fraunces, Georgia, serif; font-weight: 600; line-height: 1.15; margin: 0 0 .5em; letter-spacing: -.01em; }
+  h1 { font-size: clamp(2.3rem, 6vw, 4rem); }
+  h2 { font-size: clamp(1.8rem, 4vw, 2.6rem); }
+  h3 { font-size: 1.3rem; }
+  p { margin: 0 0 1em; }
+  .wrap { max-width: var(--max); margin: 0 auto; padding: 0 20px; }
+  section { padding: clamp(64px, 9vw, 110px) 0; }
+  .eyebrow { font-size: .8rem; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); margin-bottom: 12px; display: block; }
+  .lead { font-size: 1.15rem; color: var(--muted); max-width: 640px; }
+
+  .btn { display: inline-flex; align-items: center; gap: 8px; padding: 14px 24px; border-radius: 999px; font-weight: 600; text-decoration: none; border: 2px solid transparent; transition: .2s; cursor: pointer; font-size: 1rem; font-family: inherit; }
+  .btn-primary { background: var(--accent); color: #fff; }
+  .btn-primary:hover { background: var(--accent-dark); }
+  .btn-ghost { border-color: rgba(255,255,255,.7); color: #fff; }
+  .btn-ghost:hover { background: rgba(255,255,255,.12); }
+
+  /* Header */
+  header { position: sticky; top: 0; z-index: 50; background: rgba(247,244,239,.92); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
+  .nav { display: flex; align-items: center; justify-content: space-between; height: 68px; gap: 16px; }
+  /* Logga: kompassrosen från originalet, platt och tvåfärgad */
+  .star { --f1: #6b757b; --f2: #22272b; --f3: #cf7f59; --f4: #974b2c; }
+  .star.on-dark { --f1: #f3eee8; --f2: #9aa3a8; }
+  .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--ink); }
+  .brand svg { width: 40px; height: 40px; flex: none; }
+  .brand .word { display: flex; flex-direction: column; line-height: 1; }
+  .brand .word b { font-weight: 700; font-size: 1.08rem; letter-spacing: .1em; }
+  .brand .word small { font-size: .6rem; font-weight: 600; letter-spacing: .32em; color: var(--accent); margin-top: 5px; }
+  footer .brand { color: #fff; margin-bottom: 18px; }
+  footer .brand b { display: inline; margin: 0; color: #fff; }
+  .hero-star { position: absolute; right: -40px; top: 50%; transform: translateY(-50%); width: min(560px, 48vw); height: auto; opacity: .9; pointer-events: none; }
+  .hero-star.star { --f1: rgba(255,255,255,.16); --f2: rgba(255,255,255,.05); --f3: rgba(207,127,89,.8); --f4: rgba(151,75,44,.8); }
+  @media (max-width: 860px) { .hero-star { width: 340px; right: -110px; top: 32%; opacity: .45; } }
+  .nav ul { display: flex; gap: 26px; list-style: none; margin: 0; padding: 0; }
+  .nav ul a { text-decoration: none; font-weight: 500; font-size: .95rem; color: var(--muted); }
+  .nav ul a:hover { color: var(--ink); }
+  .nav .btn { padding: 10px 18px; font-size: .92rem; }
+  @media (max-width: 880px) { .nav ul { display: none; } }
+
+  /* Hero */
+  .hero { position: relative; min-height: min(86vh, 740px); display: flex; align-items: flex-end; color: #fff; padding: 0; overflow: hidden;
+    background:
+      radial-gradient(ellipse 70% 60% at 85% 20%, rgba(181,96,60,.45), transparent 70%),
+      linear-gradient(90deg, rgba(255,255,255,.07) 2px, transparent 2px) 0 0/96px 96px,
+      linear-gradient(0deg, rgba(255,255,255,.07) 2px, transparent 2px) 0 0/96px 96px,
+      linear-gradient(160deg, #2b3236, #1a1f22); }
+  .hero::before { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 30%, rgba(20,24,26,.75) 100%); }
+  .hero .wrap { position: relative; padding-top: 120px; padding-bottom: clamp(48px, 8vw, 90px); width: 100%; }
+  .hero h1 { max-width: 780px; }
+  .hero p { font-size: 1.2rem; max-width: 600px; color: rgba(255,255,255,.88); }
+  .hero .ctas { display: flex; flex-wrap: wrap; gap: 12px; margin: 28px 0 40px; }
+  .trust { display: flex; flex-wrap: wrap; gap: 10px 28px; font-size: .95rem; color: rgba(255,255,255,.85); padding-top: 24px; border-top: 1px solid rgba(255,255,255,.2); }
+  .trust span::before { content: "✓"; color: #f0a37f; font-weight: 700; margin-right: 8px; }
+
+  /* Tjänster */
+  .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr)); gap: 22px; margin-top: 44px; }
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 32px 28px; transition: .25s; }
+  .card:hover { transform: translateY(-4px); box-shadow: 0 18px 40px -22px rgba(34,39,43,.35); }
+  .card .icon { width: 50px; height: 50px; border-radius: 12px; background: #f4e6de; color: var(--accent); display: grid; place-items: center; margin-bottom: 20px; }
+  .card p { color: var(--muted); margin: 0; }
+  .card .tag { display: inline-block; margin-top: 18px; font-size: .85rem; font-weight: 600; color: var(--accent); }
+
+  /* Process */
+  .process { background: var(--dark); color: #fff; }
+  .process .lead { color: rgba(255,255,255,.7); }
+  .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr)); gap: 28px; margin-top: 48px; counter-reset: s; }
+  .step { border-top: 2px solid rgba(255,255,255,.15); padding-top: 22px; }
+  .step::before { counter-increment: s; content: "0" counter(s); font-family: Fraunces, serif; font-size: 2rem; color: #f0a37f; display: block; margin-bottom: 8px; }
+  .step p { color: rgba(255,255,255,.7); margin: 0; font-size: .97rem; }
+
+  /* Om oss */
+  .split { display: grid; grid-template-columns: 1.1fr 1fr; gap: clamp(32px, 6vw, 80px); align-items: start; }
+  @media (max-width: 860px) { .split { grid-template-columns: 1fr; } }
+  .timeline { list-style: none; margin: 0; padding: 0; border-left: 2px solid var(--line); }
+  .timeline li { position: relative; padding: 0 0 26px 28px; }
+  .timeline li::before { content: ""; position: absolute; left: -7px; top: 6px; width: 12px; height: 12px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 4px var(--bg); }
+  .timeline strong { font-family: Fraunces, serif; font-size: 1.25rem; display: block; }
+  .timeline span { color: var(--muted); }
+  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin: 32px 0; }
+  .stat { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 20px 16px; text-align: center; }
+  .stat b { font-family: Fraunces, serif; font-size: 2rem; display: block; color: var(--accent); line-height: 1.1; }
+  .stat small { color: var(--muted); font-size: .85rem; }
+
+  /* Certifieringar */
+  .certs { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr)); gap: 14px; margin-top: 36px; }
+  .cert { display: flex; align-items: center; gap: 14px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px; }
+  .cert img, .cert .badge { width: 52px; height: 52px; object-fit: contain; flex: none; }
+  .cert .badge { border-radius: 50%; background: #f4e6de; color: var(--accent); display: grid; place-items: center; font-weight: 700; font-size: .8rem; }
+  .cert b { display: block; font-size: .98rem; }
+  .cert small { color: var(--muted); }
+
+  /* Referenser */
+  .refs { background: var(--surface); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+  .gallery { display: grid; grid-template-columns: repeat(4, 1fr); grid-auto-rows: 200px; gap: 12px; margin-top: 40px; }
+  .gallery div { border-radius: 12px; background-size: cover; background-position: center; position: relative; overflow: hidden; }
+  .gallery .wide { grid-column: 1 / -1; }
+  .gallery .cap { position: absolute; left: 14px; bottom: 12px; background: rgba(0,0,0,.55); color: #fff; font-size: .82rem; font-weight: 600; padding: 4px 10px; border-radius: 999px; }
+  .gallery .ph { background:
+      linear-gradient(90deg, transparent 48.5%, rgba(255,255,255,.7) 48.5% 51.5%, transparent 51.5%) 0 0/60px 60px,
+      linear-gradient(0deg, transparent 48.5%, rgba(255,255,255,.7) 48.5% 51.5%, transparent 51.5%) 0 0/60px 60px, #e9e2d8;
+    display: grid; place-items: center; color: var(--muted); font-size: .9rem; font-weight: 500; text-align: center; padding: 12px; }
+  @media (max-width: 760px) { .gallery { grid-template-columns: 1fr 1fr; grid-auto-rows: 150px; } }
+
+  /* Offert */
+  .quote-box { display: grid; grid-template-columns: 1fr 1.2fr; gap: clamp(28px, 5vw, 64px); background: var(--surface); border: 1px solid var(--line); border-radius: 22px; padding: clamp(28px, 5vw, 56px); }
+  @media (max-width: 860px) { .quote-box { grid-template-columns: 1fr; } }
+  .checks { list-style: none; padding: 0; margin: 24px 0 0; }
+  .checks li { padding-left: 30px; position: relative; margin-bottom: 12px; color: var(--muted); }
+  .checks li::before { content: "✓"; position: absolute; left: 0; color: var(--accent); font-weight: 700; }
+  form { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  form .full { grid-column: 1 / -1; }
+  @media (max-width: 560px) { form { grid-template-columns: 1fr; } }
+  label { font-size: .88rem; font-weight: 600; display: block; margin-bottom: 6px; }
+  input, select, textarea { width: 100%; font: inherit; font-size: 1rem; padding: 12px 14px; border: 1px solid var(--line); border-radius: 10px; background: var(--bg); color: var(--ink); }
+  input:focus, select:focus, textarea:focus { outline: 2px solid var(--accent); outline-offset: 1px; border-color: transparent; }
+  textarea { min-height: 120px; resize: vertical; }
+  .file { border: 1.5px dashed #cfc5b8; border-radius: 10px; padding: 16px; text-align: center; color: var(--muted); font-size: .92rem; cursor: pointer; background: var(--bg); }
+  .file input { display: none; }
+  .thanks { display: none; grid-column: 1 / -1; background: #eef6ee; border: 1px solid #cfe5cf; color: #2e5a31; padding: 16px; border-radius: 10px; }
+
+  /* Kontakt */
+  .people { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr)); gap: 20px; margin-top: 40px; }
+  .person { display: flex; gap: 20px; align-items: center; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 20px; }
+  .person img, .person .avatar { width: 96px; height: 120px; border-radius: 10px; object-fit: cover; flex: none; background: #e9e2d8; }
+  .person h3 { margin-bottom: 2px; }
+  .person .role { color: var(--muted); font-size: .9rem; margin-bottom: 10px; }
+  .person a { display: block; text-decoration: none; font-weight: 500; }
+  .person a:hover { color: var(--accent); }
+  .person > div, .cert > div { min-width: 0; }
+  .person a, .cert small, .office a { overflow-wrap: anywhere; hyphens: auto; }
+  @media (max-width: 420px) {
+    .person { gap: 14px; padding: 16px; }
+    .person img, .person .avatar { width: 72px; height: 92px; }
+    .person a { font-size: .92rem; }
+    .callbar .btn { padding: 14px 12px; }
+  }
+  .office { margin-top: 20px; display: flex; flex-wrap: wrap; gap: 12px 40px; color: var(--muted); font-size: .95rem; }
+  .office b { color: var(--ink); display: block; }
+
+  /* Jobb */
+  .jobs { background: #f0e9df; }
+  .jobs .inner { display: flex; flex-wrap: wrap; gap: 24px; align-items: center; justify-content: space-between; }
+  .jobs .inner > div { max-width: 640px; }
+
+  footer { background: var(--dark); color: rgba(255,255,255,.7); padding: 48px 0 28px; font-size: .92rem; }
+  footer .cols { display: flex; flex-wrap: wrap; gap: 24px 60px; justify-content: space-between; }
+  footer b { color: #fff; display: block; margin-bottom: 6px; }
+  footer a { text-decoration: none; }
+  .concept { margin-top: 36px; padding-top: 18px; border-top: 1px solid rgba(255,255,255,.12); font-size: .82rem; color: rgba(255,255,255,.45); }
+
+  /* Mobil ring-knapp */
+  .callbar { display: none; }
+  @media (max-width: 680px) {
+    .callbar { display: flex; position: fixed; bottom: 12px; left: 12px; right: 12px; z-index: 60; gap: 10px; }
+    .callbar a { flex: 1; justify-content: center; box-shadow: 0 10px 30px -10px rgba(0,0,0,.5); }
+    .callbar .btn-dark { background: var(--dark); color: #fff; }
+    body { padding-bottom: 80px; }
+    .nav .btn { display: none; }
+    .stats b { font-size: 1.6rem; }
+  }
+
+  .reveal { opacity: 0; transform: translateY(18px); transition: opacity .7s ease, transform .7s ease; }
+  .reveal.in { opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; transition: none; } html { scroll-behavior: auto; } }
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="compass" viewBox="0 0 100 100">
+      <g id="long">
+        <polygon fill="var(--f1)" points="50,2 50,50 41.5,41.5"/>
+        <polygon fill="var(--f2)" points="50,2 58.5,41.5 50,50"/>
+      </g>
+      <use href="#long" transform="rotate(90 50 50)"/>
+      <use href="#long" transform="rotate(180 50 50)"/>
+      <use href="#long" transform="rotate(270 50 50)"/>
+      <g id="short">
+        <polygon fill="var(--f3)" points="69,31 50,50 50,43"/>
+        <polygon fill="var(--f4)" points="69,31 57,50 50,50"/>
+      </g>
+      <use href="#short" transform="rotate(90 50 50)"/>
+      <use href="#short" transform="rotate(180 50 50)"/>
+      <use href="#short" transform="rotate(270 50 50)"/>
+    </symbol>
+  </defs>
+</svg>
+
+<header>
+  <div class="wrap nav">
+    <a href="#top" class="brand" aria-label="Peters Kakel AB, etablerad 1990">
+      <svg class="star"><use href="#compass"/></svg>
+      <span class="word"><b>PETERS KAKEL</b><small>ETABLERAD 1990</small></span>
+    </a>
+    <ul>
+      <li><a href="#tjanster">Tjänster</a></li>
+      <li><a href="#sa-gar-det-till">Så går det till</a></li>
+      <li><a href="#om-oss">Om oss</a></li>
+      <li><a href="#referenser">Referenser</a></li>
+      <li><a href="#kontakt">Kontakt</a></li>
+    </ul>
+    <a href="#offert" class="btn btn-primary">Begär offert</a>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <svg class="star hero-star" viewBox="0 0 100 100" aria-hidden="true"><use href="#compass"/></svg>
+    <div class="wrap">
+      <span class="eyebrow" style="color:#f0a37f">Kakel &amp; plattsättning sedan 1990</span>
+      <h1>Erfarenhet och noggrannhet i varje fog.</h1>
+      <p>Badrumsrenovering, nyproduktion och allt däremellan. Peter och Kent har tillsammans nästan 50 års erfarenhet i kakelbranschen, erfarenhet du kan lita på.</p>
+      <div class="ctas">
+        <a href="#offert" class="btn btn-primary">Begär kostnadsfri offert</a>
+        <a href="tel:0705987599" class="btn btn-ghost">Ring 070-598 75 99</a>
+      </div>
+      <div class="trust">
+        <span>Våtrumsbehörighet</span>
+        <span>Medlem i BKR och PER</span>
+        <span>Ca 20 anställda</span>
+        <span>ROT-avdrag</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="tjanster">
+    <div class="wrap">
+      <span class="eyebrow">Vad vi gör</span>
+      <h2>Inget jobb för stort eller för litet</h2>
+      <p class="lead">Vare sig det gäller en stor nyproduktion eller renoveringen av ett mindre WC tar vi oss an jobbet med samma noggrannhet.</p>
+      <div class="grid-3">
+        <article class="card reveal">
+          <div class="icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 12h16v3a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4v-3z"/><path d="M6 12V5a2 2 0 0 1 4 0"/><path d="M7 19l-1 2M17 19l1 2"/></svg></div>
+          <h3>Badrumsrenovering</h3>
+          <p>Vi sköter hela totalentreprenaden. Du behöver inte ringa rörläggare, elektriker och snickare, det gör vi åt dig. En kontakt från rivning till färdigt badrum.</p>
+          <span class="tag">Utnyttja ROT-avdraget →</span>
+        </article>
+        <article class="card reveal">
+          <div class="icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/></svg></div>
+          <h3>Nyproduktion</h3>
+          <p>Vi är en van partner till husleverantörer och gör regelbundet plattsättning åt bland andra Eksjöhus, A-hus, Myresjöhus och Trivselhus.</p>
+          <span class="tag">För byggare och husföretag →</span>
+        </article>
+        <article class="card reveal">
+          <div class="icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="8" height="8" rx="1"/><rect x="13" y="3" width="8" height="8" rx="1"/><rect x="3" y="13" width="8" height="8" rx="1"/><rect x="13" y="13" width="8" height="8" rx="1"/></svg></div>
+          <h3>Kök, WC och mindre jobb</h3>
+          <p>Nytt kakel i köket, ett uppfräschat gäst-WC eller en hall med klinker. Mindre jobb får samma omsorg som de stora.</p>
+          <span class="tag">Berätta vad du planerar →</span>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="process" id="sa-gar-det-till">
+    <div class="wrap">
+      <span class="eyebrow" style="color:#f0a37f">Så går det till</span>
+      <h2>Från första samtal till färdigt badrum</h2>
+      <p class="lead">Tydligt från start, så du vet vad som händer och när.</p>
+      <div class="steps">
+        <div class="step reveal"><h3>Kontakt</h3><p>Hör av dig via formuläret eller ring. Berätta vad du vill göra, gärna med några bilder.</p></div>
+        <div class="step reveal"><h3>Besök och offert</h3><p>Vi tittar på plats, går igenom önskemål och material och ger dig en offert.</p></div>
+        <div class="step reveal"><h3>Vi samordnar</h3><p>Rörläggare, elektriker och snickare planeras in av oss. Du har en kontaktperson hela vägen.</p></div>
+        <div class="step reveal"><h3>Klart</h3><p>Våtrumsintyg och slutbesiktning. ROT-avdraget hanteras direkt på fakturan.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="om-oss">
+    <div class="wrap split">
+      <div>
+        <span class="eyebrow">Om oss</span>
+        <h2>Receptet på kvalitet</h2>
+        <p class="lead">När du kombinerar ett gediget intresse för yrket och en strävan efter att alltid bli bättre, med kunskapen som kommer av många års erfarenhet, så får du kvalitet.</p>
+        <p>Det som en gång började med en man är idag ett företag med ca 20 anställda, alla med olika kunskaper och arbetsuppgifter. Vi utför alla typer av arbeten inom yrket, och just badrumsrenoveringar har vi särskilt stor erfarenhet av.</p>
+        <div class="stats">
+          <div class="stat"><b>1990</b><small>grundat</small></div>
+          <div class="stat"><b>~50</b><small>års erfarenhet</small></div>
+          <div class="stat"><b>~20</b><small>anställda</small></div>
+        </div>
+      </div>
+      <ol class="timeline reveal">
+        <li><strong>1990</strong><span>Peter Båth startar firman.</span></li>
+        <li><strong>1999</strong><span>Företaget blir aktiebolag.</span></li>
+        <li><strong>2000</strong><span>Kent Warnecke går in som delägare.</span></li>
+        <li><strong>2013</strong><span>Synas utmärkelse för bästa tillväxt och Dagens Industris Gasellutmärkelse.</span></li>
+        <li><strong>Idag</strong><span>Ca 20 anställda med badrum, kök och nyproduktion i Göteborgsområdet.</span></li>
+      </ol>
+    </div>
+    <div class="wrap">
+      <div class="certs">
+        <div class="cert"><img src="https://impro.usercontent.one/appid/oneComWsb/domain/peterskakel.se/media/peterskakel.se/onewebmedia/BKR.png?etag=%22bd69-5318fa5c%22&sourceContentType=image%2Fpng" alt="BKR" onerror="this.outerHTML='<span class=badge>BKR</span>'"><div><b>Byggkeramikrådet</b><small>Medlem i BKR</small></div></div>
+        <div class="cert"><img src="https://impro.usercontent.one/appid/oneComWsb/domain/peterskakel.se/media/peterskakel.se/onewebmedia/252.png?etag=%22W%2F%22%20%224137e-54b8d7e0%22&sourceContentType=image%2Fpng" alt="PER" onerror="this.outerHTML='<span class=badge>PER</span>'"><div><b>PER</b><small>Plattsättningsentreprenörernas riksförbund</small></div></div>
+        <div class="cert"><span class="badge" style="font-size:1.3rem">✓</span><div><b>Våtrumsbehörighet</b><small>Enligt branschregler</small></div></div>
+        <div class="cert"><span class="badge">DI</span><div><b>Gasellföretag 2013</b><small>Dagens Industri</small></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="refs" id="referenser">
+    <div class="wrap">
+      <span class="eyebrow">Referenser</span>
+      <h2>Några av våra jobb</h2>
+      <p class="lead">Här visas era färdiga badrum, kök och projekt. Bilder före och efter säljer bättre än någon text.</p>
+      <div class="gallery">
+        <div class="wide" style="background-image:url('https://impro.usercontent.one/appid/oneComWsb/domain/peterskakel.se/media/peterskakel.se/onewebmedia/K%C3%B6k.jpg?etag=W%2F%2229a8d-58abe996%22&sourceContentType=image%2Fjpeg')"><span class="cap">Kök</span></div>
+        <div class="ph">Era projektbilder här</div>
+        <div class="ph">Badrum före / efter</div>
+        <div class="ph">Nyproduktion</div>
+        <div class="ph">Detaljbild, fogar och hörn</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="offert">
+    <div class="wrap">
+      <div class="quote-box">
+        <div>
+          <span class="eyebrow">Offertförfrågan</span>
+          <h2>Vad vill du göra?</h2>
+          <p class="lead">Berätta kort om ditt projekt så återkommer vi så snart vi kan.</p>
+          <ul class="checks">
+            <li>Kostnadsfri offert</li>
+            <li>En kontaktperson för hela jobbet</li>
+            <li>ROT-avdrag direkt på fakturan</li>
+          </ul>
+        </div>
+        <form id="quote">
+          <div><label for="n">Namn</label><input id="n" required autocomplete="name"></div>
+          <div><label for="t">Telefon</label><input id="t" type="tel" autocomplete="tel"></div>
+          <div><label for="e">E-post</label><input id="e" type="email" required autocomplete="email"></div>
+          <div><label for="o">Ort</label><input id="o" autocomplete="address-level2"></div>
+          <div class="full"><label for="typ">Typ av jobb</label>
+            <select id="typ"><option>Badrumsrenovering</option><option>Kök</option><option>WC / tvättstuga</option><option>Nyproduktion</option><option>Annat</option></select></div>
+          <div class="full"><label for="m">Beskriv projektet</label><textarea id="m" required placeholder="T.ex. badrum ca 6 kvm, vill byta allt inklusive golvvärme…"></textarea></div>
+          <label class="file full" id="fl">📷 Bifoga bilder på rummet (valfritt)<input type="file" accept="image/*" multiple></label>
+          <button class="btn btn-primary full" type="submit">Skicka förfrågan</button>
+          <div class="thanks" id="thanks"><b>Tack!</b> Det här är en demo, så inget skickades. I skarp version går förfrågan direkt till er inkorg.</div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <section id="kontakt" style="padding-top:0">
+    <div class="wrap">
+      <span class="eyebrow">Kontakt</span>
+      <h2>Prata direkt med oss</h2>
+      <div class="people">
+        <div class="person">
+          <img src="https://impro.usercontent.one/appid/oneComWsb/domain/peterskakel.se/media/peterskakel.se/onewebmedia/Peter.JPG?etag=W%2F%224ca1a-58ac06b2%22&sourceContentType=image%2Fjpeg&ignoreAspectRatio&resize=344%2B459&extract=94%2B130%2B148%2B198&quality=85" alt="Peter Båth" onerror="this.outerHTML='<span class=avatar></span>'">
+          <div><h3>Peter Båth</h3><div class="role">Grundare och delägare</div>
+            <a href="tel:0705987599">070-598 75 99</a><a href="mailto:peter@peterskakel.se">peter@peterskakel.se</a></div>
+        </div>
+        <div class="person">
+          <img src="https://impro.usercontent.one/appid/oneComWsb/domain/peterskakel.se/media/peterskakel.se/onewebmedia/Kent.JPG?etag=W%2F%223021-58ac075d%22&sourceContentType=image%2Fjpeg&ignoreAspectRatio&resize=193%2B194&extract=34%2B0%2B143%2B192&quality=85" alt="Kent Warnecke" onerror="this.outerHTML='<span class=avatar></span>'">
+          <div><h3>Kent Warnecke</h3><div class="role">Delägare</div>
+            <a href="tel:0703234252">070-323 42 52</a><a href="mailto:kent@peterskakel.se">kent@peterskakel.se</a></div>
+        </div>
+      </div>
+      <div class="office">
+        <div><b>Besöksadress</b><a href="https://maps.google.com/?q=Bolshedens+Industriväg+28,+427+50+Billdal" target="_blank" rel="noopener">Bolshedens Industriväg 28, 427 50 Billdal</a></div>
+        <div><b>Fakturor</b><a href="mailto:kontor@peterskakel.se">kontor@peterskakel.se</a></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="jobs" id="jobb">
+    <div class="wrap inner">
+      <div>
+        <span class="eyebrow">Lediga tjänster</span>
+        <h2>Vill du jobba med oss?</h2>
+        <p style="color:var(--muted);margin:0">Vi söker alltid duktiga plattsättare. Du har erfarenhet av plattsättning, B-körkort och kan göra dig förstådd och ta in information både muntligt och digitalt.</p>
+      </div>
+      <a class="btn btn-primary" href="mailto:peter@peterskakel.se?subject=Intresseanmälan">Skicka intresseanmälan</a>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="brand"><svg class="star on-dark"><use href="#compass"/></svg><span class="word"><b>PETERS KAKEL</b><small>ETABLERAD 1990</small></span></div>
+    <div class="cols">
+      <div><b>Peter Båth's Kakel &amp; Plattsättning AB</b>Bolshedens Industriväg 28, 427 50 Billdal<br>Org.nr 556524-8423</div>
+      <div><b>Kontakt</b><a href="tel:0705987599">070-598 75 99</a><br><a href="mailto:peter@peterskakel.se">peter@peterskakel.se</a></div>
+      <div><b>Medlem i</b>BKR · PER</div>
+    </div>
+    <div class="concept">Designkoncept framtaget av Vector Point, september 2026. Inte en publicerad webbplats. Texter och bilder är hämtade från nuvarande peterskakel.se.</div>
+  </div>
+</footer>
+
+<div class="callbar">
+  <a href="tel:0705987599" class="btn btn-dark">📞 Ring</a>
+  <a href="#offert" class="btn btn-primary">Begär offert</a>
+</div>
+
+<script>
+  document.getElementById('quote').addEventListener('submit', function (e) {
+    e.preventDefault();
+    document.getElementById('thanks').style.display = 'block';
+  });
+  document.querySelector('#fl input').addEventListener('change', function () {
+    if (this.files.length) document.getElementById('fl').firstChild.textContent = '📷 ' + this.files.length + ' bild(er) valda ';
+  });
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { threshold: .15 });
+    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+  } else {
+    document.querySelectorAll('.reveal').forEach(el => el.classList.add('in'));
+  }
+</script>
+</body>
+</html>

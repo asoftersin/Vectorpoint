@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
+Disallow: /koncept/
 
 Sitemap: https://vectorpoint.se/sitemap.xml
