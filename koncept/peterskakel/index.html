@@ -50,11 +50,11 @@
   /* Header */
   header { position: sticky; top: 0; z-index: 50; background: rgba(247,244,239,.92); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
   .nav { display: flex; align-items: center; justify-content: space-between; height: 80px; gap: 16px; }
-  /* Logga: originalet från peterskakel.se */
+  /* Logga: vektorversion av originalet */
   .brand { display: flex; align-items: center; text-decoration: none; }
-  .brand img { height: 62px; width: auto; mix-blend-mode: multiply; }
+  .brand .logo { height: 62px; width: 109px; display: block; }
   footer .brand { display: inline-flex; background: #fff; border-radius: 10px; padding: 8px 12px; margin-bottom: 22px; }
-  footer .brand img { height: 56px; mix-blend-mode: normal; }
+  footer .brand .logo { height: 56px; width: 98px; }
   .nav ul { display: flex; gap: 26px; list-style: none; margin: 0; padding: 0; }
   .nav ul a { text-decoration: none; font-weight: 500; font-size: .95rem; color: var(--muted); }
   .nav ul a:hover { color: var(--ink); }
@@ -190,10 +190,48 @@
 </head>
 <body>
 
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <linearGradient id="pk-lt" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset=".55" stop-color="#d4d6d8"/>
+      <stop offset="1" stop-color="#8e9296"/>
+    </linearGradient>
+    <linearGradient id="pk-dk" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#7c8084"/>
+      <stop offset=".6" stop-color="#3b3e41"/>
+      <stop offset="1" stop-color="#141516"/>
+    </linearGradient>
+    <g id="pk-short" stroke="#0d0d0d" stroke-width="4" stroke-linejoin="round">
+      <polygon fill="url(#pk-lt)" points="810,194 704,300 704,228"/>
+      <polygon fill="url(#pk-dk)" points="810,194 776,300 704,300"/>
+    </g>
+    <g id="pk-long" stroke="#0d0d0d" stroke-width="4" stroke-linejoin="round">
+      <polygon fill="url(#pk-dk)" points="704,5 704,300 643,239"/>
+      <polygon fill="url(#pk-lt)" points="704,5 765,239 704,300"/>
+    </g>
+  
+    <symbol id="pk-logo" viewBox="0 0 1406 800">
+      <use href="#pk-long"/>
+  <use href="#pk-long" transform="rotate(90 704 300)"/>
+  <use href="#pk-long" transform="rotate(180 704 300)"/>
+  <use href="#pk-long" transform="rotate(270 704 300)"/>
+  <use href="#pk-short"/>
+  <use href="#pk-short" transform="rotate(90 704 300)"/>
+  <use href="#pk-short" transform="rotate(180 704 300)"/>
+  <use href="#pk-short" transform="rotate(270 704 300)"/>
+  <text x="10" y="722" textLength="1393" lengthAdjust="spacingAndGlyphs" fill="#1c1c1c"
+        font-family="Inter, Helvetica, Arial, sans-serif" font-weight="700" font-size="136">PETERS KAKEL AB</text>
+  <text x="404" y="790" textLength="669" lengthAdjust="spacing" fill="#1c1c1c"
+        font-family="Inter, Helvetica, Arial, sans-serif" font-weight="800" font-size="44">ETABLERAD 1990</text>
+    </symbol>
+  </defs>
+</svg>
+
 <header>
   <div class="wrap nav">
     <a href="#top" class="brand" aria-label="Peters Kakel AB, etablerad 1990">
-      <img src="https://impro.usercontent.one/appid/oneComWsb/domain/peterskakel.se/media/peterskakel.se/onewebmedia/etabl%20logo.png?etag=%2286d3-5318f8bc%22&amp;sourceContentType=image%2Fpng" alt="Peters Kakel AB, etablerad 1990">
+      <svg class="logo" role="img" aria-label="Peters Kakel AB, etablerad 1990"><use href="#pk-logo"/></svg>
     </a>
     <ul>
       <li><a href="#tjanster">Tjänster</a></li>
@@ -385,13 +423,13 @@
 
 <footer>
   <div class="wrap">
-    <div class="brand"><img src="https://impro.usercontent.one/appid/oneComWsb/domain/peterskakel.se/media/peterskakel.se/onewebmedia/etabl%20logo.png?etag=%2286d3-5318f8bc%22&amp;sourceContentType=image%2Fpng" alt="Peters Kakel AB, etablerad 1990"></div>
+    <div class="brand"><svg class="logo" role="img" aria-label="Peters Kakel AB, etablerad 1990"><use href="#pk-logo"/></svg></div>
     <div class="cols">
       <div><b>Peter Båth's Kakel &amp; Plattsättning AB</b>Bolshedens Industriväg 28, 427 50 Billdal<br>Org.nr 556524-8423</div>
       <div><b>Kontakt</b><a href="tel:0705987599">070-598 75 99</a><br><a href="mailto:peter@peterskakel.se">peter@peterskakel.se</a></div>
       <div><b>Medlem i</b>BKR · PER</div>
     </div>
-    <div class="concept">Designkoncept framtaget av Vector Point, september 2026. Inte en publicerad webbplats. Texter och bilder är hämtade från nuvarande peterskakel.se.</div>
+    <div class="concept">Designkoncept framtaget av Vector Point, september 2026. Inte en publicerad webbplats. Texter och bilder är hämtade från nuvarande peterskakel.se, loggan är omritad i vektor efter originalet.</div>
   </div>
 </footer>
 
