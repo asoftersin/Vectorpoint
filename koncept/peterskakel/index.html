@@ -6,7 +6,6 @@
 <meta name="robots" content="noindex, nofollow">
 <title>Peter's Kakel – Kakel &amp; plattsättning i Göteborg</title>
 <meta name="description" content="Peter Båth's Kakel & Plattsättning AB i Billdal. Badrumsrenovering som totalentreprenad, nyproduktion och plattsättning sedan 1990.">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cg id='l'%3E%3Cpolygon fill='%236b757b' points='50,2 50,50 41.5,41.5'/%3E%3Cpolygon fill='%2322272b' points='50,2 58.5,41.5 50,50'/%3E%3C/g%3E%3Cuse href='%23l' transform='rotate(90 50 50)'/%3E%3Cuse href='%23l' transform='rotate(180 50 50)'/%3E%3Cuse href='%23l' transform='rotate(270 50 50)'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -24,7 +23,7 @@
     --max: 1160px;
   }
   * { box-sizing: border-box; }
-  html { scroll-behavior: smooth; scroll-padding-top: 76px; }
+  html { scroll-behavior: smooth; scroll-padding-top: 88px; }
   body {
     margin: 0; background: var(--bg); color: var(--ink);
     font: 400 17px/1.6 Inter, system-ui, sans-serif;
@@ -50,20 +49,12 @@
 
   /* Header */
   header { position: sticky; top: 0; z-index: 50; background: rgba(247,244,239,.92); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
-  .nav { display: flex; align-items: center; justify-content: space-between; height: 68px; gap: 16px; }
-  /* Logga: kompassrosen från originalet, platt och tvåfärgad */
-  .star { --f1: #6b757b; --f2: #22272b; --f3: #cf7f59; --f4: #974b2c; }
-  .star.on-dark { --f1: #f3eee8; --f2: #9aa3a8; }
-  .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--ink); }
-  .brand svg { width: 40px; height: 40px; flex: none; }
-  .brand .word { display: flex; flex-direction: column; line-height: 1; }
-  .brand .word b { font-weight: 700; font-size: 1.08rem; letter-spacing: .1em; }
-  .brand .word small { font-size: .6rem; font-weight: 600; letter-spacing: .32em; color: var(--accent); margin-top: 5px; }
-  footer .brand { color: #fff; margin-bottom: 18px; }
-  footer .brand b { display: inline; margin: 0; color: #fff; }
-  .hero-star { position: absolute; right: -40px; top: 50%; transform: translateY(-50%); width: min(560px, 48vw); height: auto; opacity: .9; pointer-events: none; }
-  .hero-star.star { --f1: rgba(255,255,255,.16); --f2: rgba(255,255,255,.05); --f3: rgba(207,127,89,.8); --f4: rgba(151,75,44,.8); }
-  @media (max-width: 860px) { .hero-star { width: 340px; right: -110px; top: 32%; opacity: .45; } }
+  .nav { display: flex; align-items: center; justify-content: space-between; height: 80px; gap: 16px; }
+  /* Logga: originalet från peterskakel.se */
+  .brand { display: flex; align-items: center; text-decoration: none; }
+  .brand img { height: 62px; width: auto; mix-blend-mode: multiply; }
+  footer .brand { display: inline-flex; background: #fff; border-radius: 10px; padding: 8px 12px; margin-bottom: 22px; }
+  footer .brand img { height: 56px; mix-blend-mode: normal; }
   .nav ul { display: flex; gap: 26px; list-style: none; margin: 0; padding: 0; }
   .nav ul a { text-decoration: none; font-weight: 500; font-size: .95rem; color: var(--muted); }
   .nav ul a:hover { color: var(--ink); }
@@ -199,32 +190,10 @@
 </head>
 <body>
 
-<svg width="0" height="0" style="position:absolute" aria-hidden="true">
-  <defs>
-    <symbol id="compass" viewBox="0 0 100 100">
-      <g id="long">
-        <polygon fill="var(--f1)" points="50,2 50,50 41.5,41.5"/>
-        <polygon fill="var(--f2)" points="50,2 58.5,41.5 50,50"/>
-      </g>
-      <use href="#long" transform="rotate(90 50 50)"/>
-      <use href="#long" transform="rotate(180 50 50)"/>
-      <use href="#long" transform="rotate(270 50 50)"/>
-      <g id="short">
-        <polygon fill="var(--f3)" points="69,31 50,50 50,43"/>
-        <polygon fill="var(--f4)" points="69,31 57,50 50,50"/>
-      </g>
-      <use href="#short" transform="rotate(90 50 50)"/>
-      <use href="#short" transform="rotate(180 50 50)"/>
-      <use href="#short" transform="rotate(270 50 50)"/>
-    </symbol>
-  </defs>
-</svg>
-
 <header>
   <div class="wrap nav">
     <a href="#top" class="brand" aria-label="Peters Kakel AB, etablerad 1990">
-      <svg class="star"><use href="#compass"/></svg>
-      <span class="word"><b>PETERS KAKEL</b><small>ETABLERAD 1990</small></span>
+      <img src="https://impro.usercontent.one/appid/oneComWsb/domain/peterskakel.se/media/peterskakel.se/onewebmedia/etabl%20logo.png?etag=%2286d3-5318f8bc%22&amp;sourceContentType=image%2Fpng" alt="Peters Kakel AB, etablerad 1990">
     </a>
     <ul>
       <li><a href="#tjanster">Tjänster</a></li>
@@ -240,7 +209,6 @@
 
 <main id="top">
   <section class="hero">
-    <svg class="star hero-star" viewBox="0 0 100 100" aria-hidden="true"><use href="#compass"/></svg>
     <div class="wrap">
       <span class="eyebrow" style="color:#f0a37f">Kakel &amp; plattsättning sedan 1990</span>
       <h1>Erfarenhet och noggrannhet i varje fog.</h1>
@@ -331,7 +299,7 @@
         <div class="cert"><img src="https://impro.usercontent.one/appid/oneComWsb/domain/peterskakel.se/media/peterskakel.se/onewebmedia/BKR.png?etag=%22bd69-5318fa5c%22&sourceContentType=image%2Fpng" alt="BKR" onerror="this.outerHTML='<span class=badge>BKR</span>'"><div><b>Byggkeramikrådet</b><small>Medlem i BKR</small></div></div>
         <div class="cert"><img src="https://impro.usercontent.one/appid/oneComWsb/domain/peterskakel.se/media/peterskakel.se/onewebmedia/252.png?etag=%22W%2F%22%20%224137e-54b8d7e0%22&sourceContentType=image%2Fpng" alt="PER" onerror="this.outerHTML='<span class=badge>PER</span>'"><div><b>PER</b><small>Plattsättningsentreprenörernas riksförbund</small></div></div>
         <div class="cert"><span class="badge" style="font-size:1.3rem">✓</span><div><b>Våtrumsbehörighet</b><small>Enligt branschregler</small></div></div>
-        <div class="cert"><span class="badge">DI</span><div><b>Gasellföretag 2013</b><small>Dagens Industri</small></div></div>
+        <div class="cert"><img src="di-gasell.png" alt="DI Gasell" onerror="this.outerHTML='<span class=badge>DI</span>'"><div><b>Gasellföretag 2013</b><small>Dagens Industri</small></div></div>
       </div>
     </div>
   </section>
@@ -417,7 +385,7 @@
 
 <footer>
   <div class="wrap">
-    <div class="brand"><svg class="star on-dark"><use href="#compass"/></svg><span class="word"><b>PETERS KAKEL</b><small>ETABLERAD 1990</small></span></div>
+    <div class="brand"><img src="https://impro.usercontent.one/appid/oneComWsb/domain/peterskakel.se/media/peterskakel.se/onewebmedia/etabl%20logo.png?etag=%2286d3-5318f8bc%22&amp;sourceContentType=image%2Fpng" alt="Peters Kakel AB, etablerad 1990"></div>
     <div class="cols">
       <div><b>Peter Båth's Kakel &amp; Plattsättning AB</b>Bolshedens Industriväg 28, 427 50 Billdal<br>Org.nr 556524-8423</div>
       <div><b>Kontakt</b><a href="tel:0705987599">070-598 75 99</a><br><a href="mailto:peter@peterskakel.se">peter@peterskakel.se</a></div>
