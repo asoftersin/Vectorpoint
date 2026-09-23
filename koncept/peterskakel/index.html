@@ -81,7 +81,12 @@
   .hero h1 { max-width: 780px; }
   .hero p { font-size: 1.2rem; max-width: 600px; color: rgba(255,255,255,.88); }
   .hero .ctas { display: flex; flex-wrap: wrap; gap: 12px; margin: 28px 0 40px; }
-  .trust { display: flex; flex-wrap: wrap; gap: 10px 28px; font-size: .95rem; color: rgba(255,255,255,.85); padding-top: 24px; border-top: 1px solid rgba(255,255,255,.2); }
+  .proof { display: flex; flex-wrap: wrap; align-items: center; gap: 20px 40px; padding-top: 24px; border-top: 1px solid rgba(255,255,255,.2); }
+  .bkr { display: flex; align-items: center; gap: 14px; }
+  .bkr img { width: 68px; height: 68px; border-radius: 10px; box-shadow: 0 8px 24px -8px rgba(0,0,0,.6); }
+  .bkr b { display: block; font-size: 1rem; }
+  .bkr small { color: rgba(255,255,255,.7); font-size: .85rem; }
+  .trust { display: flex; flex-wrap: wrap; gap: 10px 28px; font-size: .95rem; color: rgba(255,255,255,.85); }
   .trust span::before { content: "✓"; color: #f0a37f; font-weight: 700; margin-right: 8px; }
 
   /* Tjänster */
@@ -244,11 +249,16 @@
         <a href="#offert" class="btn btn-primary">Begär kostnadsfri offert</a>
         <a href="tel:0705987599" class="btn btn-ghost">Ring 070-598 75 99</a>
       </div>
-      <div class="trust">
-        <span>Våtrumsbehörighet</span>
-        <span>Medlem i BKR och PER</span>
-        <span>Ca 20 anställda</span>
-        <span>ROT-avdrag</span>
+      <div class="proof">
+        <div class="bkr">
+          <img src="https://impro.usercontent.one/appid/oneComWsb/domain/peterskakel.se/media/peterskakel.se/onewebmedia/BKR.png?etag=%22bd69-5318fa5c%22&sourceContentType=image%2Fpng" alt="Behörig våtrum, Byggkeramikrådet" onerror="this.parentNode.style.display='none'">
+          <span><b>Behörigt våtrumsföretag</b><small>Enligt Byggkeramikrådet</small></span>
+        </div>
+        <div class="trust">
+          <span>Medlem i BKR och PER</span>
+          <span>Ca 20 anställda</span>
+          <span>ROT-avdrag</span>
+        </div>
       </div>
     </div>
   </section>
