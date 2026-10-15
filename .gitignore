@@ -2,3 +2,4 @@ node_modules/
 tmp/
 .superpowers/
 apikey*.txt
+launch-video/soundtrack.wav

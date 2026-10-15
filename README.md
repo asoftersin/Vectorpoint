@@ -31,8 +31,12 @@ the browser executable is missing.
 
 The hero scrolls with the document rather than pinning visitors through an
 animation. Its headline keeps each sentence on one line, the founder's portrait
-and background sit directly under the lead, and wide screens (1100px and up)
-show a small, clearly fictional lead card that links to `#work-leads`. While the
+and background sit directly under the lead. The 20-second launch film sits
+beside the text on wide screens (1100px and up) and under the form on narrower
+ones. It loops muted from `assets/launch/teaser.mp4` (720p, no audio) under the
+same conditions as the background video, and otherwise shows its poster.
+Clicking it opens the full film with sound in a dialog; without JavaScript the
+link opens the MP4 directly. Its caption links to `#work-leads`. While the
 hero form is visible the header booking button is an outline, so the form is the
 single primary action; it turns primary once the form scrolls away. The 1.9 MB
 background video is only attached on screens 861px and wider, without reduced
@@ -52,8 +56,16 @@ starts afresh; switching tabs cancels the hidden demo and resets its pause state
 Reduced motion shows the completed example without looping or a pause button.
 Playback controls stay hidden when JavaScript is unavailable.
 
-GoatCounter tracks booking-link clicks (`cta-*`) and example clicks
-(`example-sales`, `example-support`, `example-reporting`). These are intent
+GoatCounter tracks booking-link clicks (`cta-*`), example clicks
+(`example-sales`, `example-support`, `example-reporting`) and launch film plays
+(`launch-film`). These are intent
 events, **not confirmed bookings**. Count completed meetings separately in
 Cal.com; the site does not receive booking confirmations. Form text is handed
 to Cal.com, not included in custom analytics event names.
+
+## Launch film
+
+`launch-video/` holds the source for the launch film: one HTML composition
+rendered frame by frame (16:9 and a 9:16 reel via `--vertical`) plus a
+synthesized soundtrack. See the header of `launch-video/render.mjs`. After
+re-rendering, refresh the site copies with `launch-video/web-encode.sh`.
