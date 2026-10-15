@@ -62,9 +62,7 @@
 
   /* ---------- hud ---------- */
   #hud { position: absolute; inset: 0; pointer-events: none; }
-  .hud__logo { position: absolute; left: 140px; top: 64px; font-family: var(--font-mono); font-weight: 600;
-    font-size: 18px; letter-spacing: 0.18em; display: flex; align-items: center; gap: 12px; }
-  .mark { width: 14px; height: 14px; background: var(--text); clip-path: polygon(0 0, 100% 50%, 0 100%); }
+  .hud__logo { position: absolute; left: 140px; top: 58px; width: 167px; height: 30px; }
   .hud__url { position: absolute; right: 140px; top: 64px; font-family: var(--font-mono); font-size: 16px;
     letter-spacing: 0.16em; color: var(--muted); }
   .hud__bar { position: absolute; left: 140px; right: 140px; bottom: 64px; height: 2px; background: var(--line); }
@@ -79,13 +77,10 @@
 
   /* ---------- S1 intro ---------- */
   #logoGroup { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
-  #bigTri { position: absolute; left: 760px; top: 380px; width: 280px; height: 320px; background: var(--text);
-    clip-path: polygon(0 0, 100% 50%, 0 100%); }
-  #bigDot { position: absolute; left: 1010px; top: 510px; width: 60px; height: 60px; border-radius: 50%;
-    background: var(--accent); box-shadow: 0 0 80px 10px rgba(0,153,255,0.55); }
-  #wordmark { position: absolute; left: 0; width: 1920px; top: 760px; text-align: center; font-family: var(--font-mono);
-    font-weight: 600; font-size: 46px; letter-spacing: 0.42em; padding-left: 0.42em; }
-  #wordmark span { display: inline-block; }
+  /* animated logo: parts are separate paths (see logo.js) */
+  .anilogo { position: absolute; overflow: visible; }
+  .anilogo path { fill: var(--text); transform-box: fill-box; transform-origin: center; }
+  #introLogo { left: 410px; top: 442px; width: 1100px; height: 197px; }
 
   /* ---------- S2 hook ---------- */
   #hook { position: absolute; left: 0; width: 1920px; top: 330px; text-align: center; }
@@ -197,10 +192,7 @@
   #mNote { position: absolute; left: 140px; top: 710px; font-size: 40px; color: var(--text-dim); letter-spacing: -0.01em; }
 
   /* ---------- S9 outro ---------- */
-  #oTri { position: absolute; left: 905px; top: 250px; width: 96px; height: 110px; background: var(--text); clip-path: polygon(0 0, 100% 50%, 0 100%); }
-  #oDot { position: absolute; left: 990px; top: 293px; width: 24px; height: 24px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 40px 6px rgba(0,153,255,0.6); }
-  #oWord { position: absolute; left: 0; width: 1920px; top: 400px; text-align: center; font-family: var(--font-mono); font-weight: 600;
-    font-size: 36px; letter-spacing: 0.42em; padding-left: 0.42em; color: var(--text-dim); }
+  #outroLogo { left: 680px; top: 290px; width: 560px; height: 100px; }
   #oTag { position: absolute; left: 0; width: 1920px; top: 490px; text-align: center; }
   #oTag .line { display: block; font-size: 96px; font-weight: 500; letter-spacing: -0.04em; line-height: 1.1; padding-top: 0.06em; }
   #oCta { position: absolute; left: 0; width: 1920px; top: 790px; display: flex; justify-content: center; align-items: center; gap: 34px; }
@@ -214,14 +206,12 @@
      ============================================================ */
   html.v, html.v body, html.v #stage { width: 1080px; height: 1920px; }
   .v .vignette { background: radial-gradient(ellipse 80% 60% at 50% 45%, transparent 55%, rgba(0,0,0,0.75) 100%); }
-  .v .hud__logo { left: 70px; top: 130px; font-size: 22px; }
+  .v .hud__logo { left: 70px; top: 120px; width: 200px; height: 36px; }
   .v .hud__url { display: none; }
   .v #wipe { width: 160%; }
   .v .hud__bar { left: 70px; right: 150px; top: 1500px; bottom: auto; }
 
-  .v #bigTri { left: 330px; top: 700px; }
-  .v #bigDot { left: 580px; top: 830px; }
-  .v #wordmark { width: 1080px; top: 1090px; font-size: 44px; letter-spacing: 0.3em; padding-left: 0.3em; }
+  .v #introLogo { left: 110px; top: 823px; width: 860px; height: 154px; }
 
   .v #hook { width: 1080px; top: 460px; }
   .v #hook .line { font-size: 150px; line-height: 1.04; }
@@ -267,9 +257,7 @@
   .v #mLine b { right: 0; bottom: auto; width: auto; }
   .v #mNote { left: 70px; top: 1270px; width: 860px; font-size: 42px; line-height: 1.3; }
 
-  .v #oTri { left: 440px; top: 520px; }
-  .v #oDot { left: 525px; top: 563px; }
-  .v #oWord { width: 1080px; top: 680px; font-size: 34px; letter-spacing: 0.32em; padding-left: 0.32em; }
+  .v #outroLogo { left: 240px; top: 600px; width: 600px; height: 108px; }
   .v #oTag { width: 1080px; top: 790px; }
   .v #oTag .line { font-size: 96px; line-height: 1.04; }
   .v #oCta { width: 1080px; top: 1270px; flex-direction: column; gap: 26px; }
@@ -277,15 +265,14 @@
 </style>
 </head>
 <body>
+<svg width="0" height="0" style="position:absolute"><symbol id="vpLogo"><path id="vpLogoPath" fill="#f2f2f2" fill-rule="evenodd"/></symbol></svg>
 <div id="stage">
   <canvas id="mesh" width="1920" height="1080"></canvas>
 
   <!-- S1 · INTRO -->
   <section class="scene" id="s1">
     <div id="logoGroup">
-      <div id="bigTri"></div>
-      <div id="bigDot"></div>
-      <div id="wordmark"></div>
+      <svg class="anilogo" id="introLogo"></svg>
     </div>
   </section>
 
@@ -414,8 +401,7 @@
 
   <!-- S9 · OUTRO -->
   <section class="scene" id="s9">
-    <div id="oTri"></div><div id="oDot"></div>
-    <div id="oWord"></div>
+    <svg class="anilogo" id="outroLogo"></svg>
     <div id="oTag">
       <span class="line"><span class="w">Mindre</span> <span class="w">manuellt</span><br class="vbr"> <span class="w">arbete.</span></span>
       <span class="line"><span class="w">Mer</span> <span class="w">tid</span> <span class="w">för</span><br class="vbr"> <span class="w acc">kunderna.</span></span>
@@ -426,7 +412,7 @@
   <div class="vignette"></div>
 
   <div id="hud">
-    <div class="hud__logo"><span class="mark"></span>VECTORPOINT</div>
+    <svg class="hud__logo"><use href="#vpLogo"/></svg>
     <div class="hud__url">VECTORPOINT.SE</div>
     <div class="hud__bar"><div class="hud__fill" id="hudFill"></div></div>
   </div>
@@ -435,6 +421,7 @@
   <div id="flash"></div>
 </div>
 
+<script src="logo.js"></script>
 <script>
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
@@ -544,8 +531,32 @@ function meshAlpha(t) {
 }
 
 // ---------- build repeated DOM ----------
-'VECTORPOINT'.split('').forEach(c => { const s = document.createElement('span'); s.textContent = c; $('#wordmark').appendChild(s); });
-$('#oWord').textContent = 'VECTORPOINT';
+// Real logo: one static symbol for the HUD, animatable parts for intro and outro.
+const L = window.VP_LOGO;
+$('#vpLogoPath').setAttribute('d', L.chevron + L.dotTop + L.dotBottom + L.word);
+$('#vpLogo').setAttribute('viewBox', L.viewBox);
+$('.hud__logo').setAttribute('viewBox', L.viewBox);
+for (const svg of $$('.anilogo')) {
+  svg.setAttribute('viewBox', L.viewBox);
+  svg.innerHTML = ['chevron', 'dotTop', 'dotBottom', 'word'].map(k =>
+    `<path class="lg-${k}" fill-rule="evenodd" d="${L[k]}"/>`).join('');
+}
+// chevron slides in, dots pop (flashing the accent), wordmark wipes on
+function animateLogo(svg, t, at) {
+  const ck = P(t, at, 0.5);
+  set($('.lg-chevron', svg), { x: (1 - ck) * -420, o: clamp(ck * 3), b: (1 - ck) * 16, sx: lerp(1.5, 1, ck), sy: 1 });
+  [['dotTop', 0.3], ['dotBottom', 0.42]].forEach(([k, d]) => {
+    const dot = $('.lg-' + k, svg), dk = P(t, at + d, 0.4, E.outBack);
+    set(dot, { s: dk, o: clamp(dk * 3) });
+    const glow = 1 - P(t, at + d + 0.1, 0.5, E.out3);
+    dot.style.fill = glow > 0.02 ? `rgb(${lerp(242, 0, glow)}, ${lerp(242, 153, glow)}, ${lerp(242, 255, glow)})` : '';
+    dot.style.filter = glow > 0.02 ? `drop-shadow(0 0 ${30 * glow}px rgba(0,153,255,${glow}))` : 'none';
+  });
+  const wk = P(t, at + 0.5, 0.55, E.out3);
+  const word = $('.lg-word', svg);
+  set(word, { x: (1 - wk) * -30, o: clamp(wk * 2) });
+  word.style.clipPath = `inset(-10% ${(1 - wk) * 100}% -10% 0)`;
+}
 const TOOLS = [
   ['teams', 'Teams'], ['microsoftcopilot', 'Copilot'], ['hubspot', 'HubSpot'], ['shopify', 'Shopify'], ['openai', 'OpenAI'],
   ['azure', 'Azure'], ['claude', 'Claude'], ['python', 'Python'], ['typescript', 'TypeScript'], ['playwright', 'Playwright'],
@@ -560,15 +571,11 @@ TOOLS.forEach(([f, n]) => {
 
 // ---------- scenes ----------
 function s1(t) {
-  // blue dot ignites, triangle slides in to meet it, wordmark types, then zoom-through
-  const dk = P(t, 0.05, 0.45, E.outBack);
-  set($('#bigDot'), { s: dk, o: clamp(dk * 2) });
-  const tk = P(t, 0.25, 0.5);
-  set($('#bigTri'), { x: (1 - tk) * -700, o: clamp(tk * 3), b: (1 - tk) * 20, sx: lerp(1.4, 1, tk), sy: 1 });
-  $$('#wordmark span').forEach((s, i) => rise(s, t, 0.6 + i * 0.035, { dy: 30, dur: 0.4, blur: 8 }));
+  // the logo builds itself, then the camera zooms through the mark
+  animateLogo($('#introLogo'), t, 0.05);
   const z = P(t, 1.18, 0.32, E.inExpo);
   const g = $('#logoGroup');
-  g.style.transformOrigin = V ? '610px 860px' : '1040px 540px';
+  g.style.transformOrigin = V ? '174px 900px' : '492px 540px';
   set(g, { s: 1 + z * 9, o: 1 - z, b: z * 8 });
 }
 
@@ -763,11 +770,7 @@ function s8(t) {
 
 function s9(t) {
   const lt = t - 17.0;
-  const tk = P(lt, 0.15, 0.45);
-  set($('#oTri'), { x: (1 - tk) * -300, o: clamp(tk * 3), b: (1 - tk) * 12 });
-  const dk = P(lt, 0.4, 0.4, E.outBack);
-  set($('#oDot'), { s: dk, o: clamp(dk * 2) });
-  rise($('#oWord'), lt, 0.5, { dy: 20, dur: 0.45, blur: 8 });
+  animateLogo($('#outroLogo'), lt, 0.1);
   riseWords($('#oTag'), lt, 0.55, 0.06, { dy: 70, dur: 0.5, blur: 14 });
   rise($('#oBtn'), lt, 1.15, { dy: 30, dur: 0.45, blur: 8, s0: 0.9 });
   rise($('#oUrl'), lt, 1.25, { dy: 30, dur: 0.45, blur: 8 });

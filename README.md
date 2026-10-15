@@ -73,3 +73,10 @@ rendered frame by frame (16:9, and a 9:16 reel with `--vertical`) plus a
 synthesized soundtrack. See the header of `launch-video/render.mjs`. The site
 uses `--nohud` renders (the nav sits on top); after re-rendering, refresh
 `assets/launch/` with `launch-video/web-encode.sh`.
+
+## Logo
+
+`assets/brand/` holds the logo as SVG (dark, white, and the mark alone), traced
+from the brand file. The nav and footer use the white version; `favicon.svg`
+and `assets/og-image.png` carry the same mark. The film reads its animated
+copy from `launch-video/logo.js`.
