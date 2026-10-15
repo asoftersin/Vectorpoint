@@ -1,0 +1,704 @@
+<!doctype html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<title>Vectorpoint launch video</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gasoek+One&family=Geist+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=block" rel="stylesheet">
+<style>
+  /* Brand tokens, mirrored from styles.css */
+  :root {
+    --bg: #060606;
+    --bg-alt: #0d0d0d;
+    --surface: #121212;
+    --surface-2: #1a1a1a;
+    --line: #242424;
+    --text: #f2f2f2;
+    --text-dim: #cfcfcf;
+    --muted: #999999;
+    --accent: #0099ff;
+    --accent-soft: rgba(0, 153, 255, 0.14);
+    --font-display: "Gasoek One", "Inter", sans-serif;
+    --font-mono: "Geist Mono", ui-monospace, monospace;
+    --font-body: "Inter", system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 1920px; height: 1080px; overflow: hidden; background: var(--bg); }
+  body { color: var(--text); font-family: var(--font-body); -webkit-font-smoothing: antialiased; }
+
+  #stage { position: relative; width: 1920px; height: 1080px; overflow: hidden; background: var(--bg); }
+  #mesh { position: absolute; inset: 0; }
+  .scene { position: absolute; inset: 0; display: none; }
+  .abs { position: absolute; }
+  .vignette { position: absolute; inset: 0; pointer-events: none;
+    background: radial-gradient(ellipse 75% 70% at 50% 50%, transparent 55%, rgba(0,0,0,0.75) 100%); }
+
+  /* ---------- shared pieces ---------- */
+  .eyebrow { font-family: var(--font-mono); font-size: 20px; font-weight: 500; letter-spacing: 0.22em;
+    text-transform: uppercase; color: var(--text-dim); display: flex; align-items: center; gap: 14px; }
+  .eyebrow i { width: 12px; height: 12px; background: var(--accent); display: inline-block; }
+  .w { display: inline-block; will-change: transform; }
+  .chip { font-family: var(--font-mono); font-size: 14px; letter-spacing: 0.12em; color: var(--muted);
+    border: 1px solid var(--line); border-radius: 999px; padding: 6px 14px; background: var(--surface); white-space: nowrap; }
+  .chip--ai { color: var(--accent); border-color: rgba(0,153,255,0.4); background: var(--accent-soft); }
+  .win { background: var(--bg-alt); border: 1px solid var(--line); border-radius: 16px; overflow: hidden;
+    box-shadow: 0 40px 120px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.02); }
+  .win__bar { display: flex; align-items: center; justify-content: space-between; padding: 18px 22px;
+    border-bottom: 1px solid var(--line); background: var(--surface); }
+  .win__title { font-family: var(--font-mono); font-size: 16px; letter-spacing: 0.08em; color: var(--text-dim);
+    display: flex; align-items: center; gap: 12px; }
+  .win__title i { width: 10px; height: 10px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 10px rgba(0,153,255,0.9); }
+  .ghostnum { font-family: var(--font-display); font-size: 620px; line-height: 1; color: transparent;
+    -webkit-text-stroke: 2px #1c1c1c; position: absolute; }
+
+  /* feature head (left column) */
+  .fhead { position: absolute; left: 140px; top: 330px; width: 760px; }
+  .fhead h2 { font-size: 104px; font-weight: 500; line-height: 1.02; letter-spacing: -0.035em; margin-top: 30px; padding-top: 0.1em; }
+  .fhead .sub { margin-top: 30px; font-size: 28px; line-height: 1.45; color: var(--muted); max-width: 640px; }
+  .acc { color: var(--accent); }
+
+  /* ---------- hud ---------- */
+  #hud { position: absolute; inset: 0; pointer-events: none; }
+  .hud__logo { position: absolute; left: 140px; top: 64px; font-family: var(--font-mono); font-weight: 600;
+    font-size: 18px; letter-spacing: 0.18em; display: flex; align-items: center; gap: 12px; }
+  .mark { width: 14px; height: 14px; background: var(--text); clip-path: polygon(0 0, 100% 50%, 0 100%); }
+  .hud__url { position: absolute; right: 140px; top: 64px; font-family: var(--font-mono); font-size: 16px;
+    letter-spacing: 0.16em; color: var(--muted); }
+  .hud__bar { position: absolute; left: 140px; right: 140px; bottom: 64px; height: 2px; background: var(--line); }
+  .hud__fill { position: absolute; left: 0; top: 0; bottom: 0; background: var(--accent); width: 0; }
+
+  /* ---------- wipe ---------- */
+  #wipe { position: absolute; top: -10%; bottom: -10%; left: 0; width: 130%; background: var(--surface);
+    transform: translateX(-140%) skewX(-12deg); display: none; }
+  #wipe::before { content: ""; position: absolute; right: 0; top: 0; bottom: 0; width: 18px; background: var(--accent);
+    box-shadow: 0 0 60px rgba(0,153,255,0.9); }
+  #flash { position: absolute; inset: 0; background: #f2f2f2; opacity: 0; }
+
+  /* ---------- S1 intro ---------- */
+  #logoGroup { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+  #bigTri { position: absolute; left: 760px; top: 380px; width: 280px; height: 320px; background: var(--text);
+    clip-path: polygon(0 0, 100% 50%, 0 100%); }
+  #bigDot { position: absolute; left: 1010px; top: 510px; width: 60px; height: 60px; border-radius: 50%;
+    background: var(--accent); box-shadow: 0 0 80px 10px rgba(0,153,255,0.55); }
+  #wordmark { position: absolute; left: 0; width: 1920px; top: 760px; text-align: center; font-family: var(--font-mono);
+    font-weight: 600; font-size: 46px; letter-spacing: 0.42em; padding-left: 0.42em; }
+  #wordmark span { display: inline-block; }
+
+  /* ---------- S2 hook ---------- */
+  #hook { position: absolute; left: 0; width: 1920px; top: 330px; text-align: center; }
+  #hook .line { display: block; font-size: 148px; font-weight: 500; letter-spacing: -0.04em; line-height: 1.08; padding-top: 0.08em; }
+  #hookSub { position: absolute; left: 0; width: 1920px; top: 740px; display: flex; justify-content: center; }
+  #hookSub .eyebrow { font-size: 22px; }
+  #hookUnder { position: absolute; height: 10px; background: var(--accent); top: 668px; left: 0; width: 0;
+    box-shadow: 0 0 30px rgba(0,153,255,0.6); }
+
+  /* ---------- S3 leads ---------- */
+  #leadCard { position: absolute; left: 1010px; top: 250px; width: 780px; }
+  .rows { padding: 30px 32px 10px; display: flex; flex-direction: column; gap: 22px; }
+  .row { display: grid; grid-template-columns: 170px 1fr; align-items: center; font-size: 26px; min-height: 40px; }
+  .row .k { font-family: var(--font-mono); font-size: 16px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+  .src { font-family: var(--font-mono); font-size: 13px; letter-spacing: 0.1em; color: var(--accent); border: 1px solid rgba(0,153,255,0.4);
+    background: var(--accent-soft); padding: 3px 10px; border-radius: 999px; margin-left: 12px; vertical-align: middle; display: inline-block; }
+  .checks { display: flex; gap: 10px; align-items: center; }
+  .cb { width: 30px; height: 30px; border-radius: 7px; border: 1px solid #3a3a3a; display: grid; place-items: center;
+    font-size: 18px; color: #060606; background: transparent; }
+  .cb.on { background: var(--accent); border-color: var(--accent); }
+  .okTxt { margin-left: 14px; color: var(--accent); font-family: var(--font-mono); font-size: 20px; }
+  .score { height: 12px; border-radius: 6px; background: var(--surface-2); position: relative; overflow: hidden; width: 380px; display: inline-block; vertical-align: middle; }
+  .score b { position: absolute; left: 0; top: 0; bottom: 0; background: linear-gradient(90deg, #0066aa, var(--accent)); }
+  .scoreN { font-family: var(--font-mono); font-size: 24px; margin-left: 18px; vertical-align: middle; }
+  .prio { display: inline-block; font-weight: 600; color: #060606; background: var(--accent); padding: 4px 18px; border-radius: 8px;
+    box-shadow: 0 0 40px rgba(0,153,255,0.6); }
+  .foot { margin-top: 22px; border-top: 1px solid var(--line); padding: 20px 32px; display: flex; justify-content: space-between;
+    font-family: var(--font-mono); font-size: 17px; letter-spacing: 0.06em; color: var(--muted); }
+  .foot .ok { color: var(--accent); }
+
+  /* ---------- S4 feedback ---------- */
+  .msg { position: absolute; left: 990px; width: 420px; height: 104px; padding: 16px 20px; background: var(--bg-alt);
+    border: 1px solid var(--line); border-radius: 14px; }
+  .msg__src { font-family: var(--font-mono); font-size: 13px; letter-spacing: 0.16em; color: var(--muted); }
+  .msg__txt { font-size: 21px; margin-top: 6px; white-space: nowrap; }
+  .tag { position: absolute; right: 14px; top: 12px; font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.12em;
+    padding: 4px 10px; border-radius: 999px; color: var(--accent); border: 1px solid rgba(0,153,255,0.45); background: var(--accent-soft); }
+  .owner { position: absolute; left: 1560px; width: 230px; height: 70px; border-radius: 999px; border: 1px solid var(--line);
+    background: var(--surface); display: flex; align-items: center; gap: 14px; padding: 0 22px; font-size: 21px; color: var(--text-dim); }
+  .owner i { width: 12px; height: 12px; border-radius: 50%; background: #333; }
+  .owner.on { border-color: var(--accent); color: var(--text); box-shadow: 0 0 0 5px var(--accent-soft), 0 0 40px rgba(0,153,255,0.35); }
+  .owner.on i { background: var(--accent); box-shadow: 0 0 10px var(--accent); }
+  .colLabel { position: absolute; font-family: var(--font-mono); font-size: 14px; letter-spacing: 0.2em; color: var(--muted); }
+  #fbSvg { position: absolute; inset: 0; overflow: visible; }
+  #fbSvg path { fill: none; stroke: var(--accent); stroke-width: 2.5; filter: drop-shadow(0 0 6px rgba(0,153,255,0.8)); }
+
+  /* ---------- S5 report ---------- */
+  #doc { position: absolute; left: 1030px; top: 220px; width: 720px; }
+  .doc__body { padding: 30px 34px 8px; }
+  .doc__h { font-size: 36px; font-weight: 500; letter-spacing: -0.02em; }
+  .doc__meta { font-family: var(--font-mono); font-size: 14px; letter-spacing: 0.14em; color: var(--muted); margin-top: 6px; }
+  .kpis { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin-top: 24px; }
+  .kpi { border: 1px solid var(--line); border-radius: 12px; padding: 16px 18px; background: var(--surface); }
+  .kpi .k { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.14em; color: var(--muted); }
+  .kpi .v { font-size: 38px; font-weight: 500; letter-spacing: -0.02em; margin-top: 4px; font-variant-numeric: tabular-nums; }
+  .kpi .d { font-family: var(--font-mono); font-size: 14px; color: var(--accent); }
+  .bars { display: flex; align-items: flex-end; gap: 12px; height: 120px; margin-top: 24px; padding-bottom: 2px; border-bottom: 1px solid var(--line); }
+  .bars b { flex: 1; background: #2a2a2a; border-radius: 4px 4px 0 0; height: 0; }
+  .bars b.hi { background: var(--accent); box-shadow: 0 0 20px rgba(0,153,255,0.5); }
+  .warn { margin-top: 22px; border-left: 4px solid var(--accent); background: var(--accent-soft); padding: 14px 18px; border-radius: 0 10px 10px 0; font-size: 21px; }
+  .warn b { font-family: var(--font-mono); font-size: 14px; letter-spacing: 0.14em; color: var(--accent); display: block; font-weight: 500; margin-bottom: 4px; }
+  .tabchip { position: absolute; display: flex; align-items: center; gap: 12px; padding: 14px 22px; border-radius: 12px 12px 4px 4px;
+    background: var(--surface-2); border: 1px solid var(--line); font-family: var(--font-mono); font-size: 18px; letter-spacing: 0.08em; color: var(--text-dim); }
+  .tabchip i { width: 10px; height: 10px; border-radius: 2px; background: #555; }
+
+  /* ---------- S6 integrations ---------- */
+  #intHead { position: absolute; left: 0; width: 1920px; top: 150px; text-align: center; }
+  #intHead h2 { font-size: 84px; font-weight: 500; letter-spacing: -0.035em; line-height: 1.1; margin-top: 26px; padding-top: 0.08em; }
+  #intHead .eyebrow { justify-content: center; }
+  #grid { position: absolute; left: 0; width: 1920px; top: 470px; display: flex; flex-wrap: wrap; justify-content: center; gap: 34px 44px; padding: 0 480px; }
+  .tool { width: 150px; display: flex; flex-direction: column; align-items: center; gap: 12px; }
+  .plate { width: 120px; height: 120px; border-radius: 26px; background: #fff; display: grid; place-items: center; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+  .plate img { width: 66px; height: 66px; object-fit: contain; }
+  .tool span { font-family: var(--font-mono); font-size: 15px; letter-spacing: 0.08em; color: var(--muted); white-space: nowrap; }
+
+  /* ---------- S7 testing ---------- */
+  #testHead { position: absolute; left: 140px; top: 180px; width: 1640px; }
+  #testHead h2 { font-size: 96px; font-weight: 500; letter-spacing: -0.035em; line-height: 1.05; margin-top: 26px; padding-top: 0.08em; }
+  .pnode { position: absolute; top: 560px; width: 270px; height: 132px; border-radius: 16px; border: 1px solid var(--line);
+    background: var(--bg-alt); padding: 20px 22px; }
+  .pnode .t { font-family: var(--font-mono); font-size: 13px; letter-spacing: 0.18em; color: var(--muted); display: flex; align-items: center; gap: 10px; }
+  .pnode .t i { width: 9px; height: 9px; border-radius: 50%; background: #3a3a3a; }
+  .pnode .l { font-size: 25px; margin-top: 10px; font-weight: 500; }
+  .pnode .bdg { position: absolute; left: 22px; bottom: 16px; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.12em; color: var(--accent); }
+  .pnode.on { border-color: var(--accent); box-shadow: 0 0 0 5px var(--accent-soft), 0 0 50px rgba(0,153,255,0.3); }
+  .pnode.on .t i { background: var(--accent); box-shadow: 0 0 10px var(--accent); }
+  .pnode.done { background: var(--accent); border-color: var(--accent); }
+  .pnode.done .t, .pnode.done .l { color: #060606; }
+  .pnode.done .t i { background: #060606; box-shadow: none; }
+  #ns { position: absolute; left: 458px; top: 500px; width: 1032px; height: 250px; border: 1.5px dashed #2e2e2e; border-radius: 22px; }
+  #ns span { position: absolute; left: 22px; top: 16px; font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.18em; color: var(--muted); }
+  #pipeSvg { position: absolute; inset: 0; overflow: visible; }
+  #pipeSvg .base { stroke: #2a2a2a; stroke-width: 2; fill: none; }
+  #pipeSvg .lit { stroke: var(--accent); stroke-width: 3; fill: none; filter: drop-shadow(0 0 6px rgba(0,153,255,0.9)); }
+  #pulse { position: absolute; width: 18px; height: 18px; margin: -9px 0 0 -9px; border-radius: 50%; background: #fff;
+    box-shadow: 0 0 20px 6px rgba(0,153,255,0.9); }
+  #testPoints { position: absolute; left: 140px; top: 820px; display: flex; gap: 46px; font-family: var(--font-mono); font-size: 17px; letter-spacing: 0.16em; color: var(--text-dim); }
+  #testPoints span::before { content: "✓ "; color: var(--accent); }
+
+  /* ---------- S8 method ---------- */
+  #mHead { position: absolute; left: 140px; top: 260px; }
+  .mstep { position: absolute; top: 420px; width: 400px; }
+  .mstep .n { font-family: var(--font-mono); font-size: 22px; letter-spacing: 0.16em; color: #3a3a3a; }
+  .mstep .wd { font-size: 92px; font-weight: 500; letter-spacing: -0.035em; color: #2a2a2a; margin-top: 10px; padding-top: 0.08em; }
+  .mstep.on .n { color: var(--accent); }
+  .mstep.on .wd { color: var(--text); }
+  #mLine { position: absolute; left: 140px; top: 640px; width: 1640px; height: 3px; background: var(--line); }
+  #mLine b { position: absolute; left: 0; top: 0; bottom: 0; background: var(--accent); box-shadow: 0 0 20px rgba(0,153,255,0.8); }
+  #mNote { position: absolute; left: 140px; top: 710px; font-size: 40px; color: var(--text-dim); letter-spacing: -0.01em; }
+
+  /* ---------- S9 outro ---------- */
+  #oTri { position: absolute; left: 905px; top: 250px; width: 96px; height: 110px; background: var(--text); clip-path: polygon(0 0, 100% 50%, 0 100%); }
+  #oDot { position: absolute; left: 990px; top: 293px; width: 24px; height: 24px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 40px 6px rgba(0,153,255,0.6); }
+  #oWord { position: absolute; left: 0; width: 1920px; top: 400px; text-align: center; font-family: var(--font-mono); font-weight: 600;
+    font-size: 36px; letter-spacing: 0.42em; padding-left: 0.42em; color: var(--text-dim); }
+  #oTag { position: absolute; left: 0; width: 1920px; top: 490px; text-align: center; }
+  #oTag .line { display: block; font-size: 96px; font-weight: 500; letter-spacing: -0.04em; line-height: 1.1; padding-top: 0.06em; }
+  #oCta { position: absolute; left: 0; width: 1920px; top: 790px; display: flex; justify-content: center; align-items: center; gap: 34px; }
+  .btn { font-size: 30px; font-weight: 500; background: var(--text); color: #060606; padding: 22px 40px; border-radius: 10px; }
+  .url { font-family: var(--font-mono); font-size: 26px; letter-spacing: 0.16em; color: var(--muted); }
+</style>
+</head>
+<body>
+<div id="stage">
+  <canvas id="mesh" width="1920" height="1080"></canvas>
+
+  <!-- S1 · INTRO -->
+  <section class="scene" id="s1">
+    <div id="logoGroup">
+      <div id="bigTri"></div>
+      <div id="bigDot"></div>
+      <div id="wordmark"></div>
+    </div>
+  </section>
+
+  <!-- S2 · HOOK -->
+  <section class="scene" id="s2">
+    <div id="hook">
+      <span class="line" id="hl1"><span class="w">Mindre</span> <span class="w">manuellt</span> <span class="w">arbete.</span></span>
+      <span class="line" id="hl2"><span class="w">Mer</span> <span class="w">tid</span> <span class="w">för</span> <span class="w acc">kunderna.</span></span>
+    </div>
+    <div id="hookUnder"></div>
+    <div id="hookSub"><div class="eyebrow"><i></i><span id="hookSubTxt"></span></div></div>
+  </section>
+
+  <!-- S3 · LEADS -->
+  <section class="scene" id="s3">
+    <div class="ghostnum" style="left:1180px; top:180px">01</div>
+    <div class="fhead">
+      <div class="eyebrow"><i></i><span>01 · Sälj</span></div>
+      <h2><span class="w">Leads</span> <span class="w">med</span><br><span class="w acc">underlag.</span></h2>
+      <p class="sub">Researchade med källor, poängsatta efter öppna regler. Utkastet är redan skrivet.</p>
+    </div>
+    <div id="leadCard" class="win">
+      <div class="win__bar"><span class="win__title"><i></i>Leadlista</span><span class="chip chip--ai">✦ AI/LLM</span></div>
+      <div class="rows">
+        <div class="row"><span class="k">Bolag</span><span>Nordkant Systems AB</span></div>
+        <div class="row"><span class="k">Kontakt</span><span>J. Åkerlind, IT-chef</span></div>
+        <div class="row"><span class="k">Belagt</span><span><span id="belagt"></span><span class="src">platsannons</span></span></div>
+        <div class="row"><span class="k">Kontroller</span><span class="checks"><span class="cb">✓</span><span class="cb">✓</span><span class="cb">✓</span><span class="cb">✓</span><span class="cb">✓</span><span class="okTxt" id="okTxt">0 av 5</span></span></div>
+        <div class="row"><span class="k">Poäng</span><span><span class="score"><b id="scoreBar"></b></span><span class="scoreN" id="scoreN">0</span></span></div>
+        <div class="row"><span class="k">Prioritet</span><span><span class="prio" id="prio">Hög</span></span></div>
+      </div>
+      <div class="foot" id="leadFoot"><span class="ok">✓ Säljutkast klart</span><span>→ HubSpot</span></div>
+    </div>
+  </section>
+
+  <!-- S4 · FEEDBACK -->
+  <section class="scene" id="s4">
+    <div class="ghostnum" style="left:1150px; top:180px">02</div>
+    <div class="fhead">
+      <div class="eyebrow"><i></i><span>02 · Support</span></div>
+      <h2><span class="w">Feedback</span> <span class="w">till</span><br><span class="w acc">rätt</span> <span class="w acc">person.</span></h2>
+      <p class="sub">Sammanfattad, klassificerad och skickad till den som äger frågan.</p>
+    </div>
+    <span class="colLabel" style="left:990px; top:210px" id="cl1">IN · TEAMS · E-POST · CHATT · ENKÄT</span>
+    <span class="colLabel" style="left:1560px; top:210px" id="cl2">PRODUCT OWNER</span>
+    <svg id="fbSvg" viewBox="0 0 1920 1080"><path id="fl0"/><path id="fl1"/><path id="fl2"/><path id="fl3"/></svg>
+    <div class="msg" id="m0" style="top:260px"><div class="msg__src">TEAMS</div><div class="msg__txt">Kortbetalningen hänger sig</div><span class="tag">BUGG · BETALNING</span></div>
+    <div class="msg" id="m1" style="top:392px"><div class="msg__src">E-POST</div><div class="msg__txt">Kan vi få export till Excel?</div><span class="tag">ÖNSKEMÅL · RAPPORT</span></div>
+    <div class="msg" id="m2" style="top:524px"><div class="msg__src">CHATT</div><div class="msg__txt">Inloggningen kräver kod två ggr</div><span class="tag">BUGG · KONTO</span></div>
+    <div class="msg" id="m3" style="top:656px"><div class="msg__src">ENKÄT</div><div class="msg__txt">Önskar mörkt läge i appen</div><span class="tag">ÖNSKEMÅL · APP</span></div>
+    <div class="owner" id="o0" style="top:280px"><i></i>App</div>
+    <div class="owner" id="o1" style="top:410px"><i></i>Betalning</div>
+    <div class="owner" id="o2" style="top:540px"><i></i>Konto</div>
+    <div class="owner" id="o3" style="top:670px"><i></i>Rapporter</div>
+  </section>
+
+  <!-- S5 · REPORT -->
+  <section class="scene" id="s5">
+    <div class="ghostnum" style="left:1150px; top:180px">03</div>
+    <div class="fhead">
+      <div class="eyebrow"><i></i><span>03 · Rapportering</span></div>
+      <h2><span class="w">En</span> <span class="w">sida.</span><br><span class="w acc">Inte</span> <span class="w acc">fem</span> <span class="w acc">flikar.</span></h2>
+      <p class="sub">Läget ur CRM, BI och Teams, ihopskrivet med avvikelserna utpekade.</p>
+    </div>
+    <div id="doc" class="win">
+      <div class="win__bar"><span class="win__title"><i></i>Veckounderlag</span><span class="chip chip--ai">✦ AI/LLM</span></div>
+      <div class="doc__body">
+        <div class="doc__h" id="docH">Läget inför veckomötet</div>
+        <div class="doc__meta" id="docMeta">VECKA 42 · CRM · BI · TEAMS</div>
+        <div class="kpis">
+          <div class="kpi" id="k0"><div class="k">PIPELINE</div><div class="v" id="kv0">0,0 Mkr</div><div class="d">▲ 12 %</div></div>
+          <div class="kpi" id="k1"><div class="k">NYA AFFÄRER</div><div class="v" id="kv1">0</div><div class="d">▲ 3</div></div>
+          <div class="kpi" id="k2"><div class="k">ÖPPNA ÄRENDEN</div><div class="v" id="kv2">0</div><div class="d">▼ 9</div></div>
+        </div>
+        <div class="bars" id="bars"><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b class="hi"></b></div>
+        <div class="warn" id="warn"><b>⚠ AVVIKELSE</b>Leveranstid region Väst +3 dagar mot plan</div>
+      </div>
+      <div class="foot" id="docFoot"><span class="ok">✓ Klart inför mötet</span><span>1 sida</span></div>
+    </div>
+    <div class="tabchip" id="t0"><i></i>CRM</div>
+    <div class="tabchip" id="t1"><i></i>BI</div>
+    <div class="tabchip" id="t2"><i></i>Teams</div>
+    <div class="tabchip" id="t3"><i></i>Ekonomi</div>
+    <div class="tabchip" id="t4"><i></i>E-post</div>
+  </section>
+
+  <!-- S6 · INTEGRATIONS -->
+  <section class="scene" id="s6">
+    <div id="intHead">
+      <div class="eyebrow"><i></i><span>Integrationer</span></div>
+      <h2><span class="w">Byggt</span> <span class="w">i</span> <span class="w">det</span> <span class="w">ni</span> <span class="w acc">redan</span> <span class="w acc">använder.</span></h2>
+    </div>
+    <div id="grid"></div>
+  </section>
+
+  <!-- S7 · TESTING -->
+  <section class="scene" id="s7">
+    <div id="testHead">
+      <div class="eyebrow"><i></i><span>Skillnaden</span></div>
+      <h2><span class="w">Varje</span> <span class="w">ändring</span> <span class="w">testas</span> <span class="w acc">innan</span> <span class="w acc">den</span> <span class="w acc">når</span> <span class="w acc">er.</span></h2>
+    </div>
+    <div id="ns"><span>ISOLERAT PR-NAMESPACE · KUBERNETES</span></div>
+    <svg id="pipeSvg" viewBox="0 0 1920 1080">
+      <path class="base" d="M 410 626 L 482 626 M 752 626 L 824 626 M 1094 626 L 1166 626 M 1436 626 L 1508 626"/>
+      <path class="lit" id="pipeLit" d="M 410 626 L 1508 626"/>
+    </svg>
+    <div class="pnode" id="p0" style="left:140px"><div class="t"><i></i>TRIGGER</div><div class="l">Pull request</div><div class="bdg">✦ AI-KOD</div></div>
+    <div class="pnode" id="p1" style="left:482px"><div class="t"><i></i>STEG 1</div><div class="l">Bygg + deploy</div></div>
+    <div class="pnode" id="p2" style="left:824px"><div class="t"><i></i>TESTPOD 1</div><div class="l">Integrationstester</div><div class="bdg">RIKTIGA ANROP</div></div>
+    <div class="pnode" id="p3" style="left:1166px"><div class="t"><i></i>TESTPOD 2</div><div class="l">AI-agent utforskar</div><div class="bdg">✦ RAPPORT I PR:EN</div></div>
+    <div class="pnode" id="p4" style="left:1508px"><div class="t"><i></i>GRIND</div><div class="l">Grönt ✓ Släpps</div></div>
+    <div id="pulse"></div>
+    <div id="testPoints"><span>Testat före leverans</span><span>Integrationstester</span><span>Agentisk QA</span><span>Uppföljningsbart</span></div>
+  </section>
+
+  <!-- S8 · METHOD -->
+  <section class="scene" id="s8">
+    <div id="mHead" class="eyebrow"><i></i><span>Från idé till drift</span></div>
+    <div class="mstep" id="ms0" style="left:140px"><div class="n">01</div><div class="wd">Kartlägg</div></div>
+    <div class="mstep" id="ms1" style="left:560px"><div class="n">02</div><div class="wd">Designa</div></div>
+    <div class="mstep" id="ms2" style="left:960px"><div class="n">03</div><div class="wd">Prototyp</div></div>
+    <div class="mstep" id="ms3" style="left:1380px"><div class="n">04</div><div class="wd">Driftsätt</div></div>
+    <div id="mLine"><b id="mFill"></b></div>
+    <div id="mNote">Prototyp på er egen data. <span class="acc">Fast pris.</span> Ni äger lösningen.</div>
+  </section>
+
+  <!-- S9 · OUTRO -->
+  <section class="scene" id="s9">
+    <div id="oTri"></div><div id="oDot"></div>
+    <div id="oWord"></div>
+    <div id="oTag">
+      <span class="line"><span class="w">Mindre</span> <span class="w">manuellt</span> <span class="w">arbete.</span></span>
+      <span class="line"><span class="w">Mer</span> <span class="w">tid</span> <span class="w">för</span> <span class="w acc">kunderna.</span></span>
+    </div>
+    <div id="oCta"><span class="btn" id="oBtn">Boka ett samtal →</span><span class="url" id="oUrl">vectorpoint.se</span></div>
+  </section>
+
+  <div class="vignette"></div>
+
+  <div id="hud">
+    <div class="hud__logo"><span class="mark"></span>VECTORPOINT</div>
+    <div class="hud__url">VECTORPOINT.SE</div>
+    <div class="hud__bar"><div class="hud__fill" id="hudFill"></div></div>
+  </div>
+
+  <div id="wipe"></div>
+  <div id="flash"></div>
+</div>
+
+<script>
+// ============================================================
+// Deterministic timeline: everything is a pure function of t.
+// window.renderFrame(t) is called by render.mjs once per frame.
+// Cuts sit on a 120 BPM grid (0.5 s beats) to match the soundtrack.
+// ============================================================
+const DURATION = 19.5;
+const SCENES = [
+  ['s1', 0.0, 1.5], ['s2', 1.5, 4.0], ['s3', 4.0, 6.5], ['s4', 6.5, 9.0], ['s5', 9.0, 11.5],
+  ['s6', 11.5, 13.5], ['s7', 13.5, 15.5], ['s8', 15.5, 17.0], ['s9', 17.0, 19.5],
+];
+const WIPES = [4.0, 6.5, 9.0, 11.5, 13.5, 15.5];
+
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const lerp = (a, b, k) => a + (b - a) * k;
+const E = {
+  lin: x => x,
+  out3: x => 1 - Math.pow(1 - x, 3),
+  outExpo: x => (x >= 1 ? 1 : 1 - Math.pow(2, -10 * x)),
+  inExpo: x => (x <= 0 ? 0 : Math.pow(2, 10 * x - 10)),
+  inOut3: x => (x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2),
+  outBack: x => { const c1 = 2.0, c3 = c1 + 1; return 1 + c3 * Math.pow(x - 1, 3) + c1 * Math.pow(x - 1, 2); },
+};
+const P = (t, a, d, e = E.outExpo) => e(clamp((t - a) / d));
+
+function set(el, { x = 0, y = 0, s = 1, sx, sy, r = 0, o = 1, b = 0, extra = '' } = {}) {
+  const scale = sx !== undefined || sy !== undefined ? `scale(${sx ?? s}, ${sy ?? s})` : `scale(${s})`;
+  el.style.transform = `${extra} translate(${x}px, ${y}px) ${scale} rotate(${r}deg)`;
+  el.style.opacity = o;
+  el.style.filter = b > 0.05 ? `blur(${b}px)` : 'none';
+}
+// Standard "rise in" reveal.
+function rise(el, t, start, { dy = 60, dur = 0.55, blur = 14, s0 = 1 } = {}) {
+  const k = P(t, start, dur);
+  set(el, { y: (1 - k) * dy, o: clamp(k * 1.6), b: (1 - k) * blur, s: lerp(s0, 1, k) });
+}
+function riseWords(root, t, start, step = 0.06, opts) {
+  $$('.w', root).forEach((w, i) => rise(w, t, start + i * step, opts));
+}
+
+// ---------- background mesh (echoes the hero video on the site) ----------
+const mesh = $('#mesh').getContext('2d');
+const COLS = 15, ROWS = 9;
+let seed = 7;
+const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+const pts = [];
+for (let j = 0; j <= ROWS; j++) for (let i = 0; i <= COLS; i++) {
+  pts.push({ bx: (i - 0.5 + rnd() * 0.9) * (2100 / COLS) - 90, by: (j - 0.5 + rnd() * 0.9) * (1260 / ROWS) - 90,
+    ph: rnd() * 6.28, sp: 0.4 + rnd() * 0.6, hot: rnd() < 0.08 });
+}
+function drawMesh(t, alpha, accent) {
+  mesh.clearRect(0, 0, 1920, 1080);
+  if (alpha <= 0.001) return;
+  const p = pts.map(q => ({ x: q.bx + Math.sin(t * q.sp + q.ph) * 26 + t * 14, y: q.by + Math.cos(t * q.sp * 0.8 + q.ph) * 22 - t * 6, hot: q.hot }));
+  const at = (i, j) => p[j * (COLS + 1) + i];
+  mesh.lineWidth = 1;
+  mesh.strokeStyle = `rgba(242,242,242,${0.16 * alpha})`;
+  mesh.beginPath();
+  for (let j = 0; j < ROWS; j++) for (let i = 0; i < COLS; i++) {
+    const a = at(i, j), b = at(i + 1, j), c = at(i, j + 1), d = at(i + 1, j + 1);
+    const diag = (i + j) % 2 ? [a, d] : [b, c];
+    mesh.moveTo(a.x, a.y); mesh.lineTo(b.x, b.y);
+    mesh.moveTo(a.x, a.y); mesh.lineTo(c.x, c.y);
+    mesh.moveTo(diag[0].x, diag[0].y); mesh.lineTo(diag[1].x, diag[1].y);
+  }
+  mesh.stroke();
+  for (const q of p) {
+    mesh.beginPath();
+    mesh.arc(q.x, q.y, q.hot ? 3 : 1.6, 0, 6.283);
+    mesh.fillStyle = q.hot && accent ? `rgba(0,153,255,${0.9 * alpha})` : `rgba(242,242,242,${0.35 * alpha})`;
+    if (q.hot && accent) { mesh.shadowColor = '#0099ff'; mesh.shadowBlur = 14; } else mesh.shadowBlur = 0;
+    mesh.fill();
+  }
+  mesh.shadowBlur = 0;
+}
+function meshAlpha(t) {
+  if (t < 1.5) return P(t, 0.4, 1.0, E.out3) * 0.35;
+  if (t < 4.0) return 0.75;
+  if (t < 17.0) return 0.22;
+  return P(t, 17.0, 0.6, E.out3) * 0.85;
+}
+
+// ---------- build repeated DOM ----------
+'VECTORPOINT'.split('').forEach(c => { const s = document.createElement('span'); s.textContent = c; $('#wordmark').appendChild(s); });
+$('#oWord').textContent = 'VECTORPOINT';
+const TOOLS = [
+  ['teams', 'Teams'], ['microsoftcopilot', 'Copilot'], ['hubspot', 'HubSpot'], ['shopify', 'Shopify'], ['openai', 'OpenAI'],
+  ['azure', 'Azure'], ['claude', 'Claude'], ['python', 'Python'], ['typescript', 'TypeScript'], ['playwright', 'Playwright'],
+  ['github', 'GitHub'], ['githubactions', 'Actions'], ['githubcopilot', 'GH Copilot'], ['azuredevops', 'Azure DevOps'], ['kubernetes', 'Kubernetes'],
+];
+TOOLS.forEach(([f, n]) => {
+  const d = document.createElement('div');
+  d.className = 'tool';
+  d.innerHTML = `<div class="plate"><img src="../assets/logos/${f}.svg" alt=""></div><span>${n}</span>`;
+  $('#grid').appendChild(d);
+});
+
+// ---------- scenes ----------
+function s1(t) {
+  // blue dot ignites, triangle slides in to meet it, wordmark types, then zoom-through
+  const dk = P(t, 0.05, 0.45, E.outBack);
+  set($('#bigDot'), { s: dk, o: clamp(dk * 2) });
+  const tk = P(t, 0.25, 0.5);
+  set($('#bigTri'), { x: (1 - tk) * -700, o: clamp(tk * 3), b: (1 - tk) * 20, sx: lerp(1.4, 1, tk), sy: 1 });
+  $$('#wordmark span').forEach((s, i) => rise(s, t, 0.6 + i * 0.035, { dy: 30, dur: 0.4, blur: 8 }));
+  const z = P(t, 1.18, 0.32, E.inExpo);
+  const g = $('#logoGroup');
+  g.style.transformOrigin = '1040px 540px';
+  set(g, { s: 1 + z * 9, o: 1 - z, b: z * 8 });
+}
+
+const HOOK_SUB = 'AI-agenter för support, prospektering och rapportering';
+function s2(t) {
+  const lt = t - 1.5;
+  const l1 = $$('#hl1 .w'), l2 = $$('#hl2 .w');
+  l1.forEach((w, i) => rise(w, lt, 0.02 + i * 0.12, { dy: 120, dur: 0.5, blur: 18, s0: 1.25 }));
+  l2.forEach((w, i) => rise(w, lt, 0.65 + i * 0.09, { dy: 120, dur: 0.5, blur: 18, s0: 1.25 }));
+  // underline sweeps under "kunderna."
+  const k = $('#hl2 .acc');
+  const r = k.getBoundingClientRect();
+  const u = P(lt, 1.05, 0.45);
+  const und = $('#hookUnder');
+  und.style.left = (k.offsetLeft + $('#hook').offsetLeft + 6) + 'px';
+  und.style.width = (k.offsetWidth - 12) * u + 'px';
+  und.style.opacity = u > 0 ? 1 : 0;
+  const n = Math.round(HOOK_SUB.length * P(lt, 1.35, 0.7, E.lin));
+  $('#hookSubTxt').textContent = HOOK_SUB.slice(0, n) + (n < HOOK_SUB.length && lt > 1.35 ? '▍' : '');
+  set($('#hookSub'), { o: lt > 1.3 ? 1 : 0 });
+  // subtle push-in for the whole scene
+  set($('#hook'), { s: 1 + lt * 0.02 });
+}
+
+function featureHead(scene, lt) {
+  rise($('.eyebrow', scene), lt, 0.12, { dy: 20, dur: 0.4, blur: 6 });
+  riseWords($('h2', scene), lt, 0.18, 0.07, { dy: 90, dur: 0.5, blur: 16 });
+  rise($('.sub', scene), lt, 0.6, { dy: 30, dur: 0.5, blur: 8 });
+  const g = $('.ghostnum', scene);
+  if (g) set(g, { x: (1 - P(lt, 0, 1.2)) * 160 - lt * 30, o: P(lt, 0, 0.6) });
+}
+
+const BELAGT = 'Rekryterar nytt utvecklarteam';
+function s3(t) {
+  const lt = t - 4.0, sc = $('#s3');
+  featureHead(sc, lt);
+  const ck = P(lt, 0.08, 0.6);
+  set($('#leadCard'), { x: (1 - ck) * 260, o: clamp(ck * 2), b: (1 - ck) * 10, s: lerp(0.92, 1, ck) + lt * 0.012,
+    extra: `perspective(1600px) rotateY(${(1 - ck) * -22}deg)` });
+  $$('#s3 .row').forEach((row, i) => rise(row, lt, 0.35 + i * 0.13, { dy: 24, dur: 0.35, blur: 6 }));
+  const n = Math.round(BELAGT.length * P(lt, 0.62, 0.4, E.lin));
+  $('#belagt').textContent = BELAGT.slice(0, n);
+  set($('#s3 .src'), { o: P(lt, 1.0, 0.15), s: lerp(0.6, 1, P(lt, 1.0, 0.3, E.outBack)) });
+  const checks = $$('#s3 .cb');
+  let on = 0;
+  checks.forEach((c, i) => {
+    const hit = lt > 0.85 + i * 0.08;
+    c.classList.toggle('on', hit); if (hit) on++;
+    set(c, { s: hit ? lerp(1.35, 1, P(lt, 0.85 + i * 0.08, 0.25, E.out3)) : 1 });
+  });
+  $('#okTxt').textContent = on === 5 ? '5 av 5 ok' : `${on} av 5`;
+  const sk = P(lt, 1.0, 0.6, E.out3);
+  $('#scoreBar').style.width = (87 * sk) + '%';
+  $('#scoreN').textContent = Math.round(87 * sk);
+  const pk = P(lt, 1.42, 0.4, E.outBack);
+  set($('#prio'), { s: lerp(0.3, 1, pk), o: clamp(pk * 3) });
+  rise($('#leadFoot'), lt, 1.7, { dy: 16, dur: 0.35, blur: 4 });
+}
+
+const FB_MAP = [1, 3, 2, 0]; // message -> owner
+function s4(t) {
+  const lt = t - 6.5, sc = $('#s4');
+  featureHead(sc, lt);
+  rise($('#cl1'), lt, 0.2, { dy: 10, dur: 0.3, blur: 4 });
+  rise($('#cl2'), lt, 0.3, { dy: 10, dur: 0.3, blur: 4 });
+  for (let i = 0; i < 4; i++) {
+    const m = $('#m' + i), o = $('#o' + i);
+    const mk = P(lt, 0.22 + i * 0.1, 0.45);
+    set(m, { x: (1 - mk) * -120, o: clamp(mk * 2), b: (1 - mk) * 10 });
+    const tg = $('.tag', m), tk = P(lt, 0.75 + i * 0.13, 0.35, E.outBack);
+    set(tg, { s: lerp(0.4, 1, tk), o: clamp(tk * 3) });
+    rise(o, lt, 0.3 + i * 0.08, { dy: 0, dur: 0.4, blur: 6, s0: 0.85 });
+    // connector
+    const tgt = FB_MAP[i];
+    const y1 = parseFloat(m.style.top) + 52, y2 = parseFloat($('#o' + tgt).style.top) + 35;
+    const path = $('#fl' + i);
+    path.setAttribute('d', `M 1412 ${y1} C 1490 ${y1}, 1480 ${y2}, 1558 ${y2}`);
+    const len = path.getTotalLength();
+    const lk = P(lt, 0.95 + i * 0.13, 0.4, E.inOut3);
+    path.style.strokeDasharray = len;
+    path.style.strokeDashoffset = len * (1 - lk);
+    path.style.opacity = lk > 0 ? 1 : 0;
+    m.style.borderColor = lk >= 1 ? 'rgba(0,153,255,0.45)' : '';
+  }
+  for (let j = 0; j < 4; j++) {
+    const i = FB_MAP.indexOf(j);
+    const hit = lt > 1.3 + i * 0.13;
+    const o = $('#o' + j);
+    o.classList.toggle('on', hit);
+    if (hit) set(o, { s: lerp(1.12, 1, P(lt, 1.3 + i * 0.13, 0.3, E.out3)) });
+  }
+}
+
+function s5(t) {
+  const lt = t - 9.0, sc = $('#s5');
+  featureHead(sc, lt);
+  const dk = P(lt, 0.35, 0.55);
+  set($('#doc'), { y: (1 - dk) * 80, o: clamp(dk * 2), b: (1 - dk) * 10, s: lerp(0.94, 1, dk) + lt * 0.01 });
+  // five scattered tabs converge into the document
+  const starts = [[1000, 150], [1620, 170], [1760, 520], [1580, 880], [960, 860]];
+  for (let i = 0; i < 5; i++) {
+    const el = $('#t' + i);
+    const ink = P(lt, 0.05 + i * 0.05, 0.3, E.outBack);
+    const fly = P(lt, 0.42 + i * 0.04, 0.38, E.inExpo);
+    const [sx, sy] = starts[i];
+    el.style.left = lerp(sx, 1340, fly) + 'px';
+    el.style.top = lerp(sy, 300, fly) + 'px';
+    set(el, { s: lerp(0.5, 1, ink) * lerp(1, 0.3, fly), o: clamp(ink * 2) * (1 - fly), r: (1 - fly) * (i % 2 ? 6 : -6) });
+  }
+  rise($('#docH'), lt, 0.7, { dy: 20, dur: 0.35, blur: 6 });
+  rise($('#docMeta'), lt, 0.78, { dy: 14, dur: 0.35, blur: 4 });
+  const kv = [[4.2, v => v.toFixed(1).replace('.', ',') + ' Mkr'], [17, v => Math.round(v)], [38, v => Math.round(v)]];
+  for (let i = 0; i < 3; i++) {
+    rise($('#k' + i), lt, 0.85 + i * 0.08, { dy: 24, dur: 0.35, blur: 6 });
+    const c = P(lt, 0.9 + i * 0.08, 0.6, E.out3);
+    $('#kv' + i).textContent = kv[i][1](kv[i][0] * c);
+  }
+  const H = [38, 52, 46, 64, 58, 72, 66, 96];
+  $$('#bars b').forEach((b, i) => { b.style.height = H[i] * P(lt, 1.05 + i * 0.035, 0.4, E.out3) + '%'; });
+  const wk = P(lt, 1.5, 0.4);
+  set($('#warn'), { x: (1 - wk) * -40, o: clamp(wk * 2) });
+  $('#warn').style.boxShadow = `0 0 ${40 * Math.max(0, 1 - Math.abs(lt - 1.75) * 2)}px rgba(0,153,255,0.5)`;
+  rise($('#docFoot'), lt, 1.8, { dy: 14, dur: 0.3, blur: 4 });
+}
+
+function s6(t) {
+  const lt = t - 11.5;
+  rise($('#intHead .eyebrow'), lt, 0.05, { dy: 20, dur: 0.35, blur: 6 });
+  riseWords($('#intHead h2'), lt, 0.08, 0.05, { dy: 70, dur: 0.45, blur: 14 });
+  // diagonal stagger across the grid
+  $$('.tool').forEach((el, i) => {
+    const col = i % 5, row = Math.floor(i / 5);
+    const st = 0.3 + (col + row) * 0.07;
+    const k = P(t - 11.5, st, 0.45, E.outBack);
+    set(el, { s: lerp(0.3, 1, k), o: clamp(k * 3), y: (1 - k) * 40, r: (1 - k) * (col % 2 ? 10 : -10) });
+  });
+  set($('#grid'), { s: 1 + lt * 0.025 });
+}
+
+function s7(t) {
+  const lt = t - 13.5;
+  rise($('#testHead .eyebrow'), lt, 0.05, { dy: 20, dur: 0.35, blur: 6 });
+  riseWords($('#testHead h2'), lt, 0.08, 0.05, { dy: 70, dur: 0.45, blur: 14 });
+  const nk = P(lt, 0.2, 0.4);
+  set($('#ns'), { o: nk * 1, s: lerp(0.96, 1, nk) });
+  const xs = [140, 482, 824, 1166, 1508];
+  xs.forEach((x, i) => rise($('#p' + i), lt, 0.15 + i * 0.06, { dy: 40, dur: 0.4, blur: 8 }));
+  // pulse travels from PR to gate
+  const travel = P(lt, 0.55, 1.05, E.inOut3);
+  const x0 = 275, x1 = 1643;
+  const px = lerp(x0, x1, travel);
+  const pulse = $('#pulse');
+  pulse.style.left = px + 'px';
+  pulse.style.top = '626px';
+  pulse.style.opacity = lt > 0.55 && travel < 1 ? 1 : 0;
+  const lit = $('#pipeLit');
+  lit.setAttribute('d', `M 410 626 L ${Math.max(410, Math.min(1508, px))} 626`);
+  lit.style.opacity = px > 410 ? 1 : 0;
+  xs.forEach((x, i) => {
+    const el = $('#p' + i);
+    const reached = px >= x + 20 || (i === 0 && lt > 0.5);
+    el.classList.toggle('on', reached && i < 4);
+    el.classList.toggle('done', i === 4 && travel >= 0.98);
+  });
+  if (travel >= 0.98) set($('#p4'), { s: lerp(1.15, 1, P(lt, 1.58, 0.3, E.out3)) });
+  $$('#testPoints span').forEach((s, i) => rise(s, lt, 1.0 + i * 0.1, { dy: 16, dur: 0.3, blur: 4 }));
+}
+
+function s8(t) {
+  const lt = t - 15.5;
+  rise($('#mHead'), lt, 0.0, { dy: 16, dur: 0.3, blur: 4 });
+  for (let i = 0; i < 4; i++) {
+    const el = $('#ms' + i), st = 0.08 + i * 0.22;
+    rise(el, lt, st - 0.06, { dy: 50, dur: 0.35, blur: 10 });
+    el.classList.toggle('on', lt > st);
+  }
+  $('#mFill').style.width = 100 * P(lt, 0.08, 0.9, E.inOut3) + '%';
+  rise($('#mNote'), lt, 0.95, { dy: 24, dur: 0.35, blur: 6 });
+}
+
+function s9(t) {
+  const lt = t - 17.0;
+  const tk = P(lt, 0.15, 0.45);
+  set($('#oTri'), { x: (1 - tk) * -300, o: clamp(tk * 3), b: (1 - tk) * 12 });
+  const dk = P(lt, 0.4, 0.4, E.outBack);
+  set($('#oDot'), { s: dk, o: clamp(dk * 2) });
+  rise($('#oWord'), lt, 0.5, { dy: 20, dur: 0.45, blur: 8 });
+  riseWords($('#oTag'), lt, 0.55, 0.06, { dy: 70, dur: 0.5, blur: 14 });
+  rise($('#oBtn'), lt, 1.15, { dy: 30, dur: 0.45, blur: 8, s0: 0.9 });
+  rise($('#oUrl'), lt, 1.25, { dy: 30, dur: 0.45, blur: 8 });
+}
+
+const RENDER = { s1, s2, s3, s4, s5, s6, s7, s8, s9 };
+
+window.renderFrame = function (t) {
+  for (const [id, a, b] of SCENES) {
+    const on = t >= a && t < b || (id === 's9' && t >= b);
+    const el = document.getElementById(id);
+    el.style.display = on ? 'block' : 'none';
+    if (on) RENDER[id](t);
+  }
+  drawMesh(t, meshAlpha(t), t >= 1.5);
+
+  // HUD: visible through the feature section
+  const hudOn = t >= 4.0 && t < 17.0;
+  set($('#hud'), { o: hudOn ? 1 : 0 });
+  $('#hudFill').style.width = 100 * clamp((t - 4.0) / 13.0) + '%';
+
+  // wipes: cover in 0.16 s, reveal in 0.2 s, cut at the midpoint
+  const w = $('#wipe');
+  w.style.display = 'none';
+  for (const c of WIPES) {
+    if (t >= c - 0.16 && t < c + 0.2) {
+      const xin = t < c ? lerp(-140, -10, E.out3(clamp((t - (c - 0.16)) / 0.16))) : lerp(-10, 140, E.inExpo(clamp((t - c) / 0.2)) * 0.6 + clamp((t - c) / 0.2) * 0.4);
+      w.style.display = 'block';
+      w.style.transform = `translateX(${xin}%) skewX(-12deg)`;
+    }
+  }
+  // flash into the outro
+  $('#flash').style.opacity = t >= 17.0 ? 0.9 * (1 - P(t, 17.0, 0.35, E.out3)) : 0;
+};
+
+window.DURATION = DURATION;
+window.renderFrame(0);
+</script>
+</body>
+</html>
