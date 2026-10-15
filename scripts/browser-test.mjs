@@ -66,21 +66,21 @@ try {
   check(await panels.count() === 1, "Only one panel is exposed to assistive technology");
   check(await page.locator("#work-leads").isVisible(), "Sales is selected by default");
   check(await page.locator("#prototype").isVisible(), "Offer is outside hidden examples");
+  check(await page.locator("#film").evaluate((el) => {
+    const rect = el.getBoundingClientRect();
+    return rect.top === 0 && rect.width === innerWidth && rect.height >= innerHeight * 0.85 && rect.height <= innerHeight;
+  }), "Launch film fills the first desktop screen");
+  check(await page.locator("#launchFilm").evaluate((video) => !video.getAttribute("src") && !video.controls) &&
+    await page.locator("#filmSound").textContent() === "Spela filmen",
+    "Launch film waits for a click when the visitor prefers reduced motion");
+  const toHero = (p) => p.evaluate(() => scrollTo({ top: document.getElementById("hero").offsetTop, behavior: "instant" }));
+  await toHero(page);
   check(await page.locator(".hero__proof").evaluate((el) => {
     const rect = el.getBoundingClientRect();
-    return rect.height > 0 && rect.bottom <= innerHeight && el.closest(".hero") !== null;
-  }), "Founder proof is visible in the first desktop viewport");
-  check(await page.locator("#launchTeaser").evaluate((video) => !video.getAttribute("src")),
-    "Launch film stays a poster when the visitor prefers reduced motion");
-  check(await page.locator(".hero-film__cta").getAttribute("href") === "#work-leads" &&
-    await page.locator(".hero-film").isVisible(), "Launch film and its link to the examples are visible on desktop");
-  await page.locator("#launchOpen").click();
-  check(await page.locator("#launchDialog").evaluate((dialog) => dialog.open &&
-    dialog.querySelector("video").getAttribute("src") === "assets/launch/vectorpoint-launch.mp4"),
-    "Launch film opens with sound in a dialog");
-  await page.locator(".film-dialog__close").click();
-  check(await page.locator("#launchDialog").evaluate((dialog) => !dialog.open && dialog.querySelector("video").paused),
-    "Closing the film dialog stops playback");
+    return rect.height > 0 && rect.top >= 0 && rect.bottom <= innerHeight && el.closest(".hero") !== null;
+  }), "Founder proof is visible on the hero's first screen");
+  check(await page.locator(".hero-peek").getAttribute("href") === "#work-leads" &&
+    await page.locator(".hero-peek").isVisible(), "Hero example preview links to the sales example on desktop");
   const navCtaBackground = () => page.locator(".nav__cta").evaluate((el) => getComputedStyle(el).backgroundColor);
   await page.waitForFunction(() => document.getElementById("siteNav").classList.contains("is-hero-cta"));
   check(await navCtaBackground() === "rgba(0, 0, 0, 0)", "Header booking button is a quiet outline while the hero form is visible");
@@ -217,7 +217,7 @@ try {
   }
   for (const width of [320, 375, 390, 600, 768, 1024, 1100, 1180, 1280, 1400]) {
     await mobilePage.setViewportSize({ width, height: 900 });
-    await mobilePage.evaluate(() => scrollTo({ top: 0, behavior: "instant" }));
+    await mobilePage.evaluate(() => scrollTo({ top: document.getElementById("hero").offsetTop, behavior: "instant" }));
     check(await mobilePage.locator(".hero__line").evaluateAll((lines) => lines.every((line) => {
       const range = document.createRange();
       range.selectNodeContents(line);
@@ -225,19 +225,21 @@ try {
       const box = line.getBoundingClientRect();
       return text.height < parseFloat(getComputedStyle(line).lineHeight) * 1.5 && text.right <= box.right + 1;
     })), `Each hero sentence stays on one line inside its column at ${width}px`);
-    check(await mobilePage.locator(".hero-film").evaluate((film, wide) => {
-      const rect = film.getBoundingClientRect();
+    check(await mobilePage.locator(".hero-peek").evaluate((peek, wide) => {
+      const rect = peek.getBoundingClientRect();
+      if (!wide) return rect.height === 0;
       const main = document.querySelector(".hero__main").getBoundingClientRect();
-      if (!wide) return rect.height > 0 && rect.top >= main.bottom && rect.left >= 0 && rect.right <= innerWidth;
       return rect.height > 0 && rect.left >= main.right + 24 && rect.right <= innerWidth &&
         rect.bottom <= innerHeight;
-    }, width >= 1100), `Launch film is ${width >= 1100 ? "beside the text" : "below the form"} at ${width}px`);
+    }, width >= 1100), `Hero example preview is ${width >= 1100 ? "beside the text" : "hidden"} at ${width}px`);
   }
   await mobile.close();
 
   const noJs = await newContext({ javaScriptEnabled: false });
   const fallback = await noJs.newPage();
   await fallback.goto(url);
+  check(await fallback.locator("#launchFilm").evaluate((video) => video.controls && video.getAttribute("src") === "assets/launch/film.mp4") &&
+    !await fallback.locator("#filmSound").isVisible(), "Without JS the launch film keeps native controls and no dead sound button");
   check(!await fallback.locator("#exampleTabs").isVisible(), "No dead tab controls without JS");
   check(await fallback.locator(".demo__controls:visible").count() === 0, "No dead playback controls without JS");
   for (const id of ["leads", "feedback", "report"]) {
@@ -257,14 +259,22 @@ try {
   await motionPage.goto(url);
   check(await motionPage.locator("#heroVideo").getAttribute("src") === "assets/hero-bg.mp4",
     "Hero video loads on a wide screen with motion allowed");
-  check(await motionPage.locator("#launchTeaser").getAttribute("src") === "assets/launch/teaser.mp4",
-    "Launch film loops muted on a wide screen with motion allowed");
+  check(await motionPage.locator("#launchFilm").evaluate((video) =>
+    video.getAttribute("src") === "assets/launch/film.mp4" && video.muted && video.loop) &&
+    await motionPage.locator("#filmSound").textContent() === "Ljud på",
+    "Launch film loops muted in 16:9 on a landscape screen");
   const narrowMotionPage = await animated.newPage();
   await narrowMotionPage.setViewportSize({ width: 390, height: 844 });
   await narrowMotionPage.goto(url);
-  check(await narrowMotionPage.locator("#heroVideo").getAttribute("src") === null &&
-    await narrowMotionPage.locator("#launchTeaser").getAttribute("src") === null,
-    "Hero video and launch film stay still posters on narrow screens");
+  check(await narrowMotionPage.locator("#heroVideo").getAttribute("src") === null,
+    "Hero video stays a still poster on narrow screens");
+  check(await narrowMotionPage.locator("#launchFilm").evaluate((video) =>
+    video.getAttribute("src") === "assets/launch/film-v.mp4" && video.poster.endsWith("assets/launch/poster-v.jpg")),
+    "Launch film switches to the 9:16 cut on a portrait phone");
+  check(await narrowMotionPage.locator("#film").evaluate((el) => {
+    const rect = el.getBoundingClientRect();
+    return rect.width === innerWidth && rect.height <= innerHeight && rect.height >= innerHeight * 0.8;
+  }), "9:16 film fills the phone's first screen without spilling past it");
   await narrowMotionPage.close();
   check(await motionPage.locator(".hero").evaluate((el) =>
     el.getBoundingClientRect().height <= innerHeight && getComputedStyle(el).position !== "sticky"),

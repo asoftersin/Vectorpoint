@@ -445,6 +445,8 @@ const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 // ============================================================
 const V = new URLSearchParams(location.search).has('vertical');
 if (V) document.documentElement.classList.add('v');
+// ?nohud drops the corner logo and progress bar (the website's own nav sits on top).
+const NOHUD = new URLSearchParams(location.search).has('nohud');
 const W = V ? 1080 : 1920, H = V ? 1920 : 1080;
 $('#mesh').width = W; $('#mesh').height = H;
 // Positions that differ per format (landscape values live inline in the markup).
@@ -784,7 +786,7 @@ window.renderFrame = function (t) {
 
   // HUD: visible through the feature section
   const hudOn = t >= 4.0 && t < 17.0;
-  set($('#hud'), { o: hudOn ? 1 : 0 });
+  set($('#hud'), { o: hudOn && !NOHUD ? 1 : 0 });
   $('#hudFill').style.width = 100 * clamp((t - 4.0) / 13.0) + '%';
 
   // wipes: cover in 0.16 s, reveal in 0.2 s, cut at the midpoint

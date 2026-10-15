@@ -30,12 +30,17 @@ const checks = [
   ["examples are progressively enhanced tabs", html.includes('id="exampleTabs" role="tablist"') && html.includes('aria-controls="work-report"') && js.includes('panel.setAttribute("role", "tabpanel")') && css.includes("[hidden] { display: none !important; }")],
   ["prototype offer outside every panel", html.indexOf('id="prototype"') > html.indexOf('id="demoReport"') && html.includes("Fast pris och omfattning bestäms före start.")],
   ["founder proof in hero", html.indexOf('class="builder-proof hero__proof"') > html.indexOf('class="hero__lead"') && html.indexOf('class="builder-proof hero__proof"') < html.indexOf('id="askForm"') && html.includes("Göteborg · <span class=\"builder-proof__link\">")],
-  ["hero launch film", (() => {
-    const film = html.slice(html.indexOf('class="hero-film"'), html.indexOf("</figure>", html.indexOf('class="hero-film"')));
-    return html.indexOf('class="hero-film"') > html.indexOf('id="askForm"') && html.indexOf('class="hero-film"') < html.indexOf("</section>") &&
-      film.includes('href="assets/launch/vectorpoint-launch.mp4"') && film.includes('href="#work-leads"') && film.includes('preload="none"') &&
-      ["assets/launch/teaser.mp4", "assets/launch/vectorpoint-launch.mp4", "assets/launch/poster.jpg"].every((f) => existsSync(f)) &&
-      html.includes('id="launchDialog"') && js.includes("launchDialog.showModal()");
+  ["hero example preview", (() => {
+    const peek = html.slice(html.indexOf('class="hero-peek"'), html.indexOf("</a>", html.indexOf('class="hero-peek"')));
+    return html.indexOf('class="hero-peek"') > html.indexOf('id="askForm"') && html.indexOf('class="hero-peek"') < html.indexOf("</section>", html.indexOf('<section class="hero"')) &&
+      peek.includes('href="#work-leads"') && peek.includes("EXEMPEL · PÅHITTAT") && peek.includes("Nordkant Systems AB") &&
+      css.includes(".hero-peek { display: none; }") && css.includes("@media (min-width: 1100px)");
+  })()],
+  ["launch film is the first screen", (() => {
+    const film = html.indexOf('class="film-hero"');
+    return film > html.indexOf('<main id="top">') && film < html.indexOf('<section class="hero" id="hero">') &&
+      ["film.mp4", "film-v.mp4", "poster.jpg", "poster-v.jpg"].every((f) => html.includes(`assets/launch/${f}`) && existsSync(`assets/launch/${f}`)) &&
+      html.includes('preload="none"') && js.includes('matchMedia("(orientation: portrait)")') && css.includes(".film-hero { aspect-ratio: 9 / 16; }");
   })()],
   ["optional technical deep dive", html.includes('<details class="pipeline" id="pipeline">') && html.includes("<summary>Se hur vi kvalitetssäkrar")],
   ["data processing described without absolute residency promise", !html.includes("Den stannar i era system.") && html.split("även externa AI-tjänster").length === 3],

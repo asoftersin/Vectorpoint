@@ -3,3 +3,4 @@ tmp/
 .superpowers/
 apikey*.txt
 launch-video/soundtrack.wav
+launch-video/*-nohud.mp4

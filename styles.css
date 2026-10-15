@@ -347,114 +347,179 @@ a { color: inherit; }
   .hero__line { white-space: nowrap; }
 }
 
-/* Launch film: under the form on narrow screens, beside the text on wide ones. */
-.hero-film {
-  margin-top: 36px;
-  width: 100%;
-  max-width: 560px;
-  background: rgba(13, 13, 13, 0.82);
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  overflow: hidden;
-  backdrop-filter: blur(10px);
-  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
-}
-
-.hero-film:hover,
-.hero-film:focus-within { border-color: rgba(0, 153, 255, 0.5); }
-
-.hero-film__media {
+/* Launch film fills the first screen; the page continues right below it. */
+.film-hero {
   position: relative;
-  display: block;
+  width: 100%;
   aspect-ratio: 16 / 9;
+  max-height: 100svh;
+  overflow: hidden;
   background: var(--bg);
 }
 
-.hero-film__video {
-  display: block;
+@media (orientation: portrait) {
+  .film-hero { aspect-ratio: 9 / 16; }
+}
+
+/* Keeps the transparent nav readable on top of the film. */
+.film-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 140px;
+  background: linear-gradient(rgba(6, 6, 6, 0.75), transparent);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.film-hero__video {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
+  display: block;
 }
 
-.hero-film__play {
+.film-hero__bar {
   position: absolute;
-  right: 12px;
-  bottom: 12px;
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  background: var(--accent);
-  box-shadow: 0 0 24px rgba(0, 153, 255, 0.6);
-  transition: transform 0.2s ease;
-}
-
-.hero-film__play::before {
-  content: "";
-  position: absolute;
-  left: 17px;
-  top: 14px;
-  width: 13px;
-  height: 16px;
-  background: #060606;
-  clip-path: polygon(0 0, 100% 50%, 0 100%);
-}
-
-.hero-film__media:hover .hero-film__play,
-.hero-film__media:focus-visible .hero-film__play { transform: scale(1.08); }
-
-.hero-film__foot {
+  left: var(--pad-x);
+  right: var(--pad-x);
+  bottom: 24px;
+  z-index: 2;
   display: flex;
   justify-content: space-between;
-  gap: 10px;
-  padding: 12px 16px;
-  border-top: 1px solid var(--line);
-  font-size: 0.82rem;
-  color: var(--muted);
+  align-items: center;
+  gap: 12px;
 }
 
-.hero-film__cta { color: var(--text); text-decoration: none; white-space: nowrap; }
-.hero-film__cta:hover { color: var(--accent); }
+.film-hero__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 10px 18px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(6, 6, 6, 0.72);
+  backdrop-filter: blur(10px);
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+
+.film-hero__btn:hover { border-color: var(--accent); color: var(--accent); }
+.film-hero__next { margin-left: auto; }
+
+/* A glimpse of a real example fills the empty right half on wide screens. */
+.hero-peek { display: none; }
 
 @media (min-width: 1100px) {
   .hero__frame {
     display: grid;
-    grid-template-columns: minmax(0, 760px) clamp(300px, 28vw, 520px);
+    grid-template-columns: minmax(0, 760px) clamp(300px, 25vw, 360px);
     justify-content: space-between;
     align-items: center;
     column-gap: 48px;
   }
 
-  .hero-film { margin-top: 0; }
+  .hero-peek {
+    display: flex;
+    flex-direction: column;
+    background: rgba(13, 13, 13, 0.82);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    overflow: hidden;
+    text-decoration: none;
+    font-size: 0.82rem;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+  }
 }
 
-.film-dialog {
-  margin: auto;
-  width: min(1200px, calc(100vw - 32px));
-  padding: 0;
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  background: var(--bg);
-  overflow: visible;
-}
+.hero-peek:hover,
+.hero-peek:focus-visible { border-color: rgba(0, 153, 255, 0.5); }
 
-.film-dialog::backdrop { background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(6px); }
-
-.film-dialog__video { display: block; width: 100%; aspect-ratio: 16 / 9; border-radius: var(--radius); background: #000; }
-
-.film-dialog__close {
-  position: absolute;
-  right: 0;
-  bottom: calc(100% + 10px);
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  border: 1px solid var(--line);
+.hero-peek__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--line);
   background: var(--surface);
-  color: var(--text);
-  font-size: 1rem;
-  cursor: pointer;
 }
+
+.hero-peek__bar .flow__chip { padding: 4px 10px; font-size: 0.62rem; }
+
+.hero-peek__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 8px rgba(0, 153, 255, 0.8);
+}
+
+.hero-peek__body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px;
+}
+
+.hero-peek__row {
+  display: grid;
+  grid-template-columns: 82px minmax(0, 1fr);
+  gap: 10px;
+  color: var(--text);
+  line-height: 1.4;
+}
+
+.hero-peek.is-visible .hero-peek__row { animation: peekRow 0.5s ease both; }
+.hero-peek.is-visible .hero-peek__row:nth-child(2) { animation-delay: 0.15s; }
+.hero-peek.is-visible .hero-peek__row:nth-child(3) { animation-delay: 0.3s; }
+.hero-peek.is-visible .hero-peek__row:nth-child(4) { animation-delay: 0.45s; }
+.hero-peek.is-visible .hero-peek__row:nth-child(5) { animation-delay: 0.6s; }
+
+@keyframes peekRow {
+  from { opacity: 0; transform: translateY(6px); }
+}
+
+.hero-peek__key {
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding-top: 2px;
+}
+
+.hero-peek__src {
+  display: inline-block;
+  margin-left: 4px;
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  color: var(--muted);
+}
+
+.hero-peek__ok,
+.hero-peek__prio { color: var(--accent); }
+
+.hero-peek__foot {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 12px 16px;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+}
+
+.hero-peek__cta { color: var(--text); white-space: nowrap; }
 
 .hero__lead {
   font-size: 1.05rem;
@@ -1234,6 +1299,7 @@ a { color: inherit; }
   }
 
   .marquee__track { animation: none; }
+  .hero-peek.is-visible .hero-peek__row { animation: none; }
 
   .btn, .card { transition: none; }
 

@@ -121,7 +121,19 @@
   <main id="top">
 
     <!-- HERO -->
-    <section class="hero">
+    <!-- LANSERINGSFILM: hela första skärmen. 16:9 på liggande skärmar, 9:16 på stående. -->
+    <section class="film-hero" id="film" aria-label="Lanseringsfilm, 20 sekunder">
+      <video class="film-hero__video" id="launchFilm" muted loop playsinline controls preload="none"
+        src="assets/launch/film.mp4" poster="assets/launch/poster.jpg"
+        data-src="assets/launch/film.mp4" data-poster="assets/launch/poster.jpg"
+        data-src-portrait="assets/launch/film-v.mp4" data-poster-portrait="assets/launch/poster-v.jpg"></video>
+      <div class="film-hero__bar">
+        <button class="film-hero__btn" id="filmSound" type="button" data-goatcounter-click="launch-film" hidden>Ljud på</button>
+        <a class="film-hero__btn film-hero__next" href="#hero">Till sidan <span aria-hidden="true">↓</span></a>
+      </div>
+    </section>
+
+    <section class="hero" id="hero">
       <video class="hero__video" id="heroVideo" muted loop playsinline preload="none" poster="assets/hero-bg-poster.jpg" data-src="assets/hero-bg.mp4" aria-hidden="true"></video>
       <div class="hero__scrim" aria-hidden="true"></div>
       <div class="hero__frame">
@@ -147,13 +159,20 @@
             <p class="ask__note">Texten följer med till bokningen. Ingen AI läser den, det gör vi. <a href="https://cal.com/johan-studt/15min" target="_blank" rel="noreferrer" data-goatcounter-click="cta-hero-direkt">Boka utan att skriva något</a></p>
           </form>
         </div>
-        <figure class="hero-film" data-reveal>
-          <a class="hero-film__media" id="launchOpen" href="assets/launch/vectorpoint-launch.mp4" data-goatcounter-click="launch-film" aria-label="Spela lanseringsfilmen med ljud, 20 sekunder">
-            <video class="hero-film__video" id="launchTeaser" muted loop playsinline preload="none" poster="assets/launch/poster.jpg" data-src="assets/launch/teaser.mp4" aria-hidden="true"></video>
-            <span class="hero-film__play" aria-hidden="true"></span>
-          </a>
-          <figcaption class="hero-film__foot"><span>Filmen · 20 s med ljud</span><a class="hero-film__cta" href="#work-leads" data-goatcounter-click="hero-examples">Se exemplen →</a></figcaption>
-        </figure>
+        <a class="hero-peek" href="#work-leads" data-goatcounter-click="hero-peek" aria-label="Se exemplet med leadlistan, påhittad data" data-reveal>
+          <span class="hero-peek__bar">
+            <span class="demo__title"><i class="hero-peek__dot" aria-hidden="true"></i>Leadlista</span>
+            <span class="flow__chip">EXEMPEL · PÅHITTAT</span>
+          </span>
+          <span class="hero-peek__body">
+            <span class="hero-peek__row"><span class="hero-peek__key">Bolag</span><span>Nordkant Systems AB</span></span>
+            <span class="hero-peek__row"><span class="hero-peek__key">Kontakt</span><span>J. Åkerlind, IT-chef</span></span>
+            <span class="hero-peek__row"><span class="hero-peek__key">Belagt</span><span>Rekryterar utvecklare till ett nytt team <span class="hero-peek__src">platsannons</span></span></span>
+            <span class="hero-peek__row"><span class="hero-peek__key">Kontroller</span><span class="hero-peek__ok">5 av 5 ok</span></span>
+            <span class="hero-peek__row"><span class="hero-peek__key">Prioritet</span><span class="hero-peek__prio">Hög</span></span>
+          </span>
+          <span class="hero-peek__foot"><span>Säljutkast klart</span><span class="hero-peek__cta">Se hur det fungerar →</span></span>
+        </a>
       </div>
     </section>
 
@@ -676,11 +695,6 @@
     </section>
 
   </main>
-
-  <dialog class="film-dialog" id="launchDialog" aria-label="Vectorpoints lanseringsfilm">
-    <button class="film-dialog__close" type="button" aria-label="Stäng filmen">✕</button>
-    <video class="film-dialog__video" controls playsinline preload="none" poster="assets/launch/poster.jpg" data-src="assets/launch/vectorpoint-launch.mp4"></video>
-  </dialog>
 
   <footer class="footer">
     <div class="footer__inner">

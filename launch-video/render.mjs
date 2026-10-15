@@ -2,6 +2,7 @@
 //
 //   node launch-video/render.mjs                 -> launch-video/vectorpoint-launch.mp4
 //   node launch-video/render.mjs --vertical      -> launch-video/vectorpoint-reel.mp4 (9:16)
+//   node launch-video/render.mjs --nohud         -> without corner logo/progress bar (website copies)
 //   node launch-video/render.mjs --stills 2,5,8  -> PNG stills for quick review
 //
 // Needs Playwright Chromium and ffmpeg. Soundtrack: python3 launch-video/soundtrack.py
@@ -20,7 +21,9 @@ const flag = (name, fallback) => {
 const fps = Number(flag('--fps', 60));
 const vertical = args.includes('--vertical');
 const [width, height] = vertical ? [1080, 1920] : [1920, 1080];
-const out = flag('--out', path.join(dir, vertical ? 'vectorpoint-reel.mp4' : 'vectorpoint-launch.mp4'));
+const nohud = args.includes('--nohud');
+const base = (vertical ? 'vectorpoint-reel' : 'vectorpoint-launch') + (nohud ? '-nohud' : '');
+const out = flag('--out', path.join(dir, `${base}.mp4`));
 const stills = flag('--stills', null);
 const audio = path.join(dir, 'soundtrack.wav');
 
@@ -28,7 +31,7 @@ const audio = path.join(dir, 'soundtrack.wav');
 const launchOpts = existsSync('/opt/pw-browsers/chromium') ? { executablePath: '/opt/pw-browsers/chromium' } : {};
 const browser = await chromium.launch(launchOpts);
 const page = await browser.newPage({ viewport: { width, height }, deviceScaleFactor: 1 });
-await page.goto(pathToFileURL(path.join(dir, 'composition.html')).href + (vertical ? '?vertical' : ''), { waitUntil: 'networkidle' });
+await page.goto(pathToFileURL(path.join(dir, 'composition.html')).href + '?' + [vertical && 'vertical', nohud && 'nohud'].filter(Boolean).join('&'), { waitUntil: 'networkidle' });
 await page.evaluate(async () => {
   await Promise.all(['500 40px Inter', '600 40px "Geist Mono"', '40px "Gasoek One"'].map(f => document.fonts.load(f)));
   await document.fonts.ready;
