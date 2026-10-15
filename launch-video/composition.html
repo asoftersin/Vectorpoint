@@ -39,6 +39,8 @@
     text-transform: uppercase; color: var(--text-dim); display: flex; align-items: center; gap: 14px; }
   .eyebrow i { width: 12px; height: 12px; background: var(--accent); display: inline-block; }
   .w { display: inline-block; will-change: transform; }
+  .vbr { display: none; }
+  .v .vbr { display: inline; }
   .chip { font-family: var(--font-mono); font-size: 14px; letter-spacing: 0.12em; color: var(--muted);
     border: 1px solid var(--line); border-radius: 999px; padding: 6px 14px; background: var(--surface); white-space: nowrap; }
   .chip--ai { color: var(--accent); border-color: rgba(0,153,255,0.4); background: var(--accent-soft); }
@@ -90,7 +92,7 @@
   #hook .line { display: block; font-size: 148px; font-weight: 500; letter-spacing: -0.04em; line-height: 1.08; padding-top: 0.08em; }
   #hookSub { position: absolute; left: 0; width: 1920px; top: 740px; display: flex; justify-content: center; }
   #hookSub .eyebrow { font-size: 22px; }
-  #hookUnder { position: absolute; height: 10px; background: var(--accent); top: 668px; left: 0; width: 0;
+  #hookUnder { position: absolute; height: 10px; background: var(--accent); top: 0; left: 0; width: 0;
     box-shadow: 0 0 30px rgba(0,153,255,0.6); }
 
   /* ---------- S3 leads ---------- */
@@ -204,6 +206,74 @@
   #oCta { position: absolute; left: 0; width: 1920px; top: 790px; display: flex; justify-content: center; align-items: center; gap: 34px; }
   .btn { font-size: 30px; font-weight: 500; background: var(--text); color: #060606; padding: 22px 40px; border-radius: 10px; }
   .url { font-family: var(--font-mono); font-size: 26px; letter-spacing: 0.16em; color: var(--muted); }
+
+  /* ============================================================
+     9:16 reel (?vertical). Content stays inside TikTok/Reels safe
+     zones: clear of the top bar, the right-hand action rail and the
+     caption area in the bottom ~400px.
+     ============================================================ */
+  html.v, html.v body, html.v #stage { width: 1080px; height: 1920px; }
+  .v .vignette { background: radial-gradient(ellipse 80% 60% at 50% 45%, transparent 55%, rgba(0,0,0,0.75) 100%); }
+  .v .hud__logo { left: 70px; top: 130px; font-size: 22px; }
+  .v .hud__url { display: none; }
+  .v #wipe { width: 160%; }
+  .v .hud__bar { left: 70px; right: 150px; top: 1500px; bottom: auto; }
+
+  .v #bigTri { left: 330px; top: 700px; }
+  .v #bigDot { left: 580px; top: 830px; }
+  .v #wordmark { width: 1080px; top: 1090px; font-size: 44px; letter-spacing: 0.3em; padding-left: 0.3em; }
+
+  .v #hook { width: 1080px; top: 460px; }
+  .v #hook .line { font-size: 150px; line-height: 1.04; }
+    .v #hookSub { width: 1080px; top: 1300px; padding: 0 120px; }
+  .v #hookSub .eyebrow { font-size: 24px; line-height: 1.6; justify-content: center; text-align: center; }
+  .v #hookSub .eyebrow i { display: none; }
+
+  .v .fhead { left: 70px; top: 270px; width: 880px; }
+  .v .fhead h2 { font-size: 118px; margin-top: 24px; }
+  .v .fhead .sub { font-size: 32px; margin-top: 24px; max-width: 840px; }
+  .v .eyebrow { font-size: 24px; }
+  .v .ghostnum { font-size: 520px; }
+
+  .v #leadCard { left: 70px; top: 870px; width: 870px; }
+  .v #leadCard .row { font-size: 28px; grid-template-columns: 180px 1fr; }
+
+  .v .msg { left: 70px; width: 480px; }
+  .v .owner { left: 690px; width: 250px; }
+
+  .v #doc { left: 70px; top: 850px; width: 870px; }
+
+  .v #intHead { width: 1080px; top: 300px; padding: 0 70px; }
+  .v #intHead h2 { font-size: 104px; }
+  .v #grid { width: 1080px; top: 760px; padding: 0 150px; gap: 36px 40px; }
+  .v .tool { width: 160px; }
+  .v .plate { width: 132px; height: 132px; border-radius: 28px; }
+  .v .plate img { width: 72px; height: 72px; }
+
+  .v #testHead { left: 70px; top: 270px; width: 880px; }
+  .v #testHead h2 { font-size: 104px; }
+  .v .pnode { left: 150px; width: 700px; height: 100px; padding: 18px 26px; }
+  .v .pnode .l { margin-top: 4px; font-size: 30px; }
+  .v .pnode .bdg { left: auto; right: 26px; bottom: auto; top: 22px; font-size: 13px; }
+  .v #ns { left: 110px; width: 780px; }
+  .v #ns span { left: auto; right: 22px; top: auto; bottom: 10px; }
+  .v #testPoints { display: none; }
+
+  .v #mHead { left: 70px; top: 300px; }
+  .v .mstep { left: 120px; width: 820px; display: flex; align-items: baseline; gap: 30px; }
+  .v .mstep .wd { font-size: 120px; margin-top: 0; }
+  .v .mstep .n { font-size: 26px; width: 44px; }
+  .v #mLine { left: 70px; top: 470px; width: 3px; height: 740px; }
+  .v #mLine b { right: 0; bottom: auto; width: auto; }
+  .v #mNote { left: 70px; top: 1270px; width: 860px; font-size: 42px; line-height: 1.3; }
+
+  .v #oTri { left: 440px; top: 520px; }
+  .v #oDot { left: 525px; top: 563px; }
+  .v #oWord { width: 1080px; top: 680px; font-size: 34px; letter-spacing: 0.32em; padding-left: 0.32em; }
+  .v #oTag { width: 1080px; top: 790px; }
+  .v #oTag .line { font-size: 96px; line-height: 1.04; }
+  .v #oCta { width: 1080px; top: 1270px; flex-direction: column; gap: 26px; }
+  .v .btn { font-size: 36px; padding: 26px 48px; }
 </style>
 </head>
 <body>
@@ -222,8 +292,8 @@
   <!-- S2 · HOOK -->
   <section class="scene" id="s2">
     <div id="hook">
-      <span class="line" id="hl1"><span class="w">Mindre</span> <span class="w">manuellt</span> <span class="w">arbete.</span></span>
-      <span class="line" id="hl2"><span class="w">Mer</span> <span class="w">tid</span> <span class="w">för</span> <span class="w acc">kunderna.</span></span>
+      <span class="line" id="hl1"><span class="w">Mindre</span><br class="vbr"> <span class="w">manuellt</span><br class="vbr"> <span class="w">arbete.</span></span>
+      <span class="line" id="hl2"><span class="w">Mer</span> <span class="w">tid</span> <span class="w">för</span><br class="vbr"> <span class="w acc">kunderna.</span></span>
     </div>
     <div id="hookUnder"></div>
     <div id="hookSub"><div class="eyebrow"><i></i><span id="hookSubTxt"></span></div></div>
@@ -306,7 +376,7 @@
   <section class="scene" id="s6">
     <div id="intHead">
       <div class="eyebrow"><i></i><span>Integrationer</span></div>
-      <h2><span class="w">Byggt</span> <span class="w">i</span> <span class="w">det</span> <span class="w">ni</span> <span class="w acc">redan</span> <span class="w acc">använder.</span></h2>
+      <h2><span class="w">Byggt</span> <span class="w">i</span> <span class="w">det</span> <span class="w">ni</span><br class="vbr"> <span class="w acc">redan</span> <span class="w acc">använder.</span></h2>
     </div>
     <div id="grid"></div>
   </section>
@@ -347,8 +417,8 @@
     <div id="oTri"></div><div id="oDot"></div>
     <div id="oWord"></div>
     <div id="oTag">
-      <span class="line"><span class="w">Mindre</span> <span class="w">manuellt</span> <span class="w">arbete.</span></span>
-      <span class="line"><span class="w">Mer</span> <span class="w">tid</span> <span class="w">för</span> <span class="w acc">kunderna.</span></span>
+      <span class="line"><span class="w">Mindre</span> <span class="w">manuellt</span><br class="vbr"> <span class="w">arbete.</span></span>
+      <span class="line"><span class="w">Mer</span> <span class="w">tid</span> <span class="w">för</span><br class="vbr"> <span class="w acc">kunderna.</span></span>
     </div>
     <div id="oCta"><span class="btn" id="oBtn">Boka ett samtal →</span><span class="url" id="oUrl">vectorpoint.se</span></div>
   </section>
@@ -366,11 +436,35 @@
 </div>
 
 <script>
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 // ============================================================
 // Deterministic timeline: everything is a pure function of t.
 // window.renderFrame(t) is called by render.mjs once per frame.
 // Cuts sit on a 120 BPM grid (0.5 s beats) to match the soundtrack.
 // ============================================================
+const V = new URLSearchParams(location.search).has('vertical');
+if (V) document.documentElement.classList.add('v');
+const W = V ? 1080 : 1920, H = V ? 1920 : 1080;
+$('#mesh').width = W; $('#mesh').height = H;
+// Positions that differ per format (landscape values live inline in the markup).
+if (V) {
+  const at = (sel, css) => Object.assign(document.querySelector(sel).style, css);
+  at('#s3 .ghostnum', { left: '520px', top: '120px' });
+  at('#s4 .ghostnum', { left: '500px', top: '120px' });
+  at('#s5 .ghostnum', { left: '500px', top: '120px' });
+  at('#cl1', { left: '70px', top: '800px' });
+  at('#cl2', { left: '690px', top: '800px' });
+  [850, 976, 1102, 1228].forEach((y, i) => at('#m' + i, { top: y + 'px' }));
+  [868, 994, 1120, 1246].forEach((y, i) => at('#o' + i, { top: y + 'px' }));
+  [790, 914, 1038, 1162, 1286].forEach((y, i) => at('#p' + i, { top: y + 'px', left: '150px' }));
+  at('#ns', { top: '890px', height: '296px' });
+  [520, 690, 860, 1030].forEach((y, i) => at('#ms' + i, { top: y + 'px', left: '120px' }));
+  at('#mHead', { top: '400px' });
+  $('#fbSvg').setAttribute('viewBox', '0 0 1080 1920');
+  $('#pipeSvg').setAttribute('viewBox', '0 0 1080 1920');
+  $('#pipeSvg .base').setAttribute('d', 'M 500 890 L 500 914 M 500 1014 L 500 1038 M 500 1138 L 500 1162 M 500 1262 L 500 1286');
+}
 const DURATION = 19.5;
 const SCENES = [
   ['s1', 0.0, 1.5], ['s2', 1.5, 4.0], ['s3', 4.0, 6.5], ['s4', 6.5, 9.0], ['s5', 9.0, 11.5],
@@ -378,8 +472,6 @@ const SCENES = [
 ];
 const WIPES = [4.0, 6.5, 9.0, 11.5, 13.5, 15.5];
 
-const $ = (s, r = document) => r.querySelector(s);
-const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
 const lerp = (a, b, k) => a + (b - a) * k;
 const E = {
@@ -409,16 +501,16 @@ function riseWords(root, t, start, step = 0.06, opts) {
 
 // ---------- background mesh (echoes the hero video on the site) ----------
 const mesh = $('#mesh').getContext('2d');
-const COLS = 15, ROWS = 9;
+const COLS = V ? 9 : 15, ROWS = V ? 15 : 9;
 let seed = 7;
 const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
 const pts = [];
 for (let j = 0; j <= ROWS; j++) for (let i = 0; i <= COLS; i++) {
-  pts.push({ bx: (i - 0.5 + rnd() * 0.9) * (2100 / COLS) - 90, by: (j - 0.5 + rnd() * 0.9) * (1260 / ROWS) - 90,
+  pts.push({ bx: (i - 0.5 + rnd() * 0.9) * ((W + 180) / COLS) - 90, by: (j - 0.5 + rnd() * 0.9) * ((H + 180) / ROWS) - 90,
     ph: rnd() * 6.28, sp: 0.4 + rnd() * 0.6, hot: rnd() < 0.08 });
 }
 function drawMesh(t, alpha, accent) {
-  mesh.clearRect(0, 0, 1920, 1080);
+  mesh.clearRect(0, 0, W, H);
   if (alpha <= 0.001) return;
   const p = pts.map(q => ({ x: q.bx + Math.sin(t * q.sp + q.ph) * 26 + t * 14, y: q.by + Math.cos(t * q.sp * 0.8 + q.ph) * 22 - t * 6, hot: q.hot }));
   const at = (i, j) => p[j * (COLS + 1) + i];
@@ -474,7 +566,7 @@ function s1(t) {
   $$('#wordmark span').forEach((s, i) => rise(s, t, 0.6 + i * 0.035, { dy: 30, dur: 0.4, blur: 8 }));
   const z = P(t, 1.18, 0.32, E.inExpo);
   const g = $('#logoGroup');
-  g.style.transformOrigin = '1040px 540px';
+  g.style.transformOrigin = V ? '610px 860px' : '1040px 540px';
   set(g, { s: 1 + z * 9, o: 1 - z, b: z * 8 });
 }
 
@@ -490,6 +582,7 @@ function s2(t) {
   const u = P(lt, 1.05, 0.45);
   const und = $('#hookUnder');
   und.style.left = (k.offsetLeft + $('#hook').offsetLeft + 6) + 'px';
+  und.style.top = ($('#hook').offsetTop + k.offsetTop + k.offsetHeight - (V ? 4 : 0)) + 'px';
   und.style.width = (k.offsetWidth - 12) * u + 'px';
   und.style.opacity = u > 0 ? 1 : 0;
   const n = Math.round(HOOK_SUB.length * P(lt, 1.35, 0.7, E.lin));
@@ -549,9 +642,11 @@ function s4(t) {
     rise(o, lt, 0.3 + i * 0.08, { dy: 0, dur: 0.4, blur: 6, s0: 0.85 });
     // connector
     const tgt = FB_MAP[i];
-    const y1 = parseFloat(m.style.top) + 52, y2 = parseFloat($('#o' + tgt).style.top) + 35;
+    const ow = $('#o' + tgt);
+    const y1 = m.offsetTop + 52, y2 = ow.offsetTop + 35;
+    const x1 = m.offsetLeft + m.offsetWidth + 2, x2 = ow.offsetLeft - 2, mx = (x1 + x2) / 2;
     const path = $('#fl' + i);
-    path.setAttribute('d', `M 1412 ${y1} C 1490 ${y1}, 1480 ${y2}, 1558 ${y2}`);
+    path.setAttribute('d', `M ${x1} ${y1} C ${mx} ${y1}, ${mx} ${y2}, ${x2} ${y2}`);
     const len = path.getTotalLength();
     const lk = P(lt, 0.95 + i * 0.13, 0.4, E.inOut3);
     path.style.strokeDasharray = len;
@@ -574,14 +669,15 @@ function s5(t) {
   const dk = P(lt, 0.35, 0.55);
   set($('#doc'), { y: (1 - dk) * 80, o: clamp(dk * 2), b: (1 - dk) * 10, s: lerp(0.94, 1, dk) + lt * 0.01 });
   // five scattered tabs converge into the document
-  const starts = [[1000, 150], [1620, 170], [1760, 520], [1580, 880], [960, 860]];
+  const starts = V ? [[80, 760], [620, 720], [760, 1150], [560, 1420], [90, 1380]] : [[1000, 150], [1620, 170], [1760, 520], [1580, 880], [960, 860]];
+  const [tx, ty] = V ? [420, 900] : [1340, 300];
   for (let i = 0; i < 5; i++) {
     const el = $('#t' + i);
     const ink = P(lt, 0.05 + i * 0.05, 0.3, E.outBack);
     const fly = P(lt, 0.42 + i * 0.04, 0.38, E.inExpo);
     const [sx, sy] = starts[i];
-    el.style.left = lerp(sx, 1340, fly) + 'px';
-    el.style.top = lerp(sy, 300, fly) + 'px';
+    el.style.left = lerp(sx, tx, fly) + 'px';
+    el.style.top = lerp(sy, ty, fly) + 'px';
     set(el, { s: lerp(0.5, 1, ink) * lerp(1, 0.3, fly), o: clamp(ink * 2) * (1 - fly), r: (1 - fly) * (i % 2 ? 6 : -6) });
   }
   rise($('#docH'), lt, 0.7, { dy: 20, dur: 0.35, blur: 6 });
@@ -606,7 +702,7 @@ function s6(t) {
   riseWords($('#intHead h2'), lt, 0.08, 0.05, { dy: 70, dur: 0.45, blur: 14 });
   // diagonal stagger across the grid
   $$('.tool').forEach((el, i) => {
-    const col = i % 5, row = Math.floor(i / 5);
+    const cols = V ? 4 : 5, col = i % cols, row = Math.floor(i / cols);
     const st = 0.3 + (col + row) * 0.07;
     const k = P(t - 11.5, st, 0.45, E.outBack);
     set(el, { s: lerp(0.3, 1, k), o: clamp(k * 3), y: (1 - k) * 40, r: (1 - k) * (col % 2 ? 10 : -10) });
@@ -620,22 +716,30 @@ function s7(t) {
   riseWords($('#testHead h2'), lt, 0.08, 0.05, { dy: 70, dur: 0.45, blur: 14 });
   const nk = P(lt, 0.2, 0.4);
   set($('#ns'), { o: nk * 1, s: lerp(0.96, 1, nk) });
-  const xs = [140, 482, 824, 1166, 1508];
-  xs.forEach((x, i) => rise($('#p' + i), lt, 0.15 + i * 0.06, { dy: 40, dur: 0.4, blur: 8 }));
+  const nodes = [0, 1, 2, 3, 4].map(i => $('#p' + i));
+  nodes.forEach((el, i) => rise(el, lt, 0.15 + i * 0.06, { dy: 40, dur: 0.4, blur: 8 }));
   // pulse travels from PR to gate
   const travel = P(lt, 0.55, 1.05, E.inOut3);
-  const x0 = 275, x1 = 1643;
-  const px = lerp(x0, x1, travel);
+  // position along the pipeline axis (x in landscape, y in the reel)
+  const first = nodes[0], last = nodes[4];
+  const pos = el => (V ? el.offsetTop : el.offsetLeft);
+  const size = el => (V ? el.offsetHeight : el.offsetWidth);
+  const a0 = pos(first) + size(first) / 2, a1 = pos(last) + size(last) / 2;
+  const wire0 = pos(first) + size(first), wire1 = pos(last);
+  const cross = V ? 500 : 626;
+  const pa = lerp(a0, a1, travel);
   const pulse = $('#pulse');
-  pulse.style.left = px + 'px';
-  pulse.style.top = '626px';
-  pulse.style.opacity = lt > 0.55 && travel < 1 ? 1 : 0;
+  pulse.style.left = (V ? cross : pa) + 'px';
+  pulse.style.top = (V ? pa : cross) + 'px';
+  // in the reel the pulse runs behind the stacked nodes, so only show it between them
+  const between = !V || nodes.every(n => pa < pos(n) || pa > pos(n) + size(n));
+  pulse.style.opacity = lt > 0.55 && travel < 1 && between ? 1 : 0;
   const lit = $('#pipeLit');
-  lit.setAttribute('d', `M 410 626 L ${Math.max(410, Math.min(1508, px))} 626`);
-  lit.style.opacity = px > 410 ? 1 : 0;
-  xs.forEach((x, i) => {
-    const el = $('#p' + i);
-    const reached = px >= x + 20 || (i === 0 && lt > 0.5);
+  const end = Math.max(wire0, Math.min(wire1, pa));
+  lit.setAttribute('d', V ? `M ${cross} ${wire0} L ${cross} ${end}` : `M ${wire0} ${cross} L ${end} ${cross}`);
+  lit.style.opacity = pa > wire0 ? 1 : 0;
+  nodes.forEach((el, i) => {
+    const reached = pa >= pos(el) + 20 || (i === 0 && lt > 0.5);
     el.classList.toggle('on', reached && i < 4);
     el.classList.toggle('done', i === 4 && travel >= 0.98);
   });
@@ -651,7 +755,7 @@ function s8(t) {
     rise(el, lt, st - 0.06, { dy: 50, dur: 0.35, blur: 10 });
     el.classList.toggle('on', lt > st);
   }
-  $('#mFill').style.width = 100 * P(lt, 0.08, 0.9, E.inOut3) + '%';
+  $('#mFill').style[V ? 'height' : 'width'] = 100 * P(lt, 0.08, 0.9, E.inOut3) + '%';
   rise($('#mNote'), lt, 0.95, { dy: 24, dur: 0.35, blur: 6 });
 }
 
@@ -688,7 +792,7 @@ window.renderFrame = function (t) {
   w.style.display = 'none';
   for (const c of WIPES) {
     if (t >= c - 0.16 && t < c + 0.2) {
-      const xin = t < c ? lerp(-140, -10, E.out3(clamp((t - (c - 0.16)) / 0.16))) : lerp(-10, 140, E.inExpo(clamp((t - c) / 0.2)) * 0.6 + clamp((t - c) / 0.2) * 0.4);
+      const xin = t < c ? lerp(-140, V ? -20 : -10, E.out3(clamp((t - (c - 0.16)) / 0.16))) : lerp(V ? -20 : -10, 140, E.inExpo(clamp((t - c) / 0.2)) * 0.6 + clamp((t - c) / 0.2) * 0.4);
       w.style.display = 'block';
       w.style.transform = `translateX(${xin}%) skewX(-12deg)`;
     }

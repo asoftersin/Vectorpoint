@@ -1,6 +1,7 @@
 // Renders composition.html frame by frame and encodes it with the soundtrack.
 //
 //   node launch-video/render.mjs                 -> launch-video/vectorpoint-launch.mp4
+//   node launch-video/render.mjs --vertical      -> launch-video/vectorpoint-reel.mp4 (9:16)
 //   node launch-video/render.mjs --stills 2,5,8  -> PNG stills for quick review
 //
 // Needs Playwright Chromium and ffmpeg. Soundtrack: python3 launch-video/soundtrack.py
@@ -17,15 +18,17 @@ const flag = (name, fallback) => {
   return i >= 0 ? args[i + 1] : fallback;
 };
 const fps = Number(flag('--fps', 60));
-const out = flag('--out', path.join(dir, 'vectorpoint-launch.mp4'));
+const vertical = args.includes('--vertical');
+const [width, height] = vertical ? [1080, 1920] : [1920, 1080];
+const out = flag('--out', path.join(dir, vertical ? 'vectorpoint-reel.mp4' : 'vectorpoint-launch.mp4'));
 const stills = flag('--stills', null);
 const audio = path.join(dir, 'soundtrack.wav');
 
 // Fall back to a pre-installed Chromium when Playwright's own download is missing.
 const launchOpts = existsSync('/opt/pw-browsers/chromium') ? { executablePath: '/opt/pw-browsers/chromium' } : {};
 const browser = await chromium.launch(launchOpts);
-const page = await browser.newPage({ viewport: { width: 1920, height: 1080 }, deviceScaleFactor: 1 });
-await page.goto(pathToFileURL(path.join(dir, 'composition.html')).href, { waitUntil: 'networkidle' });
+const page = await browser.newPage({ viewport: { width, height }, deviceScaleFactor: 1 });
+await page.goto(pathToFileURL(path.join(dir, 'composition.html')).href + (vertical ? '?vertical' : ''), { waitUntil: 'networkidle' });
 await page.evaluate(async () => {
   await Promise.all(['500 40px Inter', '600 40px "Geist Mono"', '40px "Gasoek One"'].map(f => document.fonts.load(f)));
   await document.fonts.ready;
@@ -36,7 +39,7 @@ const duration = await page.evaluate(() => window.DURATION);
 if (stills) {
   for (const s of stills.split(',').map(Number)) {
     await page.evaluate(t => window.renderFrame(t), s);
-    const file = path.join(flag('--still-dir', dir), `still-${s.toFixed(2)}.png`);
+    const file = path.join(flag('--still-dir', dir), `still${vertical ? '-v' : ''}-${s.toFixed(2)}.png`);
     await page.screenshot({ path: file });
     console.log(file);
   }

@@ -16,6 +16,32 @@
     heroVideo.play().catch(() => {});
   }
 
+  // ---------- launch film: muted loop in the hero, full version with sound in a dialog ----------
+  const launchTeaser = document.getElementById("launchTeaser");
+  if (launchTeaser && canPlayHeroVideo) {
+    launchTeaser.muted = true;
+    launchTeaser.src = launchTeaser.dataset.src;
+    launchTeaser.play().catch(() => {});
+  }
+  const launchOpen = document.getElementById("launchOpen");
+  const launchDialog = document.getElementById("launchDialog");
+  if (launchOpen && launchDialog && typeof launchDialog.showModal === "function") {
+    const film = launchDialog.querySelector("video");
+    launchOpen.addEventListener("click", (event) => {
+      event.preventDefault();
+      if (!film.getAttribute("src")) film.src = film.dataset.src;
+      launchDialog.showModal();
+      film.currentTime = 0;
+      film.play().catch(() => {});
+    });
+    launchDialog.querySelector(".film-dialog__close").addEventListener("click", () => launchDialog.close());
+    // Clicking the backdrop (outside the video) closes the dialog too.
+    launchDialog.addEventListener("click", (event) => {
+      if (event.target === launchDialog) launchDialog.close();
+    });
+    launchDialog.addEventListener("close", () => film.pause());
+  }
+
   // ---------- nav: scrolled state ----------
   const nav = document.getElementById("siteNav");
   const onScroll = () => {
