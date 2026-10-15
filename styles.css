@@ -183,21 +183,15 @@ a { color: inherit; }
 }
 
 .nav__logo {
-  font-family: var(--font-mono);
-  font-weight: 600;
-  font-size: 0.95rem;
-  letter-spacing: 0.18em;
-  text-decoration: none;
   display: inline-flex;
   align-items: center;
-  gap: 10px;
+  text-decoration: none;
 }
 
-.nav__mark {
-  width: 12px;
-  height: 12px;
-  background: #f2f2f2;
-  clip-path: polygon(0 0, 100% 50%, 0 100%);
+.nav__logo img {
+  display: block;
+  height: 26px;
+  width: auto;
 }
 
 .nav__links {
