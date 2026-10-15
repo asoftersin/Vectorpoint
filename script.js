@@ -16,30 +16,70 @@
     heroVideo.play().catch(() => {});
   }
 
-  // ---------- launch film: muted loop in the hero, full version with sound in a dialog ----------
-  const launchTeaser = document.getElementById("launchTeaser");
-  if (launchTeaser && canPlayHeroVideo) {
-    launchTeaser.muted = true;
-    launchTeaser.src = launchTeaser.dataset.src;
-    launchTeaser.play().catch(() => {});
-  }
-  const launchOpen = document.getElementById("launchOpen");
-  const launchDialog = document.getElementById("launchDialog");
-  if (launchOpen && launchDialog && typeof launchDialog.showModal === "function") {
-    const film = launchDialog.querySelector("video");
-    launchOpen.addEventListener("click", (event) => {
-      event.preventDefault();
-      if (!film.getAttribute("src")) film.src = film.dataset.src;
-      launchDialog.showModal();
+  // ---------- launch film: first screen, muted loop with a sound toggle ----------
+  // Without JS the video keeps its native controls and the 16:9 file.
+  const film = document.getElementById("launchFilm");
+  const filmSound = document.getElementById("filmSound");
+  if (film && filmSound) {
+    const portrait = window.matchMedia("(orientation: portrait)");
+    const canAutoplayFilm = !prefersReducedMotion &&
+      !(navigator.connection && navigator.connection.saveData) &&
+      !window.matchMedia("(prefers-reduced-data: reduce)").matches;
+    // "auto": muted loop · "sound": playing once with sound · "still": poster until asked
+    let state = canAutoplayFilm ? "auto" : "still";
+    let inView = true;
+    const label = { auto: "Ljud på", sound: "Ljud av", still: "Spela filmen" };
+    const render = () => {
+      filmSound.textContent = label[state];
+      filmSound.setAttribute("aria-pressed", String(state === "sound"));
+    };
+    const pickSource = () => {
+      const src = portrait.matches ? film.dataset.srcPortrait : film.dataset.src;
+      film.poster = portrait.matches ? film.dataset.posterPortrait : film.dataset.poster;
+      if (film.getAttribute("src") !== src) {
+        film.src = src;
+        if (state !== "still" && inView) film.play().catch(() => {});
+      }
+    };
+    const setState = (next) => {
+      state = next;
+      film.muted = state !== "sound";
+      film.loop = state === "auto";
+      if (state === "still") film.pause();
+      render();
+    };
+    film.controls = false;
+    film.removeAttribute("src");
+    filmSound.hidden = false;
+    setState(state);
+    if (state === "auto") pickSource();
+    else film.poster = portrait.matches ? film.dataset.posterPortrait : film.dataset.poster;
+    portrait.addEventListener("change", () => { if (film.getAttribute("src")) pickSource(); });
+
+    filmSound.addEventListener("click", () => {
+      if (state === "sound") {
+        setState(canAutoplayFilm ? "auto" : "still");
+        if (state === "auto") film.play().catch(() => {});
+        return;
+      }
+      setState("sound");
+      if (!film.getAttribute("src")) pickSource();
       film.currentTime = 0;
-      film.play().catch(() => {});
+      // A blocked play() means the browser refused audio; fall back to the muted loop.
+      film.play().catch(() => setState(canAutoplayFilm ? "auto" : "still"));
     });
-    launchDialog.querySelector(".film-dialog__close").addEventListener("click", () => launchDialog.close());
-    // Clicking the backdrop (outside the video) closes the dialog too.
-    launchDialog.addEventListener("click", (event) => {
-      if (event.target === launchDialog) launchDialog.close();
+    film.addEventListener("ended", () => {
+      setState(canAutoplayFilm ? "auto" : "still");
+      if (state === "auto") film.play().catch(() => {});
     });
-    launchDialog.addEventListener("close", () => film.pause());
+    // Don't keep decoding a film nobody sees.
+    if ("IntersectionObserver" in window) {
+      new IntersectionObserver(([entry]) => {
+        inView = entry.isIntersecting;
+        if (!inView) film.pause();
+        else if (state !== "still" && film.getAttribute("src")) film.play().catch(() => {});
+      }, { threshold: 0.2 }).observe(film);
+    }
   }
 
   // ---------- nav: scrolled state ----------

@@ -1,15 +1,16 @@
 #!/bin/sh
-# Builds the site copies of the launch film from the 60 fps master.
+# Builds the site copies of the launch film from the --nohud masters:
+#   node launch-video/render.mjs --nohud && node launch-video/render.mjs --nohud --vertical
 set -e
 cd "$(dirname "$0")/.."
-src=launch-video/vectorpoint-launch.mp4
 mkdir -p assets/launch
-# Muted 720p loop for the hero.
-ffmpeg -v error -y -i "$src" -an -vf "fps=30,scale=1280:720:flags=lanczos" \
-  -c:v libx264 -preset slow -crf 27 -pix_fmt yuv420p -movflags +faststart assets/launch/teaser.mp4
-# Full 1080p version with sound for the dialog.
-ffmpeg -v error -y -i "$src" -vf "fps=30" -c:v libx264 -preset slow -crf 23 -pix_fmt yuv420p \
-  -c:a aac -b:a 160k -movflags +faststart assets/launch/vectorpoint-launch.mp4
-# Poster: the lead card, fully built.
-ffmpeg -v error -y -ss 6.2 -i "$src" -frames:v 1 -vf "scale=1280:720:flags=lanczos" -q:v 4 assets/launch/poster.jpg
+enc() { # src dst crf
+  ffmpeg -v error -y -i "$1" -vf "fps=30" -c:v libx264 -preset slow -crf "$3" -pix_fmt yuv420p \
+    -c:a aac -b:a 128k -movflags +faststart "$2"
+}
+enc launch-video/vectorpoint-launch-nohud.mp4 assets/launch/film.mp4 24
+enc launch-video/vectorpoint-reel-nohud.mp4 assets/launch/film-v.mp4 25
+# Posters: the logo frame, shown before playback starts or with reduced motion.
+ffmpeg -v error -y -ss 1.0 -i launch-video/vectorpoint-launch-nohud.mp4 -frames:v 1 -vf "scale=1280:720:flags=lanczos" -q:v 4 assets/launch/poster.jpg
+ffmpeg -v error -y -ss 1.0 -i launch-video/vectorpoint-reel-nohud.mp4 -frames:v 1 -vf "scale=720:1280:flags=lanczos" -q:v 4 assets/launch/poster-v.jpg
 ls -lh assets/launch
