@@ -167,7 +167,7 @@ try {
     return tops.length === 3 && new Set(tops).size === 1;
   }), "All three hero example chips share one row on desktop");
   await page.locator(".ask__chip").first().click();
-  check(await page.locator("#askInput").inputValue() === "Veckorapporter klipps ihop", "Example chip fills the hero input");
+  check(await page.locator("#askInput").inputValue() === "Säker AI för alla medarbetare", "Example chip fills the hero input");
   await page.locator("#askInput").fill("Test av ett manuellt moment");
   const popupPromise = page.waitForEvent("popup");
   await page.locator('#askForm button[type="submit"]').click();
