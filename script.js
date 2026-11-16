@@ -55,7 +55,7 @@
         : mailBase;
     };
     input.addEventListener("input", syncMail);
-    form.querySelectorAll(".ask__chip").forEach((chip) => {
+    form.querySelectorAll(".ask__chip, .prompt__chip").forEach((chip) => {
       chip.addEventListener("click", () => {
         input.value = chip.textContent.trim();
         input.dispatchEvent(new Event("input"));
@@ -74,6 +74,17 @@
     });
     syncMail();
   };
+  const heroPrompt = document.getElementById("heroAsk");
+  const heroPromptInput = document.getElementById("heroAskInput");
+  if (heroPrompt && heroPromptInput) {
+    heroPromptInput.addEventListener("input", () => heroPrompt.classList.toggle("has-text", !!heroPromptInput.value.trim()));
+    heroPromptInput.addEventListener("keydown", event => {
+      if (event.key === "Enter" && !event.shiftKey && !event.isComposing) {
+        event.preventDefault();
+        heroPrompt.requestSubmit();
+      }
+    });
+  }
   wireAsk(document.getElementById("heroAsk"), document.getElementById("heroAskInput"), document.getElementById("heroAskTitle"), null);
   const askForm = document.getElementById("askForm");
   wireAsk(askForm, document.getElementById("askInput"), document.getElementById("askTitle"), document.getElementById("askMail"));
