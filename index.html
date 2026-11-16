@@ -794,6 +794,56 @@
     </div>
   </footer>
 
+  <!-- Bokningsrummet: varje bokningsknapp öppnar kalendern här i stället för i en ny flik.
+       Utan JS (eller utan <dialog>) går länkarna som vanligt till cal.com. -->
+  <dialog class="book" id="bookSheet" aria-labelledby="bookTitle">
+    <div class="book__panel">
+      <div class="book__side">
+        <button class="book__close" id="bookClose" type="button" aria-label="Stäng bokningen">
+          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        </button>
+        <div class="book__person">
+          <img src="assets/johan-portrait.jpg" alt="" width="64" height="64" loading="lazy">
+          <p><strong>Johan Studt</strong><span>Grundare · Vector Point AB</span></p>
+        </div>
+        <p class="book__kicker">15 minuter · du pratar med mig</p>
+        <h2 class="book__title" id="bookTitle">Välj en tid som passar er.</h2>
+        <ol class="book__steps">
+          <li>Ni berättar om problemet ni vill lösa.</li>
+          <li>Ni får ett ärligt besked om AI är rätt verktyg.</li>
+          <li>Passar det föreslår vi en avgränsad prototyp på er data, till fast pris.</li>
+        </ol>
+        <div class="book__note" id="bookNoteWrap" hidden>
+          <span class="book__note-k">Följer med bokningen</span>
+          <p id="bookNote"></p>
+        </div>
+        <p class="book__alt">Hellre mejl? <a href="mailto:johan@vectorpoint.se" data-goatcounter-click="contact-email-bokning">johan@vectorpoint.se</a></p>
+      </div>
+      <div class="book__main">
+        <div class="book__loading" id="bookLoading" aria-hidden="true">
+          <span class="book__sk book__sk--head"></span>
+          <span class="book__grid">
+            <i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+            <i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+            <i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+            <i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+            <i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+          </span>
+          <span class="book__loading-label">Hämtar lediga tider…</span>
+        </div>
+        <div class="book__cal" id="bookCal"></div>
+        <div class="book__done" id="bookDone" tabindex="-1" hidden>
+          <span class="book__done-mark" aria-hidden="true"><svg viewBox="0 0 24 24" width="28" height="28"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <h3>Bokat. Vi hörs snart.</h3>
+          <p>Bekräftelsen och länken till samtalet kommer i mejlen. Vill du lägga till något innan dess räcker det att svara på bekräftelsen.</p>
+          <button class="btn btn--ghost" type="button" data-book-close>Tillbaka till sidan</button>
+        </div>
+        <p class="book__fallback" id="bookFallback" hidden>Kalendern vill inte laddas här. Öppna den i en ny flik, dina uppgifter följer med.</p>
+        <a class="book__out" id="bookOut" href="https://cal.com/johan-studt/15min" target="_blank" rel="noreferrer" data-goatcounter-click="bokning-ny-flik">Öppna kalendern i en ny flik ↗</a>
+      </div>
+    </div>
+  </dialog>
+
   <script src="script.js"></script>
   <script data-goatcounter="https://vectorpoint.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
 </body>

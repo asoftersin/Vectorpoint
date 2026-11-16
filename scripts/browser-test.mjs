@@ -208,8 +208,14 @@ try {
   check(mail.protocol === "mailto:" && mail.pathname === "johan@vectorpoint.se" &&
     mail.searchParams.get("subject") === "Test av ett manuellt moment med en rad till" &&
     mail.searchParams.get("body") === "Test av ett manuellt moment\nmed en rad till", "Email button carries the visitor's text as subject and body");
-  const popupPromise = page.waitForEvent("popup");
+  // Bokningen öppnas på sidan; Cal.com är avstängt i testet, så reservlänken till en ny flik tar över.
   await page.locator('#askForm button[type="submit"]').click();
+  await page.locator("#bookSheet").waitFor({ state: "visible" });
+  check(await page.locator("#bookNote").textContent() === "Test av ett manuellt moment\nmed en rad till",
+    "Booking sheet opens on the page and shows the text that goes with the booking");
+  check(await page.evaluate(() => document.documentElement.classList.contains("is-booking")), "The page behind the booking sheet does not scroll");
+  const popupPromise = page.waitForEvent("popup");
+  await page.locator("#bookOut").click();
   const popup = await popupPromise;
   await popup.waitForLoadState();
   const booking = new URL(popup.url());
@@ -219,6 +225,13 @@ try {
   await popup.close();
   check(await page.locator("#askInput").inputValue() === "Test av ett manuellt moment\nmed en rad till",
     "The field keeps what the visitor wrote after the booking tab opens");
+
+  await page.locator("#heroCta").scrollIntoViewIfNeeded();
+  await page.locator("#heroCta").click();
+  check(await page.locator("#bookSheet").isVisible() && await page.locator("#bookNoteWrap").isHidden(),
+    "The hero booking button opens the calendar on the page, with no note when nothing was written");
+  await page.locator("#bookClose").click();
+  check(!await page.locator("#bookSheet").isVisible(), "The close button closes the booking sheet");
 
   // AI-kollen: en fråga i taget, beskedet och svaren följer med till bokningen
   await page.locator("#ai-kollen").scrollIntoViewIfNeeded();
@@ -232,8 +245,13 @@ try {
     "A frequent task on system data gets a strong verdict with reasons");
   const checkMail = new URL(await page.locator("#checkMail").getAttribute("href"));
   check(checkMail.searchParams.get("body").includes("Besked: Stark kandidat för AI."), "The check's email carries the answers and the verdict");
-  const checkPopupPromise = page.waitForEvent("popup");
+  check(!await page.locator("#bookSheet").isVisible() && !await page.evaluate(() => document.documentElement.classList.contains("is-booking")),
+    "Opening the calendar in a new tab closes the booking sheet");
   await page.locator("#checkSubmit").click();
+  await page.locator("#bookSheet").waitFor({ state: "visible" });
+  check((await page.locator("#bookNote").textContent()).includes("Område: Ärenden, support eller kundtjänst"), "Booking sheet shows the check's answers");
+  const checkPopupPromise = page.waitForEvent("popup");
+  await page.locator("#bookOut").click();
   const checkPopup = await checkPopupPromise;
   await checkPopup.waitForLoadState();
   const checkBooking = new URL(checkPopup.url());

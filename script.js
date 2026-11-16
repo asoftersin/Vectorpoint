@@ -1128,6 +1128,157 @@
 
   setupFlow(PIPELINE_FLOW);
 
+  // ---------- bokningsrummet: kalendern öppnas på sidan, inte i en ny flik ----------
+  // Alla länkar och formulär mot cal.com-eventet fångas här. Ctrl/Cmd-klick, mittenklick
+  // och webbläsare utan <dialog> får den vanliga länken. Kalendern (Cal.com:s inbäddning)
+  // hämtas först när någon visar intresse för en bokningsknapp.
+  const bookSheet = document.getElementById("bookSheet");
+  const BOOK_URL = "https://cal.com/johan-studt/15min";
+  if (bookSheet && typeof bookSheet.showModal === "function") {
+    const bookCal = document.getElementById("bookCal");
+    const bookLoading = document.getElementById("bookLoading");
+    const bookDone = document.getElementById("bookDone");
+    const bookFallback = document.getElementById("bookFallback");
+    const bookOut = document.getElementById("bookOut");
+    const bookNoteWrap = document.getElementById("bookNoteWrap");
+    const bookNote = document.getElementById("bookNote");
+    const NS = "vp15";
+    let renderedKey = null;
+    let readyTimer;
+    let booked = false;
+
+    const count = (path, title) => {
+      if (window.goatcounter && window.goatcounter.count) window.goatcounter.count({ path, title, event: true });
+    };
+
+    // Cal.com:s officiella laddare, kortad: köar anrop tills embed.js har laddats.
+    const ensureCal = () => {
+      if (window.Cal) return;
+      const Cal = function () {
+        const cal = Cal;
+        const args = arguments;
+        if (!cal.loaded) {
+          cal.ns = {};
+          cal.q = cal.q || [];
+          document.head.appendChild(document.createElement("script")).src = "https://app.cal.com/embed/embed.js";
+          cal.loaded = true;
+        }
+        if (args[0] === "init") {
+          const api = function () { api.q.push(arguments); };
+          const namespace = args[1];
+          api.q = api.q || [];
+          if (typeof namespace === "string") {
+            cal.ns[namespace] = cal.ns[namespace] || api;
+            cal.ns[namespace].q.push(args);
+            cal.q.push(["initNamespace", namespace]);
+          } else cal.q.push(args);
+          return;
+        }
+        cal.q.push(args);
+      };
+      window.Cal = Cal;
+      Cal("init", NS, { origin: "https://cal.com" });
+      const api = Cal.ns[NS];
+      api("ui", {
+        theme: "light",
+        hideEventTypeDetails: true,
+        layout: "month_view",
+        cssVarsPerTheme: { light: { "cal-brand": "#15171a" } },
+      });
+      api("on", { action: "linkReady", callback: () => {
+        clearTimeout(readyTimer);
+        bookSheet.classList.add("is-ready");
+        bookFallback.hidden = true;
+      } });
+      api("on", { action: "linkFailed", callback: () => showFallback() });
+      const onBooked = () => {
+        if (booked) return;
+        booked = true;
+        bookSheet.classList.add("is-booked");
+        bookDone.hidden = false;
+        bookDone.focus({ preventScroll: true });
+        // Den enda händelsen på sidan som betyder en faktisk bokning, inte bara ett klick.
+        count("bokning-klar", "Bokning klar");
+      };
+      api("on", { action: "bookingSuccessful", callback: onBooked });
+      api("on", { action: "bookingSuccessfulV2", callback: onBooked });
+    };
+
+    const showFallback = () => {
+      if (bookSheet.classList.contains("is-ready")) return;
+      bookSheet.classList.add("is-failed");
+      bookFallback.hidden = false;
+    };
+
+    const bookingLink = (target) => {
+      const link = target.closest && target.closest("a[href]");
+      return link && link.href.split(/[?#]/)[0] === BOOK_URL && !link.closest("#bookSheet") ? link : null;
+    };
+    const bookingForm = (form) => form && form.getAttribute("action") === BOOK_URL;
+
+    const open = (params) => {
+      ensureCal();
+      const notes = (params.get("notes") || "").trim();
+      const title = params.get("title") || "";
+      const out = new URL(BOOK_URL);
+      if (notes) out.searchParams.set("notes", notes);
+      if (title) out.searchParams.set("title", title);
+      bookOut.href = out.href;
+      bookNote.textContent = notes.replace(/ \(skrivet på vectorpoint\.se\)$/, "");
+      bookNoteWrap.hidden = !notes;
+
+      const key = out.search;
+      if (key !== renderedKey || booked) {
+        renderedKey = key;
+        booked = false;
+        bookSheet.classList.remove("is-ready", "is-failed", "is-booked");
+        bookDone.hidden = true;
+        bookFallback.hidden = true;
+        bookCal.replaceChildren();
+        const config = { layout: "month_view", theme: "light" };
+        if (notes) config.notes = notes;
+        if (title) config.title = title;
+        window.Cal.ns[NS]("inline", { elementOrSelector: "#bookCal", calLink: "johan-studt/15min", config });
+        clearTimeout(readyTimer);
+        readyTimer = setTimeout(showFallback, 12000);
+      }
+
+      document.documentElement.classList.add("is-booking");
+      bookSheet.showModal();
+      bookSheet.querySelector(".book__close").focus({ preventScroll: true });
+    };
+
+    const close = () => bookSheet.close();
+    bookSheet.addEventListener("close", () => document.documentElement.classList.remove("is-booking"));
+    document.getElementById("bookClose").addEventListener("click", close);
+    bookSheet.querySelectorAll("[data-book-close]").forEach((btn) => btn.addEventListener("click", close));
+    // Klick på mörkret runt panelen stänger.
+    bookSheet.addEventListener("click", (event) => { if (event.target === bookSheet) close(); });
+    bookOut.addEventListener("click", () => setTimeout(close, 0));
+
+    document.addEventListener("click", (event) => {
+      if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+      const link = bookingLink(event.target);
+      if (!link) return;
+      event.preventDefault();
+      open(new URL(link.href).searchParams);
+    });
+    // Formulären (kontakt, AI-kollen) fyller i sina fält i egna lyssnare först; här tas resultatet.
+    document.addEventListener("submit", (event) => {
+      const form = event.target;
+      if (event.defaultPrevented || !bookingForm(form)) return;
+      event.preventDefault();
+      open(new URLSearchParams(new FormData(form)));
+    });
+
+    // Värm upp kalendern när någon närmar sig en bokningsknapp.
+    const warm = (event) => {
+      if (bookingLink(event.target) || (event.target.closest && bookingForm(event.target.closest("form")))) ensureCal();
+    };
+    document.addEventListener("pointerover", warm, { passive: true });
+    document.addEventListener("focusin", warm);
+  }
+
   // ---------- scroll progress ----------
 
   const progressFill = document.getElementById("scrollProgressFill");

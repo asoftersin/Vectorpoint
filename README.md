@@ -115,6 +115,18 @@ starts afresh; switching tabs cancels the hidden demo and resets its pause state
 Reduced motion shows the completed example without looping or a pause button.
 Playback controls stay hidden when JavaScript is unavailable.
 
+**Booking happens on the page.** Every booking link and both booking forms
+(contact and AI-kollen) open a sheet instead of a new cal.com tab: Johan's
+portrait, what happens on the call, the visitor's own text or AI-kollen answers
+("Följer med bokningen") on the left, and the live Cal.com calendar on the right,
+with the same text prefilled as the booking note. Cal.com's embed script is only
+fetched once someone points at or focuses a booking button. A skeleton calendar
+shows while it loads; if it has not loaded after 12 seconds, the sheet offers
+"Öppna kalendern i en ny flik", which carries the same text (that link is always
+at the bottom of the sheet). On phones the sheet is full screen with a compact
+header. Ctrl/Cmd-click, middle-click, browsers without `<dialog>` and visitors
+without JavaScript get the plain cal.com link as before.
+
 The contact form has no backend. "Välj tid för ett samtal" hands the text to
 Cal.com as the booking note; "Skicka som mejl" is a `mailto:` link that carries
 the same text as subject and body. "Kopiera" copies the address for visitors
@@ -132,10 +144,13 @@ GoatCounter tracks these clicks:
 | `example-sales`, `example-support`, `example-reporting`, `demo-replay-*` | An example tab or replay |
 | `launch-film` | The film's sound/play button |
 | `ai-kollen-hero`, `cta-ai-kollen`, `contact-email-ai-kollen` | The hero link to AI-kollen, and booking or emailing from its verdict |
+| `bokning-klar` | **A booking was completed** in the on-page calendar (Cal.com's `bookingSuccessful` event) |
+| `bokning-ny-flik`, `contact-email-bokning` | Leaving the booking sheet for a cal.com tab, or for email |
 
-These are intent events, **not confirmed bookings or sent emails**. Count
-completed meetings separately in Cal.com; the site does not receive booking
-confirmations. Form text is handed to Cal.com or the visitor's mail program,
+Apart from `bokning-klar`, these are intent events, **not confirmed bookings or
+sent emails**. `bokning-klar` counts bookings finished in the on-page calendar;
+bookings made in a separate cal.com tab are not seen by the site, so Cal.com
+remains the source of truth for meetings. Form text is handed to Cal.com or the visitor's mail program,
 never included in analytics event names.
 
 ## Launch film

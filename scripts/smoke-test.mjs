@@ -114,6 +114,9 @@ const checks = [
   ["reduced motion support", css.includes("prefers-reduced-motion") && js.includes("prefers-reduced-motion")],
   ["responsive layout", css.includes("@media")],
   ["booking cta", html.includes("https://cal.com/") && html.includes('data-goatcounter-click="cta-hero"')],
+  ["booking opens on the page and keeps the plain link as fallback", html.includes('<dialog class="book" id="bookSheet"') &&
+    html.includes('id="bookOut" href="https://cal.com/johan-studt/15min"') && js.includes("https://app.cal.com/embed/embed.js") &&
+    js.includes('"bokning-klar"') && js.includes("typeof bookSheet.showModal") && css.includes("html.is-booking { overflow: hidden; }")],
   ["contact section offers booking, email and LinkedIn", (() => {
     const contact = html.slice(html.indexOf('<section class="contact" id="kontakt"'), html.indexOf("</main>"));
     return contact.includes('data-goatcounter-click="cta-kontakt"') && contact.includes('data-goatcounter-click="cta-kontakt-direkt"') &&
