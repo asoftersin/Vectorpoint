@@ -76,7 +76,7 @@ try {
   }
   check(await onFirstScreen(page, ".clients") && await page.locator(".clients img").evaluateAll((imgs) =>
     imgs.length > 0 && imgs.every((img) => img.complete && img.naturalWidth > 0)) &&
-    await page.locator(".clients__list li").count() === 3, "Desktop first screen names the clients, with their logos loaded");
+    await page.locator(".clients__list li").count() === 3, "Desktop first screen shows the previous work, with the logos loaded");
   check(await page.locator(".founder__photo").evaluate((img) =>
     img.complete && img.naturalWidth > 0 && getComputedStyle(img).objectFit === "cover"), "Founder portrait loads and is cropped, not stretched");
   check(await page.locator("#heroCta").getAttribute("href") === "https://cal.com/johan-studt/15min" &&
@@ -235,7 +235,7 @@ try {
       const centres = rects.map((rect) => rect.top + rect.height / 2);
       return rects.every((rect) => rect.left >= 0 && rect.right <= innerWidth) &&
         Math.max(...centres) - Math.min(...centres) < 2;
-    }), "On a phone the clients follow the founder card, centred on one row");
+    }), "On a phone the previous work follows the founder card, centred on one row");
   check(await mobilePage.locator(".founder a").evaluateAll((links) =>
     links.every((a) => a.getBoundingClientRect().height >= 36)), "Founder card links are comfortable touch targets");
   for (const id of ["leads", "feedback", "report"]) {

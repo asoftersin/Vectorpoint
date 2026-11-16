@@ -458,7 +458,7 @@ a { color: inherit; }
 
 .founder__links a:hover { color: var(--accent); text-decoration-color: var(--accent); }
 
-/* ---------- kunder: bara namn och logotyper som uttryckligen får visas ---------- */
+/* ---------- tidigare arbeten: bara namn och logotyper som uttryckligen får visas ---------- */
 
 .clients {
   display: flex;

@@ -46,12 +46,13 @@ const checks = [
       hero.includes('href="mailto:johan@vectorpoint.se"') && hero.includes("https://www.linkedin.com/in/johan-studt/") &&
       hero.includes("Vector Point AB") && hero.indexOf('id="heroCta"') < hero.indexOf('class="founder"');
   })()],
-  // Only clients Johan has said may be shown. Adding a name here is his call, not a design decision.
-  ["named clients sit in the hero with local assets", (() => {
+  // Only organisations Johan has said may be shown, under the label he chose: "previous work",
+  // not "clients". Adding a name or changing that claim is his call, not a design decision.
+  ["previous work sits in the hero with local assets", (() => {
     const hero = html.slice(html.indexOf('<section class="hero"'), html.indexOf("</section>", html.indexOf('<section class="hero"')));
     const strip = hero.slice(hero.indexOf('class="clients"'));
     const shown = [...strip.matchAll(/src="assets\/clients\/([a-z]+)\.png" alt="([^"]+)"/g)];
-    return hero.includes('class="clients"') && shown.map((m) => m[2]).join(",") === "Stratsys,Prevas,Chalmers" &&
+    return hero.includes('class="clients"') && strip.includes(">Tidigare arbeten</h2>") && !/kunder/i.test(strip.slice(0, strip.indexOf("</ul>"))) && shown.map((m) => m[2]).join(",") === "Stratsys,Prevas,Chalmers" &&
       shown.every((m) => existsSync(`assets/clients/${m[1]}.png`)) && readdirSync("assets/clients").length === shown.length;
   })()],
   ["hero commitments repeat promises made in full further down", ["Fast pris på första prototypen", "Ni äger kod och dokumentation", "Testat innan det når er"].every((t) => html.includes(`<li>${t}</li>`)) &&

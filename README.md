@@ -47,9 +47,10 @@ from those two.
   support who he is. They are kept out of the hero and the contact section so
   the three contact routes stay clear.
 - **Only claims the company has actually made.** The three commitments under
-  the hero buttons repeat promises spelled out further down. The client strip
-  at the bottom of the hero shows only clients Johan has said may be named:
-  Stratsys, Prevas and Chalmers, using the logo files he supplied
+  the hero buttons repeat promises spelled out further down. The strip at the
+  bottom of the hero is labelled "Tidigare arbeten" (previous work), Johan's
+  wording, and deliberately does not call anyone a client. It shows only
+  organisations he has said may be named: Stratsys, Prevas and Chalmers, using the logo files he supplied
   (`assets/clients/`, unaltered apart from trimming and resizing). There are
   no testimonials, result figures, response-time or price
   promises, and no phone number, because none have been supplied. Add them
