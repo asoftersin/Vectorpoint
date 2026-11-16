@@ -71,8 +71,10 @@ meetings. Never include visitor text in analytics event names.
 
 ## Design and assets
 
-The hero uses midnight blue and a light blue booking button; the main page
-uses warm paper, dark ink and the brand blue. Demos, contact and footer use
+The opening and main page share a warm paper canvas, dark ink and one brand-blue
+booking action. The founder portrait is unboxed and the previous-work strip uses
+a quiet dividing rule. Services are editorial rows with direct links to the
+relevant example or method; those links work without JavaScript. Demos, contact and footer use
 dark panels. Navigation stays opaque and readable. Preserve responsive layout,
 visible focus, native disclosures and reduced-motion support.
 
