@@ -86,8 +86,10 @@ once with sound, after which it returns to the muted loop. With reduced motion
 or data saving it shows a poster until "Spela filmen" is pressed, and it pauses
 while out of view. Without JavaScript it keeps native controls.
 
-Six familiar systems appear first; a native "Visa alla" disclosure exposes the
-remaining tools, including without JavaScript.
+Six tools appear first, led by the AI models and assistants (Claude, OpenAI,
+Microsoft Copilot, GitHub Copilot, Gemini) in the order Johan chose, then Azure;
+a native "Visa alla" disclosure exposes the remaining tools, including without
+JavaScript.
 
 The examples start as readable sections. JavaScript enhances them into tabs;
 `#work-leads`, `#work-feedback` and `#work-report` still open the relevant example.
