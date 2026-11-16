@@ -5,8 +5,9 @@ const requiredFiles = [
   "index.html",
   "styles.css",
   "script.js",
-  "assets/hero-bg.mp4",
-  "assets/hero-bg-poster.jpg",
+  "assets/johan-portrait.jpg",
+  "assets/brand/vectorpoint-logo.svg",
+  "assets/brand/vectorpoint-logo-white.svg",
   "assets/og-image.png",
   "favicon.svg",
   "robots.txt",
@@ -26,26 +27,50 @@ const js = await readFile("script.js", "utf8");
 const sitemap = await readFile("sitemap.xml", "utf8");
 
 const checks = [
-  ["outcome-led hero headline", html.includes('class="hero__title" data-reveal><span class="hero__line">Från AI-idé</span> <span class="hero__line">till mätbar effekt.</span></h1>')],
+  // The first screen has to do three things: say what we do, show who you would
+  // be dealing with, and offer a way to get in touch.
+  ["hero is the first thing on the page", (() => {
+    const main = html.indexOf('<main id="top">');
+    const firstSection = html.indexOf("<section", main);
+    return firstSection === html.indexOf('<section class="hero" id="hero">') && html.indexOf('id="film"') > html.indexOf('id="services"');
+  })()],
+  // The headline sells the difference (it works in daily operation); the brand
+  // tagline from the film stays in the title, the social cards and the footer.
+  ["hero headline sells the difference, tagline stays in the title", html.includes('class="hero__title" data-reveal><span class="hero__line">AI som fungerar i drift.</span> <span class="hero__line">Inte bara i en demo.</span></h1>') &&
+    html.includes("<title>Vectorpoint — Från AI-idé till mätbar effekt</title>") && html.includes("från idé till mätbar effekt.</p>")],
   ["examples are progressively enhanced tabs", html.includes('id="exampleTabs" role="tablist"') && html.includes('aria-controls="work-report"') && js.includes('panel.setAttribute("role", "tabpanel")') && css.includes("[hidden] { display: none !important; }")],
   ["prototype offer outside every panel", html.indexOf('id="prototype"') > html.indexOf('id="demoReport"') && html.includes("Fast pris och omfattning bestäms före start.")],
-  ["founder proof in hero", html.indexOf('class="builder-proof hero__proof"') > html.indexOf('class="hero__lead"') && html.indexOf('class="builder-proof hero__proof"') < html.indexOf('id="askForm"') && html.includes("Göteborg · <span class=\"builder-proof__link\">")],
-  ["hero example preview", (() => {
-    const peek = html.slice(html.indexOf('class="hero-peek"'), html.indexOf("</a>", html.indexOf('class="hero-peek"')));
-    return html.indexOf('class="hero-peek"') > html.indexOf('id="askForm"') && html.indexOf('class="hero-peek"') < html.indexOf("</section>", html.indexOf('<section class="hero"')) &&
-      peek.includes('href="#work-leads"') && peek.includes("EXEMPEL · PÅHITTAT") && peek.includes("Nordkant Systems AB") &&
-      css.includes(".hero-peek { display: none; }") && css.includes("@media (min-width: 1100px)");
+  ["founder and direct contact details in hero", (() => {
+    const hero = html.slice(html.indexOf('<section class="hero"'), html.indexOf("</section>", html.indexOf('<section class="hero"')));
+    return hero.includes('class="founder"') && hero.includes('src="assets/johan-portrait.jpg" alt="Johan Studt"') &&
+      hero.includes('href="mailto:johan@vectorpoint.se"') && hero.includes("https://www.linkedin.com/in/johan-studt/") &&
+      hero.includes("Vector Point AB") && hero.indexOf('id="heroCta"') < hero.indexOf('class="founder"');
   })()],
-  ["launch film is the first screen", (() => {
-    const film = html.indexOf('class="film-hero"');
-    return film > html.indexOf('<main id="top">') && film < html.indexOf('<section class="hero" id="hero">') &&
+  // Only organisations Johan has said may be shown, under the label he chose: "previous work",
+  // not "clients". Adding a name or changing that claim is his call, not a design decision.
+  ["previous work sits in the hero with local assets", (() => {
+    const hero = html.slice(html.indexOf('<section class="hero"'), html.indexOf("</section>", html.indexOf('<section class="hero"')));
+    const strip = hero.slice(hero.indexOf('class="clients"'));
+    const shown = [...strip.matchAll(/src="assets\/clients\/([a-z]+)\.png" alt="([^"]+)"/g)];
+    return hero.includes('class="clients"') && strip.includes(">Tidigare arbeten</h2>") && !/kunder/i.test(strip.slice(0, strip.indexOf("</ul>"))) && shown.map((m) => m[2]).join(",") === "Stratsys,Prevas,Chalmers" &&
+      shown.every((m) => existsSync(`assets/clients/${m[1]}.png`)) && readdirSync("assets/clients").length === shown.length;
+  })()],
+  ["hero commitments repeat promises made in full further down", ["Fast pris på första prototypen", "Ni äger kod och dokumentation", "Testat innan det når er"].every((t) => html.includes(`<li>${t}</li>`)) &&
+    html.includes("Fast pris och omfattning bestäms före start.") && html.includes("Ni äger lösningen") && html.includes("Testat som programvara")],
+  ["launch film is a framed section that loads on demand", (() => {
+    const film = html.indexOf('id="film"');
+    return film > html.indexOf('id="services"') && film < html.indexOf('id="work"') &&
       ["film.mp4", "film-v.mp4", "poster.jpg", "poster-v.jpg"].every((f) => html.includes(`assets/launch/${f}`) && existsSync(`assets/launch/${f}`)) &&
-      html.includes('preload="none"') && js.includes('matchMedia("(orientation: portrait)")') && css.includes(".film-hero { aspect-ratio: 9 / 16; }");
+      html.includes('preload="none"') && js.includes('matchMedia("(orientation: portrait)")') && js.includes("if (!film.getAttribute(\"src\")) pickSource();") &&
+      css.includes(".vectorpoint-loaded .film {") && css.includes("aspect-ratio: 9 / 16;");
   })()],
+  ["light page with dark panels from one token set", css.includes("--bg: #f6f4ef") && css.includes("--accent: #0a66d1") && css.includes("--accent: #0099ff") &&
+    /\.film,\n\.demo,\n\.flow__stage,\n\.contact,\n\.footer \{/.test(css) && html.includes('<meta name="theme-color" content="#f6f4ef">') &&
+    html.includes('<img src="assets/brand/vectorpoint-logo.svg" alt="Vectorpoint"')],
   ["optional technical deep dive", html.includes('<details class="pipeline" id="pipeline">') && html.includes("<summary>Se hur vi kvalitetssäkrar")],
   ["data processing described without absolute residency promise", !html.includes("Den stannar i era system.") && html.split("även externa AI-tjänster").length === 3],
   ["LinkedIn CTA", html.includes("https://www.linkedin.com/in/johan-studt/")],
-  ["nav links", html.includes('href="#services"') && html.includes('href="#faq"') && html.includes('<a href="#work">Exempel</a>')],
+  ["nav links", html.includes('href="#services"') && html.includes('href="#faq"') && html.includes('<a href="#work">Exempel</a>') && html.split('<a href="#kontakt">Kontakt</a>').length === 4 && html.split('<a href="#about">Om</a>').length === 4],
   ["mobile menu", html.includes('id="navBurger"') && js.includes("navBurger")],
   ["services section names the problems we solve", html.includes('id="services"') && html.includes("Säker AI för hela organisationen") && html.split('class="grid grid--3"').length === 2],
   ["stats filler removed", !html.includes('class="stats"') && !html.includes('class="stat__value"')],
@@ -79,19 +104,37 @@ const checks = [
   ["approach section", html.includes('id="approach"') && html.includes("Problem och mål") && html.indexOf('id="approach"') < html.indexOf('id="prototype"')],
   ["trust points cover control and ownership", !html.includes('id="principles"') && html.includes("Säkerhet och kontroll") && html.includes("Ni äger lösningen")],
   ["faq accordion", html.includes('class="faq__item"') && html.includes("<details")],
-  ["hero video", html.includes('data-src="assets/hero-bg.mp4"') && html.includes('preload="none"') && html.includes("playsinline") && !/<video[^>]*\sautoplay/.test(html) && !html.includes('<source src="assets/hero-bg.mp4"') &&
-    html.includes('<link rel="preload" as="image" href="assets/hero-bg-poster.jpg"') && js.includes("heroVideo.dataset.src") && js.includes("saveData") && js.includes("(min-width: 861px)")],
-  ["header CTA yields to hero form", js.includes('nav.classList.toggle("is-hero-cta"') && js.includes('"IntersectionObserver" in window') && css.includes(".nav.is-hero-cta .nav__cta {") && !html.includes("is-hero-cta")],
+  ["no background video left behind", !html.includes("heroVideo") && !js.includes("heroVideo") && !css.includes(".hero__video") && !existsSync("assets/hero-bg.mp4") &&
+    html.includes('<link rel="preload" as="image" href="assets/johan-portrait.jpg"')],
+  ["header CTA yields to the hero booking button", js.includes('nav.classList.toggle("is-hero-cta"') && js.includes('document.getElementById("heroCta")') && css.includes(".nav.is-hero-cta .nav__cta {") && !html.includes("is-hero-cta")],
   ["no external js deps", !html.includes("cdn.jsdelivr.net")],
-  ["design tokens", css.includes("--accent: #0099ff") && css.includes("Gasoek One")],
+  ["fonts", html.includes("family=Geist+Mono") && html.includes("family=Inter") && !html.includes("Gasoek") && !css.includes("Gasoek")],
   ["load hook", js.includes("vectorpoint-loaded")],
   ["reveal on scroll", css.includes("[data-reveal]") && js.includes("IntersectionObserver")],
   ["reduced motion support", css.includes("prefers-reduced-motion") && js.includes("prefers-reduced-motion")],
   ["responsive layout", css.includes("@media")],
   ["booking cta", html.includes("https://cal.com/") && html.includes('data-goatcounter-click="cta-hero"')],
-  ["hero ask form hands the text to cal.com", html.includes('id="askForm"') && html.includes('action="https://cal.com/johan-studt/15min"') && html.includes('name="notes"') && html.includes('name="title"') && js.includes("askForm")],
-  ["hero ask form is honest about no AI", html.includes("Ingen AI läser den") && !html.includes("Fråga vår AI")],
-  ["hero ask form has a direct booking fallback", html.includes('data-goatcounter-click="cta-hero-direkt"')],
+  ["contact section offers booking, email and LinkedIn", (() => {
+    const contact = html.slice(html.indexOf('<section class="contact" id="kontakt"'), html.indexOf("</main>"));
+    return contact.includes('data-goatcounter-click="cta-kontakt"') && contact.includes('data-goatcounter-click="cta-kontakt-direkt"') &&
+      contact.includes('href="mailto:johan@vectorpoint.se" data-goatcounter-click="contact-email"') &&
+      contact.includes('data-goatcounter-click="contact-linkedin"') && contact.includes("Det här händer sedan") &&
+      html.indexOf('id="kontakt"') > html.indexOf('id="faq"');
+  })()],
+  ["contact form hands the text to cal.com", html.includes('id="askForm"') && html.includes('action="https://cal.com/johan-studt/15min"') && html.includes('name="notes"') && html.includes('name="title"') && js.includes("askForm")],
+  ["contact form is honest about no AI", html.includes("Ingen AI läser den") && !html.includes("Fråga vår AI")],
+  ["contact controls degrade without script", html.includes('id="askMail" href="mailto:johan@vectorpoint.se"') && /id="copyEmail"[^>]* hidden>/.test(html) &&
+    js.includes("copyEmail.hidden = false") && js.includes("navigator.clipboard.writeText")],
+  ["no contact detail or promise we were not given", !/tel:|\+46/.test(html) && !/kostnadsfri|gratis|svar inom/i.test(html)],
+  // Instagram shows Johan explaining AI to companies: proof of the person, not a way to reach him.
+  ["instagram supports the about section without becoming a contact route", (() => {
+    const about = html.slice(html.indexOf('id="about"'), html.indexOf('id="faq"'));
+    const contact = html.slice(html.indexOf('id="kontakt"'), html.indexOf("</main>"));
+    const hero = html.slice(html.indexOf('<section class="hero"'), html.indexOf('id="services"'));
+    return about.includes('href="https://www.instagram.com/johanstudt/"') && !contact.includes("instagram") && !hero.includes("instagram") &&
+      html.split('"https://www.instagram.com/johanstudt/"]').length === 3;
+  })()],
+  ["structured data carries the contact address", html.includes('"email": "johan@vectorpoint.se"')],
   ["analytics snippet", html.includes("data-goatcounter=") && html.includes("gc.zgo.at/count.js")],
   ["no placeholders left", !html.includes("PLACEHOLDER")],
   ["favicon link", html.includes('rel="icon"') && html.includes("favicon.svg")],
@@ -101,7 +144,7 @@ const checks = [
   ["json-ld", html.includes("application/ld+json") && html.includes("ProfessionalService")],
   ["faq schema", html.includes('"FAQPage"') && html.includes("Hur vet vi att det ger effekt?")],
   ["difference section", html.includes('id="difference"') && html.includes("Integrationstester") && html.includes("Testat som programvara")],
-  ["about section", html.includes('id="about"') && html.includes("Johan Studt") && css.includes(".about__inner")],
+  ["about section", html.includes('id="about"') && html.includes("Johan Studt") && css.includes(".about__inner") && html.includes('data-goatcounter-click="cta-om"')],
   ["game removed", !html.includes("hitta-felet") && !sitemap.includes("hitta-felet") && !existsSync("hitta-felet")],
   ["pipeline flow", html.includes('id="flowSvg4"') && html.includes("ISOLERAT PR-NAMESPACE") && html.includes("INT_TEST_URL")],
   ["pipeline flow config", js.includes("PIPELINE_FLOW") && js.includes("flowSvg4") && js.includes("wire4-o2") && css.includes(".flow__boundary")],
@@ -115,9 +158,9 @@ const checks = [
   ["difference points list", html.split('class="point"').length === 5 && css.includes(".points {")],
   ["tighter page rhythm", css.includes("padding: clamp(56px, 7vw, 96px) var(--pad-x)") && css.includes("min-height: min(780px, 100svh)")],
   ["mobile nav keeps booking cta", !css.includes(".nav__links, .nav__cta { display: none; }") && css.includes(".nav__cta { margin-left: auto;")],
-  ["hero drops redundant meta and scroll cue", !html.includes("hero__meta") && !html.includes("heroCue") && !css.includes("cueTick") && !js.includes("heroCue")],
+  ["hero drops redundant meta, scroll cue and fictional preview", !html.includes("hero__meta") && !html.includes("heroCue") && !css.includes("cueTick") && !js.includes("heroCue") && !html.includes("hero-peek") && !css.includes("hero-peek")],
   ["reveal stagger", css.includes("transition-delay: 0.12s")],
-  ["scroll reduced motion", css.includes(".scroll-progress { display: none; }") && js.includes("if (!prefersReducedMotion)")],
+  ["scroll reduced motion", css.includes(".scroll-progress { display: none; }") && js.includes("if (!prefersReducedMotion && progressFill)")],
   ["hero stays in document flow", !html.includes('id="heroScrub"') && !js.includes("heroScrubOn") && !css.includes(".hero-scrub.is-scrub")],
   ["reveal variants", html.includes('data-reveal="blur"') && html.includes('data-reveal="scale"') && html.includes('data-reveal="left"') && css.includes('[data-reveal="blur"]') && css.includes(".grid--2 > [data-reveal]:nth-child(odd)")],
   ["faq cascade", html.includes('<details class="faq__item" data-reveal>') && css.includes(".faq__list > [data-reveal]:nth-child(7)")],

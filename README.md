@@ -22,33 +22,74 @@ For browser regression coverage (starts its own local preview server):
 npm run test:browser
 ```
 
-The browser checks cover example tabs (mouse, keyboard and direct links), mobile
-layout, demo pause/resume, reduced motion, optional disclosures, booking handoff and the no-JS
-fallback. Install Playwright Chromium with `npx playwright install chromium` if
-the browser executable is missing.
+The browser checks cover the first screen (offer, founder card and booking button
+on desktop and phone), the contact routes, text contrast, example tabs (mouse,
+keyboard and direct links), mobile layout, demo pause/resume, reduced motion,
+optional disclosures, booking handoff and the no-JS fallback. Install Playwright
+Chromium with `npx playwright install chromium` if the browser executable is
+missing.
+
+## What the page is for
+
+Two jobs: make it easy to reach Johan, and give a buyer at a large organisation
+reasons to trust the company before they do. Every design choice below follows
+from those two.
+
+- **The first screen** says what Vectorpoint does, shows who you would be
+  dealing with (portrait, name, company, email, LinkedIn) and offers the
+  booking button. No film or animation stands between a visitor and that.
+- **Contact has three routes**, because not everyone wants to book a slot with
+  a stranger: booking (Cal.com), email and LinkedIn. They appear in the hero,
+  the About card, the contact section and the footer. The header keeps a
+  booking button and a `Kontakt` link on every screen size.
+- **Instagram is proof, not a contact route.** Johan's videos about AI and tech
+  for companies are linked from the About card and the footer, where they
+  support who he is. They are kept out of the hero and the contact section so
+  the three contact routes stay clear.
+- **Only claims the company has actually made.** The three commitments under
+  the hero buttons repeat promises spelled out further down. The strip at the
+  bottom of the hero is labelled "Tidigare arbeten" (previous work), Johan's
+  wording, and deliberately does not call anyone a client. It shows only
+  organisations he has said may be named: Stratsys, Prevas and Chalmers, using the logo files he supplied
+  (`assets/clients/`, unaltered apart from trimming and resizing). There are
+  no testimonials, result figures, response-time or price
+  promises, and no phone number, because none have been supplied. Add them
+  when they exist; do not invent them. The smoke test guards several of these.
+- **Examples say they are fictional** wherever invented names and numbers
+  appear.
+
+## Design
+
+The page is light: warm paper background, ink text, the brand blue as accent,
+Inter for headings and body and Geist Mono only for small labels. Anything that
+shows software at work (the film, the demos, the pipeline diagram) is a dark
+panel, as are the closing contact band and the footer. `styles.css` declares one
+set of colour tokens on `:root` and re-declares the same names for the dark
+panels, so components never hard-code which mode they are in.
 
 ## Page behaviour and measurement
 
-The first screen is the 20-second launch film, edge to edge: the 16:9 cut on
-landscape screens and the 9:16 cut on portrait ones, never taller than the
-viewport so the page visibly continues below. It loops muted; "Ljud på" restarts
-it once with sound, then it returns to the muted loop. With reduced motion or
-data saving it shows a poster until "Spela filmen" is pressed, and it pauses
-while scrolled out of view. Without JavaScript it keeps native controls.
-GoatCounter counts sound/play clicks as `launch-film`.
+The hero scrolls with the document. Its headline ("AI som fungerar i drift.
+Inte bara i en demo.") keeps each sentence on one line; the brand tagline from
+the film ("Från AI-idé till mätbar effekt") stays in the page title, the social
+cards and the footer. From 1000px the founder card sits beside the text with a large portrait;
+below that it becomes a compact card under the text. While the hero's booking
+button is visible the header booking button is an outline, so there is a single
+primary action; it turns primary once the hero button scrolls away. On narrow
+screens the header shortens its booking label while keeping the booking link and
+a 44px menu button visible.
 
-The hero follows the film and scrolls with the document rather than pinning visitors through an
-animation. Its headline keeps each sentence on one line, the founder's portrait
-and background sit directly under the lead, and wide screens (1100px and up)
-show a small, clearly fictional lead card that links to `#work-leads`. While the
-hero form is visible the header booking button is an outline, so the form is the
-single primary action; it turns primary once the form scrolls away. The 1.9 MB
-background video is only attached on screens 861px and wider, without reduced
-motion or data saving; everyone else sees the preloaded poster image.
-On narrow screens the header shortens its booking label while
-keeping the booking link and a 44px menu button visible.
-Six familiar systems appear first; a native "Visa alla" disclosure exposes the
-remaining tools, including without JavaScript.
+The 20-second launch film is a framed section after the three problem cards:
+the 16:9 cut on landscape screens and the 9:16 cut on portrait ones. It is not
+fetched until it scrolls into view. It then loops muted; "Ljud på" restarts it
+once with sound, after which it returns to the muted loop. With reduced motion
+or data saving it shows a poster until "Spela filmen" is pressed, and it pauses
+while out of view. Without JavaScript it keeps native controls.
+
+Six tools appear first, led by the AI models and assistants (Claude, OpenAI,
+Microsoft Copilot, GitHub Copilot, Gemini) in the order Johan chose, then Azure;
+a native "Visa alla" disclosure exposes the remaining tools, including without
+JavaScript.
 
 The examples start as readable sections. JavaScript enhances them into tabs;
 `#work-leads`, `#work-feedback` and `#work-report` still open the relevant example.
@@ -60,23 +101,42 @@ starts afresh; switching tabs cancels the hidden demo and resets its pause state
 Reduced motion shows the completed example without looping or a pause button.
 Playback controls stay hidden when JavaScript is unavailable.
 
-GoatCounter tracks booking-link clicks (`cta-*`) and example clicks
-(`example-sales`, `example-support`, `example-reporting`). These are intent
-events, **not confirmed bookings**. Count completed meetings separately in
-Cal.com; the site does not receive booking confirmations. Form text is handed
-to Cal.com, not included in custom analytics event names.
+The contact form has no backend. "Välj tid för ett samtal" hands the text to
+Cal.com as the booking note; "Skicka som mejl" is a `mailto:` link that carries
+the same text as subject and body. "Kopiera" copies the address for visitors
+without a mail program, and only appears when the clipboard is available.
+Without JavaScript the form, the mail link and every contact link still work.
+
+GoatCounter tracks these clicks:
+
+| Event | What was clicked |
+| --- | --- |
+| `cta-nav`, `cta-mobilnav`, `cta-hero`, `cta-exempel`, `cta-om`, `cta-kontakt`, `cta-kontakt-direkt`, `cta-footer` | A booking link, by position |
+| `contact-email-hero`, `contact-email`, `contact-email-form`, `contact-email-footer`, `contact-email-copy` | An email link, or the copy button |
+| `contact-linkedin-hero`, `contact-linkedin-om`, `contact-linkedin` | A LinkedIn link |
+| `instagram-om`, `instagram-footer` | The Instagram link |
+| `example-sales`, `example-support`, `example-reporting`, `demo-replay-*` | An example tab or replay |
+| `launch-film` | The film's sound/play button |
+
+These are intent events, **not confirmed bookings or sent emails**. Count
+completed meetings separately in Cal.com; the site does not receive booking
+confirmations. Form text is handed to Cal.com or the visitor's mail program,
+never included in analytics event names.
 
 ## Launch film
 
 `launch-video/` holds the source for the launch film: one HTML composition
 rendered frame by frame (16:9, and a 9:16 reel with `--vertical`) plus a
 synthesized soundtrack. See the header of `launch-video/render.mjs`. The site
-uses `--nohud` renders (the nav sits on top); after re-rendering, refresh
+uses `--nohud` renders; after re-rendering, refresh
 `assets/launch/` with `launch-video/web-encode.sh`.
 
 ## Logo
 
+`assets/johan.jpg` is the full-size portrait; `assets/johan-portrait.jpg` is the
+4:5 crop the page uses.
+
 `assets/brand/` holds the logo as SVG (dark, white, and the mark alone), traced
-from the brand file. The nav and footer use the white version; `favicon.svg`
-and `assets/og-image.png` carry the same mark. The film reads its animated
+from the brand file. The nav uses the dark version on the light page and the
+footer the white one; `favicon.svg` and `assets/og-image.png` carry the same mark. The film reads its animated
 copy from `launch-video/logo.js`.

@@ -2,21 +2,15 @@
 (() => {
   const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+  // Reveal-on-scroll hides content only from here on. Whatever is already on
+  // screen is marked visible first, so the first screen never blinks out and back.
+  const revealEls = document.querySelectorAll("[data-reveal]");
+  revealEls.forEach((el) => {
+    if (el.getBoundingClientRect().top < window.innerHeight) el.classList.add("is-visible");
+  });
   document.documentElement.classList.add("vectorpoint-loaded");
 
-  // ---------- hero video: only on wide screens that can afford ~2 MB of motion ----------
-  const heroVideo = document.getElementById("heroVideo");
-  const canPlayHeroVideo = !prefersReducedMotion &&
-    !(navigator.connection && navigator.connection.saveData) &&
-    !window.matchMedia("(prefers-reduced-data: reduce)").matches &&
-    window.matchMedia("(min-width: 861px)").matches;
-  if (heroVideo && heroVideo.dataset.src && canPlayHeroVideo) {
-    heroVideo.muted = true;
-    heroVideo.src = heroVideo.dataset.src;
-    heroVideo.play().catch(() => {});
-  }
-
-  // ---------- launch film: first screen, muted loop with a sound toggle ----------
+  // ---------- launch film: muted loop with a sound toggle, loaded when it scrolls into view ----------
   // Without JS the video keeps its native controls and the 16:9 file.
   const film = document.getElementById("launchFilm");
   const filmSound = document.getElementById("filmSound");
@@ -24,18 +18,22 @@
     const portrait = window.matchMedia("(orientation: portrait)");
     const canAutoplayFilm = !prefersReducedMotion &&
       !(navigator.connection && navigator.connection.saveData) &&
-      !window.matchMedia("(prefers-reduced-data: reduce)").matches;
+      !window.matchMedia("(prefers-reduced-data: reduce)").matches &&
+      "IntersectionObserver" in window;
     // "auto": muted loop · "sound": playing once with sound · "still": poster until asked
     let state = canAutoplayFilm ? "auto" : "still";
-    let inView = true;
+    let inView = false;
     const label = { auto: "Ljud på", sound: "Ljud av", still: "Spela filmen" };
     const render = () => {
       filmSound.textContent = label[state];
       filmSound.setAttribute("aria-pressed", String(state === "sound"));
     };
+    const pickPoster = () => {
+      film.poster = portrait.matches ? film.dataset.posterPortrait : film.dataset.poster;
+    };
     const pickSource = () => {
       const src = portrait.matches ? film.dataset.srcPortrait : film.dataset.src;
-      film.poster = portrait.matches ? film.dataset.posterPortrait : film.dataset.poster;
+      pickPoster();
       if (film.getAttribute("src") !== src) {
         film.src = src;
         if (state !== "still" && inView) film.play().catch(() => {});
@@ -52,9 +50,11 @@
     film.removeAttribute("src");
     filmSound.hidden = false;
     setState(state);
-    if (state === "auto") pickSource();
-    else film.poster = portrait.matches ? film.dataset.posterPortrait : film.dataset.poster;
-    portrait.addEventListener("change", () => { if (film.getAttribute("src")) pickSource(); });
+    pickPoster();
+    portrait.addEventListener("change", () => {
+      if (film.getAttribute("src")) pickSource();
+      else pickPoster();
+    });
 
     filmSound.addEventListener("click", () => {
       if (state === "sound") {
@@ -72,12 +72,18 @@
       setState(canAutoplayFilm ? "auto" : "still");
       if (state === "auto") film.play().catch(() => {});
     });
-    // Don't keep decoding a film nobody sees.
+    // The film sits below the first screen: fetch it when it comes into view,
+    // and don't keep decoding a film nobody sees.
     if ("IntersectionObserver" in window) {
       new IntersectionObserver(([entry]) => {
         inView = entry.isIntersecting;
-        if (!inView) film.pause();
-        else if (state !== "still" && film.getAttribute("src")) film.play().catch(() => {});
+        if (!inView) {
+          film.pause();
+          return;
+        }
+        if (state === "still") return;
+        if (!film.getAttribute("src")) pickSource();
+        else film.play().catch(() => {});
       }, { threshold: 0.2 }).observe(film);
     }
   }
@@ -90,12 +96,12 @@
   window.addEventListener("scroll", onScroll, { passive: true });
   onScroll();
 
-  // ---------- nav: softer booking button while the hero form is visible ----------
-  const heroAskForm = document.getElementById("askForm");
-  if (heroAskForm && "IntersectionObserver" in window) {
+  // ---------- nav: softer booking button while the hero's own booking button is visible ----------
+  const heroCta = document.getElementById("heroCta");
+  if (heroCta && "IntersectionObserver" in window) {
     new IntersectionObserver(([entry]) => {
       nav.classList.toggle("is-hero-cta", entry.isIntersecting);
-    }).observe(heroAskForm);
+    }).observe(heroCta);
   }
 
   // ---------- nav: mobile menu ----------
@@ -113,22 +119,62 @@
     });
   }
 
-  // ---------- frågefältet i hero: chips fyller fältet, titeln förifylls vid bokning ----------
+  // ---------- kontaktformuläret: chips fyller fältet, texten följer med till bokningen eller mejlet ----------
   const askForm = document.getElementById("askForm");
   if (askForm) {
     const askInput = document.getElementById("askInput");
     const askTitle = document.getElementById("askTitle");
+    const askMail = document.getElementById("askMail");
+    const mailBase = askMail ? askMail.getAttribute("href") : "";
+    const oneLine = (text) => text.replace(/\s+/g, " ").trim();
+    // Mejllänken är en vanlig mailto-länk utan JS; med JS får den med sig texten som skrivits.
+    const syncMail = () => {
+      if (!askMail) return;
+      const text = askInput.value.trim();
+      askMail.href = text
+        ? `${mailBase}?subject=${encodeURIComponent(oneLine(text).slice(0, 60))}&body=${encodeURIComponent(text)}`
+        : mailBase;
+    };
+    askInput.addEventListener("input", syncMail);
     askForm.querySelectorAll(".ask__chip").forEach((chip) => {
       chip.addEventListener("click", () => {
         askInput.value = chip.textContent.trim();
+        syncMail();
         askInput.focus();
       });
     });
     askForm.addEventListener("submit", () => {
       const text = askInput.value.trim();
       // cal.com-eventet kräver en mötesrubrik; en kort version av texten duger, annars ett standardvärde
-      askTitle.value = text ? text.slice(0, 60) : "Samtal om ett flöde att automatisera";
-      if (text) askInput.value = text + " (skrivet på vectorpoint.se)";
+      askTitle.value = text ? oneLine(text).slice(0, 60) : "Samtal om ett problem att lösa";
+      if (text) {
+        askInput.value = text + " (skrivet på vectorpoint.se)";
+        // Bokningen öppnas i en ny flik; fältet här ska visa det besökaren faktiskt skrev.
+        setTimeout(() => { askInput.value = text; }, 0);
+      }
+    });
+    syncMail();
+  }
+
+  // ---------- kontakt: kopiera adressen, för den som saknar mejlprogram på datorn ----------
+  const copyEmail = document.getElementById("copyEmail");
+  if (copyEmail && navigator.clipboard && navigator.clipboard.writeText) {
+    const idleLabel = copyEmail.textContent;
+    let copyTimer;
+    copyEmail.hidden = false;
+    copyEmail.addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(copyEmail.dataset.copy);
+      } catch {
+        return;
+      }
+      copyEmail.textContent = "Kopierad";
+      copyEmail.classList.add("is-copied");
+      clearTimeout(copyTimer);
+      copyTimer = setTimeout(() => {
+        copyEmail.textContent = idleLabel;
+        copyEmail.classList.remove("is-copied");
+      }, 2000);
     });
   }
 
@@ -177,7 +223,6 @@
   }
 
   // ---------- reveal on scroll ----------
-  const revealEls = document.querySelectorAll("[data-reveal]");
   if (prefersReducedMotion) {
     revealEls.forEach((el) => el.classList.add("is-visible"));
   } else {
@@ -902,44 +947,16 @@
     c.done("Klart. Ett underlag, tre källor, en person som läser en sida.");
   });
 
-  // ---------- scroll experience: one rAF-driven engine ----------
   setupFlow(PIPELINE_FLOW);
 
-  if (!prefersReducedMotion) {
-    const progressFill = document.getElementById("scrollProgressFill");
-    const marqueeTrack = document.querySelector(".marquee__track");
+  // ---------- scroll progress ----------
 
-    // Marqueen tar över från CSS-animationen och drivs per frame,
-    // så scrollfarten kan addera tillfällig hastighet.
-    let marqueeHalf = 0;
-    if (marqueeTrack) {
-      marqueeTrack.style.animation = "none";
-      marqueeHalf = marqueeTrack.scrollWidth / 2;
-    }
-
-    let lastY = window.scrollY;
-    let velocity = 0;
-    let marqueeOffset = 0;
-
+  const progressFill = document.getElementById("scrollProgressFill");
+  if (!prefersReducedMotion && progressFill) {
     const frame = () => {
-      const y = window.scrollY;
-      const doc = document.documentElement;
-      const maxScroll = doc.scrollHeight - window.innerHeight;
-
-      velocity += (Math.abs(y - lastY) - velocity) * 0.1; // lerp-dämpad scrollfart
-      lastY = y;
-
-      if (progressFill) {
-        const p = maxScroll > 0 ? y / maxScroll : 0;
-        progressFill.style.transform = `translateX(${(p - 1) * 100}%)`;
-      }
-
-      if (marqueeTrack && marqueeHalf > 0) {
-        marqueeOffset -= 0.6 + Math.min(velocity * 0.12, 4);
-        if (marqueeOffset <= -marqueeHalf) marqueeOffset += marqueeHalf;
-        marqueeTrack.style.transform = `translateX(${marqueeOffset}px)`;
-      }
-
+      const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+      const p = maxScroll > 0 ? window.scrollY / maxScroll : 0;
+      progressFill.style.transform = `translateX(${(p - 1) * 100}%)`;
       requestAnimationFrame(frame);
     };
     requestAnimationFrame(frame);

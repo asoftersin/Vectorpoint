@@ -38,6 +38,7 @@ try {
     const context = await browser.newContext({
       viewport: { width: 1400, height: 900 },
       reducedMotion: "reduce",
+      permissions: ["clipboard-read", "clipboard-write"],
       ...options,
     });
     // Exercise only local content, never send test bookings or analytics.
@@ -56,8 +57,6 @@ try {
   const context = await newContext();
   const page = await context.newPage();
   await page.goto(url);
-  check(await page.locator("#heroVideo").evaluate((video) => !video.getAttribute("src") && video.networkState !== 2),
-    "Hero video is not loaded when the visitor prefers reduced motion");
   check(await page.locator(".nav__cta").evaluate((el) => getComputedStyle(el).columnGap === "0px"),
     "Booking label keeps normal word spacing when the long label is shown");
   const tabs = page.getByRole("tab");
@@ -66,36 +65,52 @@ try {
   check(await panels.count() === 1, "Only one panel is exposed to assistive technology");
   check(await page.locator("#work-leads").isVisible(), "Sales is selected by default");
   check(await page.locator("#prototype").isVisible(), "Offer is outside hidden examples");
-  check(await page.locator("#film").evaluate((el) => {
+  const onFirstScreen = (p, selector) => p.locator(selector).evaluate((el) => {
     const rect = el.getBoundingClientRect();
-    return rect.top === 0 && rect.width === innerWidth && rect.height >= innerHeight * 0.85 && rect.height <= innerHeight;
-  }), "Launch film fills the first desktop screen");
+    return rect.height > 0 && rect.top >= 0 && rect.bottom <= innerHeight && rect.left >= 0 && rect.right <= innerWidth;
+  });
+  check(await page.locator("main > section").first().getAttribute("id") === "hero", "The hero is the first thing on the page");
+  for (const [selector, what] of [[".hero__title", "what we do"], ["#heroCta", "the booking button"],
+    [".founder", "the founder card"], ['.founder a[href^="mailto:"]', "a direct email address"]]) {
+    check(await onFirstScreen(page, selector), `Desktop first screen shows ${what}`);
+  }
+  check(await onFirstScreen(page, ".clients") && await page.locator(".clients img").evaluateAll((imgs) =>
+    imgs.length > 0 && imgs.every((img) => img.complete && img.naturalWidth > 0)) &&
+    await page.locator(".clients__list li").count() === 3, "Desktop first screen shows the previous work, with the logos loaded");
+  check(await page.locator(".founder__photo").evaluate((img) =>
+    img.complete && img.naturalWidth > 0 && getComputedStyle(img).objectFit === "cover"), "Founder portrait loads and is cropped, not stretched");
+  check(await page.locator("#heroCta").getAttribute("href") === "https://cal.com/johan-studt/15min" &&
+    await page.locator("#heroCta").getAttribute("target") === "_blank", "Hero button books in a new tab, keeping the page open");
+  check(await page.evaluate(() => {
+    const rgb = (value) => value.match(/\d+/g).slice(0, 3).map(Number);
+    const lum = ([r, g, b]) => [r, g, b].map((v) => {
+      v /= 255;
+      return v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4;
+    }).reduce((sum, v, i) => sum + v * [0.2126, 0.7152, 0.0722][i], 0);
+    const contrast = (a, b) => {
+      const [hi, lo] = [lum(rgb(a)), lum(rgb(b))].sort((x, y) => y - x);
+      return (hi + 0.05) / (lo + 0.05);
+    };
+    const page = getComputedStyle(document.body).backgroundColor;
+    const probe = document.createElement("span");
+    document.body.append(probe);
+    const ok = ["--text", "--text-dim", "--muted", "--accent"].every((token) => {
+      probe.style.color = `var(${token})`;
+      return contrast(getComputedStyle(probe).color, page) >= 4.5;
+    });
+    probe.remove();
+    return ok && lum(rgb(page)) > 0.8;
+  }), "The page is light and every text colour keeps at least 4.5:1 contrast on it");
   check(await page.locator("#launchFilm").evaluate((video) => !video.getAttribute("src") && !video.controls) &&
     await page.locator("#filmSound").textContent() === "Spela filmen",
     "Launch film waits for a click when the visitor prefers reduced motion");
-  const toHero = (p) => p.evaluate(() => scrollTo({ top: document.getElementById("hero").offsetTop, behavior: "instant" }));
-  await toHero(page);
-  check(await page.locator(".hero__proof").evaluate((el) => {
-    const rect = el.getBoundingClientRect();
-    return rect.height > 0 && rect.top >= 0 && rect.bottom <= innerHeight && el.closest(".hero") !== null;
-  }), "Founder proof is visible on the hero's first screen");
-  check(await page.locator(".hero-peek").getAttribute("href") === "#work-leads" &&
-    await page.locator(".hero-peek").isVisible(), "Hero example preview links to the sales example on desktop");
   const navCtaBackground = () => page.locator(".nav__cta").evaluate((el) => getComputedStyle(el).backgroundColor);
   await page.waitForFunction(() => document.getElementById("siteNav").classList.contains("is-hero-cta"));
-  check(await navCtaBackground() === "rgba(0, 0, 0, 0)", "Header booking button is a quiet outline while the hero form is visible");
+  check(await navCtaBackground() === "rgba(0, 0, 0, 0)", "Header booking button is a quiet outline while the hero button is visible");
   await page.evaluate(() => scrollTo({ top: document.getElementById("work").offsetTop, behavior: "instant" }));
   await page.waitForFunction(() => !document.getElementById("siteNav").classList.contains("is-hero-cta"));
-  check(await navCtaBackground() === "rgb(242, 242, 242)", "Header booking button turns primary once the hero form scrolls away");
+  check(await navCtaBackground() === "rgb(21, 23, 26)", "Header booking button turns primary once the hero button scrolls away");
   await page.evaluate(() => scrollTo({ top: 0, behavior: "instant" }));
-  for (const selector of [".builder-proof img", ".about__avatar img"]) {
-    check(await page.locator(selector).evaluate((img) => {
-      const style = getComputedStyle(img);
-      const rect = img.getBoundingClientRect();
-      return style.objectFit === "cover" && style.objectPosition === "50% 0%" &&
-        Math.abs(rect.width - rect.height) < 1;
-    }), `${selector} uses a square, top-aligned portrait crop with headroom`);
-  }
   await tabs.nth(1).click();
   check(await page.locator("#work-feedback").isVisible(), "Click opens support");
   check(!await page.locator("#work-leads").isVisible(), "Previous example is hidden");
@@ -153,35 +168,79 @@ try {
   });
   check(faqMatches, "FAQ copy and structured data agree");
 
-  check(await page.locator("#tools .tools__item:visible").count() === 6, "Six familiar systems are shown initially");
+  check(await page.locator("#tools .tools__item:visible").count() === 6 &&
+    (await page.locator("#tools .tools__item:visible .tools__name").allInnerTexts()).map((name) => name.toLowerCase()).join(", ") ===
+      "anthropic claude, openai, microsoft copilot, github copilot, google gemini, microsoft azure",
+    "The AI models and assistants lead the six tools shown initially");
   await page.locator("#moreTools summary").focus();
   await page.keyboard.press("Enter");
-  check(await page.locator("#tools .tools__item:visible").count() === 15, "Keyboard reveals all fifteen tools");
+  check(await page.locator("#tools .tools__item:visible").count() === 16, "Keyboard reveals all sixteen tools");
   check(await page.locator("#moreTools summary").innerText() === "Visa färre verktyg", "Expanded label offers collapse");
   await page.keyboard.press("Space");
   check(await page.locator("#tools .tools__item:visible").count() === 6, "Keyboard collapses the secondary tools");
 
   await page.goto(url);
+  await page.locator('.nav__links a[href="#kontakt"]').click();
+  await page.waitForFunction(() => {
+    const rect = document.getElementById("kontakt").getBoundingClientRect();
+    return rect.top < innerHeight / 2 && rect.bottom > innerHeight / 2;
+  });
+  check(true, "Header contact link lands on the contact section");
+  const ways = page.locator("#kontakt .contact__ways a");
+  check(await ways.count() === 3 && await ways.evaluateAll((links) => links.map((a) => a.getAttribute("href")).join(" ") ===
+    "https://cal.com/johan-studt/15min mailto:johan@vectorpoint.se https://www.linkedin.com/in/johan-studt/"),
+    "Contact section offers booking, email and LinkedIn");
+  check(await page.locator("#kontakt .contact__person img").evaluate((img) => img.complete && img.naturalWidth > 0),
+    "Contact section shows who you are writing to");
+  check(await page.locator("#copyEmail").isVisible(), "Copy button appears when the clipboard is available");
+  await page.locator("#copyEmail").click();
+  await page.waitForFunction(() => document.getElementById("copyEmail").textContent === "Kopierad");
+  check(await page.evaluate(() => navigator.clipboard.readText()) === "johan@vectorpoint.se", "Copy button puts the address on the clipboard");
   check(await page.locator("#askInput").evaluate(() => {
     const tops = [...document.querySelectorAll(".ask__chip")].map((chip) => Math.round(chip.getBoundingClientRect().top));
     return tops.length === 3 && new Set(tops).size === 1;
-  }), "All three hero example chips share one row on desktop");
+  }), "All three example chips share one row on desktop");
+  check(await page.locator("#askMail").getAttribute("href") === "mailto:johan@vectorpoint.se", "Email button is a plain mailto link while the field is empty");
   await page.locator(".ask__chip").first().click();
-  check(await page.locator("#askInput").inputValue() === "Säker AI för alla medarbetare", "Example chip fills the hero input");
-  await page.locator("#askInput").fill("Test av ett manuellt moment");
+  check(await page.locator("#askInput").inputValue() === "Säker AI för alla medarbetare", "Example chip fills the contact field");
+  await page.locator("#askInput").fill("Test av ett manuellt moment\nmed en rad till");
+  const mail = new URL(await page.locator("#askMail").getAttribute("href"));
+  check(mail.protocol === "mailto:" && mail.pathname === "johan@vectorpoint.se" &&
+    mail.searchParams.get("subject") === "Test av ett manuellt moment med en rad till" &&
+    mail.searchParams.get("body") === "Test av ett manuellt moment\nmed en rad till", "Email button carries the visitor's text as subject and body");
   const popupPromise = page.waitForEvent("popup");
   await page.locator('#askForm button[type="submit"]').click();
   const popup = await popupPromise;
   await popup.waitForLoadState();
   const booking = new URL(popup.url());
   check(booking.origin === "https://cal.com", "Booking uses the existing provider");
-  check(booking.searchParams.get("notes").startsWith("Test av ett manuellt moment"), "Booking carries the visitor's text");
+  check(booking.searchParams.get("notes").replace(/\r/g, "").startsWith("Test av ett manuellt moment\nmed en rad till"), "Booking carries the visitor's text");
+  check(booking.searchParams.get("title") === "Test av ett manuellt moment med en rad till", "Booking title is the text on one line");
   await popup.close();
+  check(await page.locator("#askInput").inputValue() === "Test av ett manuellt moment\nmed en rad till",
+    "The field keeps what the visitor wrote after the booking tab opens");
   await context.close();
 
   const mobile = await newContext({ viewport: { width: 375, height: 812 } });
   const mobilePage = await mobile.newPage();
   await mobilePage.goto(url);
+  for (const [selector, what] of [[".hero__title", "what we do"], ["#heroCta", "the booking button"], [".nav__cta", "the header booking button"]]) {
+    check(await onFirstScreen(mobilePage, selector), `Phone first screen shows ${what}`);
+  }
+  check(await mobilePage.locator(".founder").evaluate((el) => {
+    const rect = el.getBoundingClientRect();
+    return rect.top < innerHeight && rect.top >= document.querySelector(".hero__main").getBoundingClientRect().bottom;
+  }), "Phone first screen reaches the founder card below the text");
+  check(await mobilePage.locator(".clients").evaluate((el) =>
+    el.getBoundingClientRect().top >= document.querySelector(".founder").getBoundingClientRect().bottom) &&
+    await mobilePage.locator(".clients__list li").evaluateAll((items) => {
+      const rects = items.map((li) => li.getBoundingClientRect());
+      const centres = rects.map((rect) => rect.top + rect.height / 2);
+      return rects.every((rect) => rect.left >= 0 && rect.right <= innerWidth) &&
+        Math.max(...centres) - Math.min(...centres) < 2;
+    }), "On a phone the previous work follows the founder card, centred on one row");
+  check(await mobilePage.locator(".founder a").evaluateAll((links) =>
+    links.every((a) => a.getBoundingClientRect().height >= 36)), "Founder card links are comfortable touch targets");
   for (const id of ["leads", "feedback", "report"]) {
     await mobilePage.locator(`#tab-${id}`).click();
     check(await mobilePage.locator(`#work-${id}`).isVisible(), `Mobile ${id} panel opens`);
@@ -217,7 +276,7 @@ try {
   }
   for (const width of [320, 375, 390, 600, 768, 1024, 1100, 1180, 1280, 1400]) {
     await mobilePage.setViewportSize({ width, height: 900 });
-    await mobilePage.evaluate(() => scrollTo({ top: document.getElementById("hero").offsetTop, behavior: "instant" }));
+    await mobilePage.evaluate(() => scrollTo({ top: 0, behavior: "instant" }));
     check(await mobilePage.locator(".hero__line").evaluateAll((lines) => lines.every((line) => {
       const range = document.createRange();
       range.selectNodeContents(line);
@@ -225,13 +284,24 @@ try {
       const box = line.getBoundingClientRect();
       return text.height < parseFloat(getComputedStyle(line).lineHeight) * 1.5 && text.right <= box.right + 1;
     })), `Each hero sentence stays on one line inside its column at ${width}px`);
-    check(await mobilePage.locator(".hero-peek").evaluate((peek, wide) => {
-      const rect = peek.getBoundingClientRect();
-      if (!wide) return rect.height === 0;
+    check(await mobilePage.locator(".founder").evaluate((card, wide) => {
+      const rect = card.getBoundingClientRect();
       const main = document.querySelector(".hero__main").getBoundingClientRect();
-      return rect.height > 0 && rect.left >= main.right + 24 && rect.right <= innerWidth &&
-        rect.bottom <= innerHeight;
-    }, width >= 1100), `Hero example preview is ${width >= 1100 ? "beside the text" : "hidden"} at ${width}px`);
+      if (rect.height === 0 || rect.left < 0 || rect.right > innerWidth) return false;
+      return wide ? rect.left >= main.right + 24 && rect.bottom <= innerHeight : rect.top >= main.bottom;
+    }, width >= 1000), `Founder card is ${width >= 1000 ? "beside the text on the first screen" : "below the text"} at ${width}px`);
+    check(await mobilePage.evaluate(() =>
+      document.documentElement.scrollWidth <= window.innerWidth), `No horizontal overflow at ${width}px`);
+  }
+  for (const width of [320, 375, 390, 768, 1024]) {
+    await mobilePage.setViewportSize({ width, height: 900 });
+    await mobilePage.locator("#kontakt").scrollIntoViewIfNeeded();
+    check(await mobilePage.locator('#kontakt .contact__ways a[href^="mailto:"]').evaluate((a) =>
+      a.getClientRects().length === 1), `Email address stays on one line in the contact card at ${width}px`);
+    check(await mobilePage.locator("#kontakt .ask__actions > *").evaluateAll((controls) => controls.every((el) => {
+      const rect = el.getBoundingClientRect();
+      return rect.height >= 44 && rect.left >= 0 && rect.right <= innerWidth;
+    })), `Contact actions fit with 44px touch targets at ${width}px`);
   }
   await mobile.close();
 
@@ -240,6 +310,15 @@ try {
   await fallback.goto(url);
   check(await fallback.locator("#launchFilm").evaluate((video) => video.controls && video.getAttribute("src") === "assets/launch/film.mp4") &&
     !await fallback.locator("#filmSound").isVisible(), "Without JS the launch film keeps native controls and no dead sound button");
+  check(await fallback.locator("#askMail").getAttribute("href") === "mailto:johan@vectorpoint.se" &&
+    !await fallback.locator("#copyEmail").isVisible() && await fallback.locator("#kontakt .contact__ways a:visible").count() === 3,
+    "Without JS every contact route still works and no dead copy button shows");
+  check(await fallback.locator(".founder").isVisible() && await fallback.locator("#heroCta").isVisible(),
+    "Without JS the hero still shows the founder and the booking button");
+  check(await fallback.locator("[data-reveal]").evaluateAll((els) => els.length > 20 && els.every((el) => {
+    const style = getComputedStyle(el);
+    return style.opacity === "1" && style.transform === "none" && style.filter === "none";
+  })), "Without JS nothing waits for a scroll reveal that will never come");
   check(!await fallback.locator("#exampleTabs").isVisible(), "No dead tab controls without JS");
   check(await fallback.locator(".demo__controls:visible").count() === 0, "No dead playback controls without JS");
   for (const id of ["leads", "feedback", "report"]) {
@@ -248,7 +327,7 @@ try {
   await fallback.locator("#pipeline summary").click();
   check(await fallback.locator("#flowSvg4").isVisible(), "Native disclosure works without JS");
   await fallback.locator("#moreTools summary").click();
-  check(await fallback.locator("#tools .tools__item:visible").count() === 15, "All tools are accessible without JS");
+  check(await fallback.locator("#tools .tools__item:visible").count() === 16, "All tools are accessible without JS");
   await fallback.setViewportSize({ width: 375, height: 812 });
   check(await fallback.locator("#work-leads .demo-steps__item p").first().isVisible(),
     "Mobile no-JS fallback exposes the step descriptions");
@@ -257,24 +336,37 @@ try {
   const animated = await newContext({ reducedMotion: "no-preference" });
   const motionPage = await animated.newPage();
   await motionPage.goto(url);
-  check(await motionPage.locator("#heroVideo").getAttribute("src") === "assets/hero-bg.mp4",
-    "Hero video loads on a wide screen with motion allowed");
+  check(await motionPage.locator(".hero [data-reveal]").evaluateAll((els) =>
+    els.length >= 5 && els.every((el) => el.classList.contains("is-visible") && getComputedStyle(el).opacity === "1")),
+    "With motion the first screen is shown at once, without fading in");
+  // Sections further down fade out off screen first, then wait for the scroll.
+  await motionPage.waitForFunction(() => {
+    const el = document.querySelector("#faq [data-reveal]");
+    return !el.classList.contains("is-visible") && getComputedStyle(el).opacity === "0";
+  });
+  check(true, "With motion later sections wait for the scroll");
+  check(await motionPage.locator("#launchFilm").getAttribute("src") === null,
+    "Launch film is not fetched before it scrolls into view");
+  await motionPage.locator("#film .film").scrollIntoViewIfNeeded();
+  await motionPage.waitForFunction(() => document.getElementById("launchFilm").getAttribute("src") !== null);
   check(await motionPage.locator("#launchFilm").evaluate((video) =>
     video.getAttribute("src") === "assets/launch/film.mp4" && video.muted && video.loop) &&
     await motionPage.locator("#filmSound").textContent() === "Ljud på",
     "Launch film loops muted in 16:9 on a landscape screen");
+  await motionPage.evaluate(() => scrollTo({ top: 0, behavior: "instant" }));
   const narrowMotionPage = await animated.newPage();
   await narrowMotionPage.setViewportSize({ width: 390, height: 844 });
   await narrowMotionPage.goto(url);
-  check(await narrowMotionPage.locator("#heroVideo").getAttribute("src") === null,
-    "Hero video stays a still poster on narrow screens");
+  await narrowMotionPage.locator("#film .film").scrollIntoViewIfNeeded();
+  await narrowMotionPage.waitForFunction(() => document.getElementById("launchFilm").getAttribute("src") !== null);
   check(await narrowMotionPage.locator("#launchFilm").evaluate((video) =>
     video.getAttribute("src") === "assets/launch/film-v.mp4" && video.poster.endsWith("assets/launch/poster-v.jpg")),
     "Launch film switches to the 9:16 cut on a portrait phone");
-  check(await narrowMotionPage.locator("#film").evaluate((el) => {
+  check(await narrowMotionPage.locator("#film .film").evaluate((el) => {
     const rect = el.getBoundingClientRect();
-    return rect.width === innerWidth && rect.height <= innerHeight && rect.height >= innerHeight * 0.8;
-  }), "9:16 film fills the phone's first screen without spilling past it");
+    return rect.left >= 0 && rect.right <= innerWidth && rect.height <= innerHeight * 0.8 &&
+      Math.abs(rect.width / rect.height - 9 / 16) < 0.01;
+  }), "9:16 film keeps its shape and leaves room around it on a phone");
   await narrowMotionPage.close();
   check(await motionPage.locator(".hero").evaluate((el) =>
     el.getBoundingClientRect().height <= innerHeight && getComputedStyle(el).position !== "sticky"),

@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Vectorpoint — Från AI-idé till mätbar effekt</title>
   <meta name="description" content="Vectorpoint hjälper stora organisationer att lösa verkliga problem med AI: säkra AI-miljöer, avlastning för support och automatiserade flöden på er egen data. Vi enas om vad som ska bli bättre innan vi bygger.">
-  <meta name="theme-color" content="#060606">
+  <meta name="theme-color" content="#f6f4ef">
   <meta property="og:title" content="Vectorpoint — Från AI-idé till mätbar effekt">
   <meta property="og:description" content="Säkra AI-miljöer, avlastning för support och automatiserade flöden på er egen data, för stora organisationer. Vi enas om vad som ska bli bättre innan vi bygger, och mäter det efteråt.">
   <meta property="og:type" content="website">
@@ -28,18 +28,20 @@
     "description": "Vectorpoint hjälper stora organisationer att lösa verkliga problem med AI: säkra AI-miljöer, avlastning för support och automatiserade flöden på er egen data. Vi enas om vad som ska bli bättre innan vi bygger.",
     "url": "https://vectorpoint.se/",
     "areaServed": "SE",
+    "email": "johan@vectorpoint.se",
+    "image": "https://vectorpoint.se/assets/johan-portrait.jpg",
     "knowsAbout": ["AI-automation", "Säker AI-miljö", "RAG", "Integrationer", "Testautomation"],
     "address": {
       "@type": "PostalAddress",
       "addressLocality": "Göteborg",
       "addressCountry": "SE"
     },
-    "sameAs": ["https://www.linkedin.com/in/johan-studt/"],
+    "sameAs": ["https://www.linkedin.com/in/johan-studt/", "https://www.instagram.com/johanstudt/"],
     "founder": {
       "@type": "Person",
       "name": "Johan Studt",
       "jobTitle": "Grundare",
-      "sameAs": "https://www.linkedin.com/in/johan-studt/"
+      "sameAs": ["https://www.linkedin.com/in/johan-studt/", "https://www.instagram.com/johanstudt/"]
     }
   }
   </script>
@@ -78,8 +80,8 @@
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Gasoek+One&family=Geist+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="preload" as="image" href="assets/hero-bg-poster.jpg" fetchpriority="high">
+  <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="preload" as="image" href="assets/johan-portrait.jpg" fetchpriority="high">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -95,13 +97,14 @@
   <header class="nav" id="siteNav">
     <div class="nav__inner">
       <a class="nav__logo" href="#top">
-        <img src="assets/brand/vectorpoint-logo-white.svg" alt="Vectorpoint" width="145" height="26">
+        <img src="assets/brand/vectorpoint-logo.svg" alt="Vectorpoint" width="145" height="26">
       </a>
       <nav class="nav__links" aria-label="Huvudmeny">
         <a href="#services">Uppdrag</a>
         <a href="#work">Exempel</a>
         <a href="#approach">Metod</a>
-        <a href="#faq">FAQ</a>
+        <a href="#about">Om</a>
+        <a href="#kontakt">Kontakt</a>
       </nav>
       <a class="btn btn--primary nav__cta" href="https://cal.com/johan-studt/15min" target="_blank" rel="noreferrer" data-goatcounter-click="cta-nav">Boka<span class="nav__cta-detail">&nbsp;ett samtal</span></a>
       <button class="nav__burger" id="navBurger" aria-label="Öppna meny" aria-expanded="false" aria-controls="mobileNav">
@@ -112,66 +115,52 @@
       <a href="#services">Uppdrag</a>
       <a href="#work">Exempel</a>
       <a href="#approach">Metod</a>
-      <a href="#faq">FAQ</a>
+      <a href="#about">Om</a>
+      <a href="#kontakt">Kontakt</a>
       <a class="btn btn--primary" href="https://cal.com/johan-studt/15min" target="_blank" rel="noreferrer" data-goatcounter-click="cta-mobilnav">Boka ett samtal</a>
     </nav>
   </header>
 
   <main id="top">
 
-    <!-- HERO -->
-    <!-- LANSERINGSFILM: hela första skärmen. 16:9 på liggande skärmar, 9:16 på stående. -->
-    <section class="film-hero" id="film" aria-label="Lanseringsfilm, 20 sekunder">
-      <video class="film-hero__video" id="launchFilm" muted loop playsinline controls preload="none"
-        src="assets/launch/film.mp4" poster="assets/launch/poster.jpg"
-        data-src="assets/launch/film.mp4" data-poster="assets/launch/poster.jpg"
-        data-src-portrait="assets/launch/film-v.mp4" data-poster-portrait="assets/launch/poster-v.jpg"></video>
-      <div class="film-hero__bar">
-        <button class="film-hero__btn" id="filmSound" type="button" data-goatcounter-click="launch-film" hidden>Ljud på</button>
-        <a class="film-hero__btn film-hero__next" href="#hero">Till sidan <span aria-hidden="true">↓</span></a>
-      </div>
-    </section>
-
+    <!-- HERO: erbjudandet, personen och vägen till kontakt på första skärmen -->
     <section class="hero" id="hero">
-      <video class="hero__video" id="heroVideo" muted loop playsinline preload="none" poster="assets/hero-bg-poster.jpg" data-src="assets/hero-bg.mp4" aria-hidden="true"></video>
-      <div class="hero__scrim" aria-hidden="true"></div>
       <div class="hero__frame">
         <div class="hero__main">
-          <h1 class="hero__title" data-reveal><span class="hero__line">Från AI-idé</span> <span class="hero__line">till mätbar effekt.</span></h1>
+          <h1 class="hero__title" data-reveal><span class="hero__line">AI som fungerar i drift.</span> <span class="hero__line">Inte bara i en demo.</span></h1>
           <p class="hero__lead" data-reveal>Vi hjälper stora organisationer att lösa verkliga problem med AI, från säkra AI-miljöer till avlastning för support och automatiserade flöden på er egen data.<br>Vi enas om vad som ska bli bättre innan vi bygger, och mäter det efteråt.</p>
-          <a class="builder-proof hero__proof" href="#about" data-reveal>
-            <img src="assets/johan.jpg" alt="" width="40" height="40">
-            <span>Johan Studt, grundare<span class="builder-proof__detail">10+ år inom testautomation · Göteborg · <span class="builder-proof__link">Om Johan →</span></span></span>
-          </a>
-          <form class="hero__ask ask" id="askForm" action="https://cal.com/johan-studt/15min" method="get" target="_blank" rel="noreferrer" data-reveal>
-            <label class="ask__label" for="askInput">Vilket problem vill ni lösa?</label>
-            <div class="ask__row">
-              <input class="ask__input" id="askInput" name="notes" type="text" maxlength="400" autocomplete="off" placeholder="Beskriv problemet med några ord">
-              <input type="hidden" name="title" id="askTitle" value="">
-              <button class="btn btn--primary" type="submit" data-goatcounter-click="cta-hero">Ta med det till ett samtal</button>
-            </div>
-            <div class="ask__chips" aria-label="Exempel att utgå från">
-              <button type="button" class="ask__chip">Säker AI för alla medarbetare</button>
-              <button type="button" class="ask__chip">Avlasta supporten</button>
-              <button type="button" class="ask__chip">Hitta rätt i interna dokument</button>
-            </div>
-            <p class="ask__note">Texten följer med till bokningen. Ingen AI läser den, det gör vi. <a href="https://cal.com/johan-studt/15min" target="_blank" rel="noreferrer" data-goatcounter-click="cta-hero-direkt">Boka utan att skriva något</a></p>
-          </form>
+          <div class="hero__actions" data-reveal>
+            <a class="btn btn--primary btn--lg" id="heroCta" href="https://cal.com/johan-studt/15min" target="_blank" rel="noreferrer" data-goatcounter-click="cta-hero">Boka ett samtal · 15 min</a>
+            <a class="btn btn--ghost btn--lg" href="#work">Se exempel</a>
+          </div>
+          <ul class="hero__facts" data-reveal aria-label="Det här gäller alltid">
+            <li>Fast pris på första prototypen</li>
+            <li>Ni äger kod och dokumentation</li>
+            <li>Testat innan det når er</li>
+          </ul>
         </div>
-        <a class="hero-peek" href="#work-leads" data-goatcounter-click="hero-peek" aria-label="Se exemplet med leadlistan, påhittad data" data-reveal>
-          <span class="hero-peek__bar">
-            <span class="demo__title"><i class="hero-peek__dot" aria-hidden="true"></i>Leadlista</span>
-            <span class="flow__chip">EXEMPEL · PÅHITTAT</span>
-          </span>
-          <span class="hero-peek__body">
-            <span class="hero-peek__row"><span class="hero-peek__key">Bolag</span><span>Nordkant Systems AB</span></span>
-            <span class="hero-peek__row"><span class="hero-peek__key">Kontakt</span><span>J. Åkerlind, IT-chef</span></span>
-            <span class="hero-peek__row"><span class="hero-peek__key">Belagt</span><span>Rekryterar utvecklare till ett nytt team <span class="hero-peek__src">platsannons</span></span></span>
-            <span class="hero-peek__row"><span class="hero-peek__key">Kontroller</span><span class="hero-peek__ok">5 av 5 ok</span></span>
-            <span class="hero-peek__row"><span class="hero-peek__key">Prioritet</span><span class="hero-peek__prio">Hög</span></span>
-          </span>
-          <span class="hero-peek__foot"><span>Säljutkast klart</span><span class="hero-peek__cta">Se hur det fungerar →</span></span>
-        </a>
+        <aside class="founder" aria-labelledby="founderName" data-reveal>
+          <img class="founder__photo" src="assets/johan-portrait.jpg" alt="Johan Studt" width="800" height="1000" fetchpriority="high">
+          <div class="founder__body">
+            <p class="founder__name" id="founderName">Johan Studt</p>
+            <p class="founder__role">Grundare · Vector Point AB · Göteborg</p>
+            <p class="founder__quote">Det är mig du pratar med. Jag bygger lösningarna och testar dem innan de når er.</p>
+            <p class="founder__links">
+              <a href="mailto:johan@vectorpoint.se" data-goatcounter-click="contact-email-hero">johan@vectorpoint.se</a>
+              <a href="https://www.linkedin.com/in/johan-studt/" target="_blank" rel="noreferrer" data-goatcounter-click="contact-linkedin-hero">LinkedIn</a>
+              <a href="#about">Om Johan</a>
+            </p>
+          </div>
+        </aside>
+        <!-- TIDIGARE ARBETEN: bara namn och logotyper som Johan uttryckligen har sagt får visas -->
+        <div class="clients" data-reveal>
+          <h2 class="clients__title" id="clientsTitle">Tidigare arbeten</h2>
+          <ul class="clients__list" aria-labelledby="clientsTitle">
+            <li><img class="clients__logo clients__logo--stratsys" src="assets/clients/stratsys.png" alt="Stratsys" width="600" height="134"></li>
+            <li><img class="clients__logo clients__logo--prevas" src="assets/clients/prevas.png" alt="Prevas" width="500" height="185"></li>
+            <li><img class="clients__logo clients__logo--chalmers" src="assets/clients/chalmers.png" alt="Chalmers" width="224" height="224"></li>
+          </ul>
+        </div>
       </div>
     </section>
 
@@ -197,6 +186,21 @@
           <h3>Kunskap och flöden på er egen data</h3>
           <p>Sök och svar i interna dokument med källhänvisning, rapporter som sammanställs automatiskt och integrationer mellan era system.</p>
         </article>
+      </div>
+    </section>
+
+    <!-- LANSERINGSFILM: kortversionen av sidan. 16:9 på liggande skärmar, 9:16 på stående. -->
+    <section class="section section--film" id="film" aria-labelledby="filmTitle">
+      <div class="section__head">
+        <p class="eyebrow" data-reveal>FILM · 20 SEKUNDER</p>
+        <h2 id="filmTitle" data-reveal="blur">Kortversionen.</h2>
+      </div>
+      <div class="film" data-reveal="scale">
+        <video class="film__video" id="launchFilm" muted loop playsinline controls preload="none"
+          src="assets/launch/film.mp4" poster="assets/launch/poster.jpg"
+          data-src="assets/launch/film.mp4" data-poster="assets/launch/poster.jpg"
+          data-src-portrait="assets/launch/film-v.mp4" data-poster-portrait="assets/launch/poster-v.jpg"></video>
+        <button class="film__btn" id="filmSound" type="button" data-goatcounter-click="launch-film" hidden>Ljud på</button>
       </div>
     </section>
 
@@ -398,7 +402,7 @@
     </section>
 
     <!-- DIFFERENCE: varför det håller, med leveranspipelinen i praktiken -->
-    <section class="section" id="difference">
+    <section class="section section--alt" id="difference">
       <div class="section__head">
         <p class="eyebrow" data-reveal>BYGGT FÖR STORA ORGANISATIONER</p>
         <h2 data-reveal="blur">AI som går att lita på i drift.</h2>
@@ -411,25 +415,26 @@
       </ul>
       <div class="tools-block" id="tools">
         <p class="eyebrow" data-reveal>VERKTYG OCH INTEGRATIONER</p>
-        <p class="section__sub" data-reveal>Några vanliga system vi bygger i. Saknas ert finns det ofta ett API att bygga mot.</p>
+        <p class="section__sub" data-reveal>AI-modellerna och assistenterna först, sedan systemen vi bygger i. Saknas ert finns det ofta ett API att bygga mot.</p>
       <ul class="tools" data-reveal aria-label="Verktyg och integrationer vi arbetar i">
-        <li class="tools__item"><span class="tools__plate"><img src="assets/logos/teams.svg" alt="" width="36" height="36" loading="lazy"></span><span class="tools__name">Microsoft Teams</span></li>
-        <li class="tools__item"><span class="tools__plate"><img src="assets/logos/microsoftcopilot.svg" alt="" width="36" height="36" loading="lazy"></span><span class="tools__name">Microsoft Copilot</span></li>
-        <li class="tools__item"><span class="tools__plate"><img src="assets/logos/hubspot.svg" alt="" width="36" height="36" loading="lazy"></span><span class="tools__name">HubSpot</span></li>
-        <li class="tools__item"><span class="tools__plate"><img src="assets/logos/shopify.svg" alt="" width="36" height="36" loading="lazy"></span><span class="tools__name">Shopify</span></li>
+        <li class="tools__item"><span class="tools__plate"><img src="assets/logos/claude.svg" alt="" width="36" height="36" loading="lazy"></span><span class="tools__name">Anthropic Claude</span></li>
         <li class="tools__item"><span class="tools__plate"><img src="assets/logos/openai.svg" alt="" width="36" height="36" loading="lazy"></span><span class="tools__name">OpenAI</span></li>
+        <li class="tools__item"><span class="tools__plate"><img src="assets/logos/microsoftcopilot.svg" alt="" width="36" height="36" loading="lazy"></span><span class="tools__name">Microsoft Copilot</span></li>
+        <li class="tools__item"><span class="tools__plate"><img src="assets/logos/githubcopilot.svg" alt="" width="36" height="36" loading="lazy"></span><span class="tools__name">GitHub Copilot</span></li>
+        <li class="tools__item"><span class="tools__plate"><img src="assets/logos/gemini.svg" alt="" width="36" height="36" loading="lazy"></span><span class="tools__name">Google Gemini</span></li>
         <li class="tools__item"><span class="tools__plate"><img src="assets/logos/azure.svg" alt="" width="36" height="36" loading="lazy"></span><span class="tools__name">Microsoft Azure</span></li>
       </ul>
       <details class="tools-more" id="moreTools">
-        <summary><span class="tools-more__expand">Visa alla verktyg (15)</span><span class="tools-more__collapse">Visa färre verktyg</span></summary>
+        <summary><span class="tools-more__expand">Visa alla verktyg (16)</span><span class="tools-more__collapse">Visa färre verktyg</span></summary>
         <ul class="tools" aria-label="Fler verktyg vi bygger med">
-        <li class="tools__item"><span class="tools__plate"><img src="assets/logos/claude.svg" alt="" width="36" height="36" loading="lazy"></span><span class="tools__name">Anthropic Claude</span></li>
+        <li class="tools__item"><span class="tools__plate"><img src="assets/logos/teams.svg" alt="" width="36" height="36" loading="lazy"></span><span class="tools__name">Microsoft Teams</span></li>
+        <li class="tools__item"><span class="tools__plate"><img src="assets/logos/hubspot.svg" alt="" width="36" height="36" loading="lazy"></span><span class="tools__name">HubSpot</span></li>
+        <li class="tools__item"><span class="tools__plate"><img src="assets/logos/shopify.svg" alt="" width="36" height="36" loading="lazy"></span><span class="tools__name">Shopify</span></li>
         <li class="tools__item"><span class="tools__plate"><img src="assets/logos/python.svg" alt="" width="36" height="36" loading="lazy"></span><span class="tools__name">Python</span></li>
         <li class="tools__item"><span class="tools__plate"><img src="assets/logos/typescript.svg" alt="" width="36" height="36" loading="lazy"></span><span class="tools__name">TypeScript</span></li>
         <li class="tools__item"><span class="tools__plate"><img src="assets/logos/playwright.svg" alt="" width="36" height="36" loading="lazy"></span><span class="tools__name">Playwright</span></li>
         <li class="tools__item"><span class="tools__plate"><img src="assets/logos/github.svg" alt="" width="36" height="36" loading="lazy"></span><span class="tools__name">GitHub</span></li>
         <li class="tools__item"><span class="tools__plate"><img src="assets/logos/githubactions.svg" alt="" width="36" height="36" loading="lazy"></span><span class="tools__name">GitHub Actions</span></li>
-        <li class="tools__item"><span class="tools__plate"><img src="assets/logos/githubcopilot.svg" alt="" width="36" height="36" loading="lazy"></span><span class="tools__name">GitHub Copilot</span></li>
         <li class="tools__item"><span class="tools__plate"><img src="assets/logos/azuredevops.svg" alt="" width="36" height="36" loading="lazy"></span><span class="tools__name">Azure DevOps</span></li>
         <li class="tools__item"><span class="tools__plate"><img src="assets/logos/kubernetes.svg" alt="" width="36" height="36" loading="lazy"></span><span class="tools__name">Kubernetes</span></li>
         </ul>
@@ -569,24 +574,35 @@
     </section>
 
     <!-- ABOUT -->
-    <section class="section" id="about">
+    <section class="section section--split" id="about">
       <div class="section__head">
         <p class="eyebrow" data-reveal>OM</p>
         <h2 data-reveal="blur">Vem du pratar med.</h2>
       </div>
       <div class="about__inner" data-reveal>
-        <div class="about__avatar" data-reveal="scale"><img src="assets/johan.jpg" alt="Johan Studt, grundare av Vectorpoint"></div>
-        <div class="about__text" data-reveal="right">
+        <div class="about__photo"><img src="assets/johan-portrait.jpg" alt="Johan Studt, grundare av Vectorpoint" width="800" height="1000" loading="lazy"></div>
+        <div class="about__text">
           <h3>Johan Studt</h3>
+          <p class="about__role">Grundare, Vector Point AB</p>
           <p>Jag bygger AI-lösningar som ska fungera i drift, inte bara i en demo. Efter mer än tio år inom testautomation vet jag att det som inte testas går sönder, alltid vid fel tillfälle. Därför testas allt jag bygger innan det når er.</p>
-          <p class="about__meta">GÖTEBORG · 10+ ÅR TESTAUTOMATION · AI SEDAN 2023 · ISTQB</p>
-          <a class="about__link" href="https://www.linkedin.com/in/johan-studt/" target="_blank" rel="noreferrer">LinkedIn →</a>
+          <p>Du pratar med mig från första samtalet, utan mellanhänder. På Instagram gör jag korta filmer om AI och teknik för företag.</p>
+          <ul class="about__facts" aria-label="Bakgrund">
+            <li>10+ år testautomation</li>
+            <li>AI sedan 2023</li>
+            <li>ISTQB</li>
+            <li>Göteborg</li>
+          </ul>
+          <div class="about__actions">
+            <a class="btn btn--primary" href="https://cal.com/johan-studt/15min" target="_blank" rel="noreferrer" data-goatcounter-click="cta-om">Boka ett samtal</a>
+            <a class="btn btn--ghost" href="https://www.linkedin.com/in/johan-studt/" target="_blank" rel="noreferrer" data-goatcounter-click="contact-linkedin-om">LinkedIn</a>
+            <a class="btn btn--ghost" href="https://www.instagram.com/johanstudt/" target="_blank" rel="noreferrer" data-goatcounter-click="instagram-om">Instagram</a>
+          </div>
         </div>
       </div>
     </section>
 
     <!-- FAQ -->
-    <section class="section" id="faq">
+    <section class="section section--split" id="faq">
       <div class="section__head">
         <p class="eyebrow" data-reveal>FAQ</p>
         <h2 data-reveal="blur">Vanliga frågor.</h2>
@@ -615,13 +631,61 @@
       </div>
     </section>
 
-    <!-- CTA -->
-    <section class="cta">
-      <div class="cta__glow" aria-hidden="true" data-reveal="fade"></div>
-      <p class="eyebrow" data-reveal>KONTAKT</p>
-      <h2 data-reveal="blur">Vilket problem vill ni lösa?</h2>
-      <p class="cta__sub" data-reveal>Berätta, så säger vi ärligt om AI är rätt verktyg.</p>
-      <a class="btn btn--primary btn--lg" data-reveal href="https://cal.com/johan-studt/15min" target="_blank" rel="noreferrer" data-goatcounter-click="cta-footer">Boka ett samtal med Johan</a>
+    <!-- KONTAKT: tre vägar in, och vad som händer sedan -->
+    <section class="contact" id="kontakt" aria-labelledby="contactTitle">
+      <div class="contact__inner">
+        <div class="contact__main">
+          <p class="eyebrow" data-reveal>KONTAKT</p>
+          <h2 id="contactTitle" data-reveal="blur">Vilket problem vill ni lösa?</h2>
+          <p class="contact__sub" data-reveal>Berätta, så säger vi ärligt om AI är rätt verktyg.</p>
+          <form class="ask" id="askForm" action="https://cal.com/johan-studt/15min" method="get" target="_blank" rel="noreferrer" data-reveal>
+            <label class="ask__label" for="askInput">Beskriv problemet med några ord</label>
+            <textarea class="ask__input" id="askInput" name="notes" rows="3" maxlength="400" placeholder="Till exempel: supporten hinner inte sortera alla inkommande ärenden"></textarea>
+            <input type="hidden" name="title" id="askTitle" value="">
+            <div class="ask__chips" aria-label="Exempel att utgå från">
+              <button type="button" class="ask__chip">Säker AI för alla medarbetare</button>
+              <button type="button" class="ask__chip">Avlasta supporten</button>
+              <button type="button" class="ask__chip">Hitta rätt i interna dokument</button>
+            </div>
+            <div class="ask__actions">
+              <button class="btn btn--primary btn--lg" type="submit" data-goatcounter-click="cta-kontakt">Välj tid för ett samtal</button>
+              <a class="btn btn--ghost btn--lg" id="askMail" href="mailto:johan@vectorpoint.se" data-goatcounter-click="contact-email-form">Skicka som mejl</a>
+            </div>
+            <p class="ask__note">Texten följer med till bokningen eller mejlet. Ingen AI läser den, det gör vi.</p>
+          </form>
+          <div class="contact__after" data-reveal>
+            <h3>Det här händer sedan</h3>
+            <ol class="contact__steps">
+              <li>Ett kort samtal om problemet ni vill lösa.</li>
+              <li>Ett ärligt besked om AI är rätt verktyg.</li>
+              <li>Passar det föreslår vi en avgränsad prototyp på er data, till fast pris.</li>
+            </ol>
+          </div>
+        </div>
+        <aside class="contact__card" aria-labelledby="contactDirect" data-reveal="right">
+          <div class="contact__person">
+            <img src="assets/johan-portrait.jpg" alt="" width="56" height="56" loading="lazy">
+            <p><strong>Johan Studt</strong><span>Grundare, Vector Point AB</span></p>
+          </div>
+          <h3 id="contactDirect">Hellre direkt?</h3>
+          <ul class="contact__ways">
+            <li>
+              <span class="contact__k">Boka tid</span>
+              <a href="https://cal.com/johan-studt/15min" target="_blank" rel="noreferrer" data-goatcounter-click="cta-kontakt-direkt">15 minuter, välj tid själv</a>
+            </li>
+            <li>
+              <span class="contact__k">E-post</span>
+              <a href="mailto:johan@vectorpoint.se" data-goatcounter-click="contact-email">johan@vectorpoint.se</a>
+              <button class="contact__copy" id="copyEmail" type="button" data-copy="johan@vectorpoint.se" data-goatcounter-click="contact-email-copy" hidden>Kopiera</button>
+            </li>
+            <li>
+              <span class="contact__k">LinkedIn</span>
+              <a href="https://www.linkedin.com/in/johan-studt/" target="_blank" rel="noreferrer" data-goatcounter-click="contact-linkedin">Johan Studt</a>
+            </li>
+          </ul>
+          <p class="contact__org">Vector Point AB · Göteborg</p>
+        </aside>
+      </div>
     </section>
 
   </main>
@@ -639,14 +703,16 @@
         <a href="#services">Uppdrag</a>
         <a href="#work">Exempel</a>
         <a href="#approach">Metod</a>
-        <a href="#faq">FAQ</a>
         <a href="#about">Om</a>
+        <a href="#faq">FAQ</a>
+        <a href="#kontakt">Kontakt</a>
       </div>
       <div class="footer__col">
         <h3>Kontakt</h3>
-        <a href="mailto:johan@vectorpoint.se">johan@vectorpoint.se</a>
+        <a href="https://cal.com/johan-studt/15min" target="_blank" rel="noreferrer" data-goatcounter-click="cta-footer">Boka ett samtal</a>
+        <a href="mailto:johan@vectorpoint.se" data-goatcounter-click="contact-email-footer">johan@vectorpoint.se</a>
         <a href="https://www.linkedin.com/in/johan-studt/" target="_blank" rel="noreferrer">LinkedIn</a>
-        <a href="https://vectorpoint.se">vectorpoint.se</a>
+        <a href="https://www.instagram.com/johanstudt/" target="_blank" rel="noreferrer" data-goatcounter-click="instagram-footer">Instagram</a>
       </div>
     </div>
     <div class="footer__base">
