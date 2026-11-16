@@ -22,7 +22,7 @@ For browser regression coverage (starts its own local preview server):
 npm run test:browser
 ```
 
-The browser checks cover the first screen (offer, founder card and booking button
+The browser checks cover the first screen, AI-kollen (mouse, keyboard, booking handoff, phone fit, no JS) (offer, founder card and booking button
 on desktop and phone), the contact routes, text contrast, example tabs (mouse,
 keyboard and direct links), mobile layout, demo pause/resume, reduced motion,
 optional disclosures, booking handoff and the no-JS fallback. Install Playwright
@@ -79,6 +79,20 @@ primary action; it turns primary once the hero button scrolls away. On narrow
 screens the header shortens its booking label while keeping the booking link and
 a 44px menu button visible.
 
+**AI-kollen** (`#ai-kollen`, right after the three problem cards) is four
+quick questions: what the problem is, how often the work happens, where the data
+lives and what happens if the AI gets it wrong. It shows one question at a time;
+a click moves on, while keyboard users change answers with the arrow keys and
+move on with Enter or "Nästa". It ends in an honest, rule-based verdict ("Stark
+kandidat", "Värt att pröva" or "AI är troligen inte första steget"), with the
+reasons and a suggested first prototype. "Boka 15 min med era svar" hands the
+answers and the verdict to Cal.com as the booking note; "Skicka svaren som mejl"
+does the same through `mailto:`. No AI and no backend are involved, and the page
+says so. The hero's secondary button ("Passar AI er? · 4 frågor") leads here: a
+small first step for visitors not ready to book yet. Without JavaScript all four
+questions show at once and the button still books. The verdict is counted in
+GoatCounter as `ai-kollen-besked-stark|mojlig|svag`.
+
 The 20-second launch film is a framed section after the three problem cards:
 the 16:9 cut on landscape screens and the 9:16 cut on portrait ones. It is not
 fetched until it scrolls into view. It then loops muted; "Ljud på" restarts it
@@ -117,6 +131,7 @@ GoatCounter tracks these clicks:
 | `instagram-om`, `instagram-footer` | The Instagram link |
 | `example-sales`, `example-support`, `example-reporting`, `demo-replay-*` | An example tab or replay |
 | `launch-film` | The film's sound/play button |
+| `ai-kollen-hero`, `cta-ai-kollen`, `contact-email-ai-kollen` | The hero link to AI-kollen, and booking or emailing from its verdict |
 
 These are intent events, **not confirmed bookings or sent emails**. Count
 completed meetings separately in Cal.com; the site does not receive booking

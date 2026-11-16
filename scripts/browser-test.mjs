@@ -219,6 +219,40 @@ try {
   await popup.close();
   check(await page.locator("#askInput").inputValue() === "Test av ett manuellt moment\nmed en rad till",
     "The field keeps what the visitor wrote after the booking tab opens");
+
+  // AI-kollen: en fråga i taget, beskedet och svaren följer med till bokningen
+  await page.locator("#ai-kollen").scrollIntoViewIfNeeded();
+  check(await page.locator("#aiCheck .check__q:visible").count() === 1 && !await page.locator("#checkSubmit").isVisible() &&
+    await page.locator("#checkNextBtn").isDisabled(), "AI check shows one question at a time and no booking before an answer");
+  for (const answer of ["Ärenden, support eller kundtjänst", "Många gånger varje dag", "I system vi redan har", "En människa granskar ändå"]) {
+    await page.locator("#aiCheck label", { hasText: answer }).click();
+  }
+  await page.locator("#checkResult").waitFor({ state: "visible" });
+  check(await page.locator("#checkVerdict").textContent() === "Stark kandidat för AI." && await page.locator("#checkWhy li").count() === 3,
+    "A frequent task on system data gets a strong verdict with reasons");
+  const checkMail = new URL(await page.locator("#checkMail").getAttribute("href"));
+  check(checkMail.searchParams.get("body").includes("Besked: Stark kandidat för AI."), "The check's email carries the answers and the verdict");
+  const checkPopupPromise = page.waitForEvent("popup");
+  await page.locator("#checkSubmit").click();
+  const checkPopup = await checkPopupPromise;
+  await checkPopup.waitForLoadState();
+  const checkBooking = new URL(checkPopup.url());
+  check(checkBooking.origin === "https://cal.com" && checkBooking.searchParams.get("notes").includes("Område: Ärenden, support eller kundtjänst") &&
+    checkBooking.searchParams.get("title") === "Samtal efter AI-kollen", "Booking from the check carries the visitor's answers");
+  await checkPopup.close();
+  await page.locator("#checkRestart").click();
+  await page.locator('#aiCheck input[name="area"][value="annat"]').focus();
+  await page.keyboard.press("Space");
+  await page.keyboard.press("ArrowDown");
+  check(await page.locator('#aiCheck fieldset[data-q="area"]').isVisible(), "Arrow keys change the answer without skipping ahead");
+  await page.keyboard.press("Enter");
+  check(await page.locator('#aiCheck fieldset[data-q="volume"]').isVisible(), "Enter moves to the next question");
+  for (const [name, value] of [["volume", "0"], ["data", "0"], ["risk", "mid"]]) {
+    await page.locator(`#aiCheck input[name="${name}"][value="${value}"]`).focus();
+    await page.keyboard.press("Space");
+    await page.locator("#checkNextBtn").click();
+  }
+  check(await page.locator("#checkVerdict").textContent() === "AI är troligen inte första steget.", "A rare task without data gets an honest no");
   await context.close();
 
   const mobile = await newContext({ viewport: { width: 375, height: 812 } });
@@ -303,6 +337,12 @@ try {
       return rect.height >= 44 && rect.left >= 0 && rect.right <= innerWidth;
     })), `Contact actions fit with 44px touch targets at ${width}px`);
   }
+  await mobilePage.setViewportSize({ width: 375, height: 812 });
+  await mobilePage.locator("#ai-kollen").scrollIntoViewIfNeeded();
+  check(await mobilePage.locator("#aiCheck .check__opts span:visible").evaluateAll((opts) => opts.every((el) => {
+    const rect = el.getBoundingClientRect();
+    return rect.height >= 44 && rect.left >= 0 && rect.right <= innerWidth;
+  })), "AI check answers fit the phone with 44px touch targets");
   await mobile.close();
 
   const noJs = await newContext({ javaScriptEnabled: false });
@@ -320,6 +360,9 @@ try {
     return style.opacity === "1" && style.transform === "none" && style.filter === "none";
   })), "Without JS nothing waits for a scroll reveal that will never come");
   check(!await fallback.locator("#exampleTabs").isVisible(), "No dead tab controls without JS");
+  check(await fallback.locator("#aiCheck .check__q:visible").count() === 4 && await fallback.locator("#checkSubmit").isVisible() &&
+    !await fallback.locator("#checkNextBtn").isVisible() && !await fallback.locator("#checkBack").isVisible(),
+    "Without JS the AI check shows every question and a working booking button");
   check(await fallback.locator(".demo__controls:visible").count() === 0, "No dead playback controls without JS");
   for (const id of ["leads", "feedback", "report"]) {
     check(await fallback.locator(`#work-${id}`).isVisible(), `No-JS ${id} content remains readable`);
