@@ -272,27 +272,48 @@
     </section>
 
     <!-- UPPDRAG: problemen stora organisationer oftast kommer med -->
-    <section class="section" id="services">
+    <section class="section pilot" id="services" aria-labelledby="pilotTitle">
       <div class="section__head">
         <p class="eyebrow" data-reveal>UPPDRAG</p>
-        <h2 data-reveal="blur">Tre problem vi ofta löser.</h2>
+        <h2 id="pilotTitle" data-reveal="blur">Ett verkligt problem.<br>Ett första steg ni kan se.</h2>
+        <p class="section__sub">Välj ert område och se hur en avgränsad pilot kan börja. Omfattning och mål bestämmer vi tillsammans före start.</p>
       </div>
       <div class="grid grid--3">
         <article class="card" data-reveal="scale">
           <span class="card__num">01</span>
           <h3>Säker AI för hela organisationen</h3>
           <p>Medarbetarna använder redan AI, ofta i verktyg ni inte har kontroll över. Vi sätter upp en AI-miljö med rätt behörigheter, loggning och avtal, kopplad till er egen data.</p>
+          <button class="pilot__pick" type="button" data-pilot="0" aria-pressed="false" aria-controls="pilotPlan" hidden>Se första steget<span aria-hidden="true"> →</span><span class="sr-only">: Säker AI</span></button>
         </article>
         <article class="card" data-reveal="scale">
           <span class="card__num">02</span>
           <h3>Avlastning för support och kundtjänst</h3>
           <p>Ärenden sorteras, sammanfattas och får svarsförslag. Rätt ärende hamnar hos rätt person, och oklara fall går till en människa.</p>
+          <button class="pilot__pick" type="button" data-pilot="1" aria-pressed="true" aria-controls="pilotPlan" hidden>Se första steget<span aria-hidden="true"> →</span><span class="sr-only">: Support</span></button>
         </article>
         <article class="card" data-reveal="scale">
           <span class="card__num">03</span>
           <h3>Kunskap och flöden på er egen data</h3>
           <p>Sök och svar i interna dokument med källhänvisning, rapporter som sammanställs automatiskt och integrationer mellan era system.</p>
+          <button class="pilot__pick" type="button" data-pilot="2" aria-pressed="false" aria-controls="pilotPlan" hidden>Se första steget<span aria-hidden="true"> →</span><span class="sr-only">: Kunskap</span></button>
         </article>
+      </div>
+      <div class="pilot__plan" id="pilotPlan" role="region" aria-labelledby="pilotPlanTitle">
+        <div class="pilot__intro">
+          <p class="pilot__eyebrow">FÖRSLAG TILL FÖRSTA PILOT · <span id="pilotIndex">02 / 03</span></p>
+          <h3 id="pilotPlanTitle">Från ärende till svarsförslag.</h3>
+          <p id="pilotScope">Börja med en ärendetyp och ett avgränsat urval tidigare ärenden. Jämför förslagen med hur ni arbetar i dag innan något skickas till en kund.</p>
+        </div>
+        <ol class="pilot__flow" aria-label="Så kan flödet se ut">
+          <li><span class="pilot__step">01 · UNDERLAG</span><strong id="pilotInput">Tidigare supportärenden</strong><span id="pilotInputDetail">En ärendetyp, ett tydligt urval.</span></li>
+          <li><span class="pilot__step">02 · AI STÖDJER</span><strong id="pilotAction">Sortera och föreslå svar</strong><span id="pilotActionDetail">Sammanfattning och förslag, med stöd i ert underlag.</span></li>
+          <li><span class="pilot__step">03 · MÄNNISKAN AVGÖR</span><strong id="pilotHuman">Granska före utskick</strong><span id="pilotHumanDetail">Handläggaren godkänner. Oklara fall går vidare.</span></li>
+        </ol>
+        <div class="pilot__outcome"><div><span class="pilot__step">DET VI VILL PRÖVA</span><p id="pilotMeasure">Blir handläggningstiden kortare utan att kvaliteten på svaren sjunker? Mät tid, rättningar och fall som måste lämnas vidare.</p></div>
+          <a class="btn btn--primary" id="pilotBook" href="https://cal.com/johan-studt/15min?title=Pilot%20f%C3%B6r%20support&amp;notes=Vi%20vill%20diskutera%20en%20pilot%20f%C3%B6r%20en%20%C3%A4rendetyp%2C%20med%20m%C3%A4nsklig%20granskning%20och%20m%C3%A4tning%20av%20tid%20och%20kvalitet." target="_blank" rel="noreferrer" data-goatcounter-click="cta-pilot">Boka 15 min om piloten</a>
+        </div>
+        <p class="pilot__fine">Ett möjligt upplägg, inte en färdig offert eller ett löfte om resultat. Ni äger kod och dokumentation.</p>
+        <p class="pilot__status" id="pilotStatus" role="status"></p>
       </div>
     </section>
 
@@ -1078,7 +1099,7 @@
           <button class="btn btn--ghost" type="button" data-book-close>Tillbaka till sidan</button>
         </div>
         <p class="book__fallback" id="bookFallback" hidden>Kalendern vill inte laddas här. Öppna den i en ny flik, dina uppgifter följer med.</p>
-        <a class="book__out" id="bookOut" href="https://cal.com/johan-studt/15min" target="_blank" rel="noreferrer" data-goatcounter-click="bokning-ny-flik">Öppna kalendern i en ny flik ↗</a>
+        <a class="book__out" id="bookOut" href="https://cal.com/johan-studt/15min" target="_blank" rel="noreferrer" data-goatcounter-click="bokning-ny-flik">Öppna kalendern i en ny flik →</a>
       </div>
     </div>
   </dialog>

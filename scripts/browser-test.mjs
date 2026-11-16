@@ -32,7 +32,7 @@ try {
       }
     });
   });
-  browser = await chromium.launch();
+  browser = await chromium.launch(process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE ? { executablePath: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE } : {});
   const errors = [];
   const newContext = async (options = {}) => {
     const context = await browser.newContext({
@@ -244,6 +244,7 @@ try {
   check(await page.locator("#bookNote").textContent() === "Supporten drunknar i ärenden" &&
     new URL(await page.locator("#bookOut").getAttribute("href")).searchParams.get("title") === "Supporten drunknar i ärenden",
     "Enter in the hero field opens the calendar on the page with the visitor's words as the note and title");
+  await page.waitForFunction(() => document.getElementById("heroAskInput").value === "Supporten drunknar i ärenden");
   check(await page.locator("#heroAskInput").inputValue() === "Supporten drunknar i ärenden", "The hero field keeps what the visitor wrote");
   await page.locator("#bookClose").click();
 
@@ -642,6 +643,32 @@ try {
   check(await memoPage.locator("#briefForm").evaluate((form) => [...form.querySelectorAll("button")]
     .every((el) => { const r = el.getBoundingClientRect(); return r.left >= 0 && r.right <= innerWidth; })), "Dock buttons fit at 320px");
   await memoContext.close();
+
+  // Pilot selections must update the complete plan and the booking handoff together.
+  const pilotContext = await newContext();
+  const pilotPage = await pilotContext.newPage();
+  await pilotPage.goto(url);
+  for (const [index, title, guard] of [[0, "Säker AI, med en grupp först.", "Testa åtkomst"], [2, "Ett svar. En källa att kontrollera.", "En sakkunnig"], [1, "Från ärende till svarsförslag.", "Handläggaren"]]) {
+    const pick = pilotPage.locator(`[data-pilot="${index}"]`);
+    await pick.focus();
+    await pilotPage.keyboard.press("Enter");
+    check(await pick.getAttribute("aria-pressed") === "true" && await pilotPage.locator('[data-pilot][aria-pressed="true"]').count() === 1, "One pilot is selected with the keyboard");
+    check(await pilotPage.locator("#pilotPlanTitle").textContent() === title, "Selected pilot shows its matching plan");
+    await pilotPage.locator("#pilotBook").click();
+    check((await pilotPage.locator("#bookNote").textContent()).includes(guard) && (await pilotPage.locator("#bookNote").textContent()).includes("Mätning:"), "Booking carries selected human review and measurement");
+    await pilotPage.keyboard.press("Escape");
+  }
+  for (const width of [320, 375, 768, 1400]) {
+    await pilotPage.setViewportSize({ width, height: 812 });
+    await pilotPage.locator('[data-pilot="0"]').click();
+    check(await pilotPage.locator("#services").evaluate(el => [...el.querySelectorAll(".card, .pilot__flow li, #pilotBook")].every(node => { const r = node.getBoundingClientRect(); return r.left >= 0 && r.right <= innerWidth; })), `Pilot content fits at ${width}px`);
+  }
+  await pilotContext.close();
+  const pilotFallbackContext = await newContext({ javaScriptEnabled: false });
+  const pilotFallback = await pilotFallbackContext.newPage();
+  await pilotFallback.goto(url + "#services");
+  check(await pilotFallback.locator(".pilot__pick:visible").count() === 0 && await pilotFallback.locator("#pilotPlanTitle").textContent() === "Från ärende till svarsförslag." && new URL(await pilotFallback.locator("#pilotBook").getAttribute("href")).searchParams.get("notes").includes("mänsklig"), "No-JS fallback keeps a complete support pilot and booking context");
+  await pilotFallbackContext.close();
 
   check(errors.length === 0, `No browser errors: ${errors.join("; ")}`);
   console.log(`Browser tests passed (${checks} checks).`);

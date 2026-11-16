@@ -104,6 +104,15 @@ situation as the note: a stalled pilot is a concrete reason to call, which
 "book a call" alone is not. Without JavaScript the panel shows the drift state
 with the demo wording under each row, and the button still books.
 
+**Pilot planner** (`#services`) turns the three service areas into selectable
+first-project plans. Each shows a bounded scope, data → AI → human review,
+and a question to measure, rather than promising a result. Support is selected
+initially; all choices work with native buttons and announce changes. The CTA
+passes the selected scope, review step and measurement question into the existing
+booking sheet. On smaller screens a selection brings the plan into view, respecting
+reduced motion. Without JavaScript the service descriptions, support plan and its
+booking link remain available. GoatCounter records `pilot-val-1|2|3` and `cta-pilot`.
+
 **AI-kollen** (`#ai-kollen`, right after the three problem cards) is four
 quick questions: what the problem is, how often the work happens, where the data
 lives and what happens if the AI gets it wrong. It shows one question at a time;

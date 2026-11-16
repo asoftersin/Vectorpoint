@@ -3776,3 +3776,45 @@ html.is-memo .brief { visibility: hidden; }
 }
 /* Keep navigation readable above the dark opening and every later section. */
 .nav { background: #f6f5f1; border-bottom: 1px solid #d9dfe6; }
+
+/* A pilot blueprint connects each capability to a bounded first decision. */
+.pilot .section__head { max-width: 850px; }
+.pilot .grid { gap: 0; border: 1px solid var(--line); border-bottom: 0; border-radius: 16px 16px 0 0; overflow: hidden; }
+.pilot .card { border: 0; border-radius: 0; padding: clamp(22px, 3vw, 38px); background: transparent; display: flex; flex-direction: column; }
+.pilot .card + .card { border-left: 1px solid var(--line); }
+.pilot .card.is-selected { background: #e7effa; box-shadow: inset 0 4px #0a66d1; }
+.pilot .card p { flex: 1; }
+.pilot__pick { align-self: flex-start; margin-top: 20px; padding: 12px 0; border: 0; background: transparent; color: #075cc7; font: 600 .9rem/1.4 var(--font-body); text-align: left; cursor: pointer; }
+.pilot__pick[hidden] { display: none; }
+.pilot__pick[aria-pressed="true"] { color: #15171a; }
+.pilot__pick:focus-visible { outline: 2px solid #075cc7; outline-offset: 4px; }
+.pilot__plan { scroll-margin-top: 100px; position: relative; padding: clamp(24px, 4vw, 52px); border-radius: 0 0 16px 16px; background: #0b1b2d; color: #f4f7fc; }
+.pilot__eyebrow { margin: 0 0 18px; color: #a7caff; font: 500 .72rem/1.6 var(--font-mono); letter-spacing: .08em; }
+.pilot__intro h3 { font-size: clamp(1.6rem, 3vw, 2.5rem); letter-spacing: -.035em; margin-bottom: 16px; }
+.pilot__intro > p:last-child { max-width: 740px; color: #c3cede; line-height: 1.7; }
+.pilot__flow { display: grid; grid-template-columns: repeat(3, 1fr); margin: 32px 0; padding: 0; list-style: none; border: 1px solid #3b4f67; border-radius: 10px; overflow: hidden; }
+.pilot__flow li { display: flex; flex-direction: column; gap: 14px; padding: 24px; background: #13283f; }
+.pilot__flow li + li { border-left: 1px solid #3b4f67; }
+.pilot__flow li:last-child { background: #17394b; }
+.pilot__step { display: block; color: #a7caff; font: 500 .7rem/1.6 var(--font-mono); letter-spacing: .06em; }
+.pilot__flow strong { font-size: 1.1rem; line-height: 1.4; }
+.pilot__flow li > span:last-child { font-size: .92rem; color: #c3cede; line-height: 1.6; }
+.pilot__outcome { display: flex; align-items: center; gap: 40px; justify-content: space-between; }
+.pilot__outcome > div { max-width: 620px; }
+.pilot__outcome p { margin: 10px 0 0; line-height: 1.7; }
+.pilot__outcome .btn { background: #a7caff; border-color: #a7caff; color: #0b1b2d; text-align: center; }
+.pilot__outcome .btn:hover { background: #d1e3ff; }
+.pilot__fine { margin: 30px 0 0; padding-top: 18px; border-top: 1px solid #3b4f67; color: #c3cede; font-size: .8rem; line-height: 1.6; }
+.pilot__status, .pilot .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+@media (max-width: 900px) {
+  .pilot__outcome { flex-direction: column; align-items: flex-start; gap: 24px; }
+  .pilot__flow li { padding: 20px; }
+}
+@media (max-width: 640px) {
+  .pilot .grid { grid-template-columns: 1fr; }
+  .pilot .card + .card { border-left: 0; border-top: 1px solid var(--line); }
+  .pilot .card.is-selected { box-shadow: inset 4px 0 #0a66d1; }
+  .pilot__flow { grid-template-columns: 1fr; }
+  .pilot__flow li + li { border-left: 0; border-top: 1px solid #3b4f67; }
+  .pilot__outcome .btn { width: 100%; white-space: normal; }
+}

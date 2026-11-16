@@ -10,6 +10,69 @@
   });
   document.documentElement.classList.add("vectorpoint-loaded");
 
+  // Concrete pilot plans; only the chosen plan is passed to booking.
+  const pilotButtons = [...document.querySelectorAll("[data-pilot]")];
+  if (pilotButtons.length) {
+    const plans = [
+      {
+        title: "Säker AI, med en grupp först.",
+        scope: "Börja med en användargrupp och en avgränsad datakälla. Pröva behörigheter, loggning och användning innan fler bjuds in.",
+        input: "En godkänd datakälla", inputDetail: "Bestäm vad som får användas och av vem.",
+        action: "En assistent i er miljö", actionDetail: "Sök och svar inom de ramar ni har godkänt.",
+        human: "Er ansvariga godkänner", humanDetail: "Testa åtkomst och granska svar före bredare användning.",
+        measure: "Får rätt person rätt information? Pröva tillåtna och otillåtna frågor, följ loggarna och mät om gruppen får hjälp i sitt arbete.",
+        booking: "Säker AI för hela organisationen"
+      },
+      {
+        title: "Från ärende till svarsförslag.",
+        scope: "Börja med en ärendetyp och ett avgränsat urval tidigare ärenden. Jämför förslagen med hur ni arbetar i dag innan något skickas till en kund.",
+        input: "Tidigare supportärenden", inputDetail: "En ärendetyp, ett tydligt urval.",
+        action: "Sortera och föreslå svar", actionDetail: "Sammanfattning och förslag, med stöd i ert underlag.",
+        human: "Granska före utskick", humanDetail: "Handläggaren godkänner. Oklara fall går vidare.",
+        measure: "Blir handläggningstiden kortare utan att kvaliteten på svaren sjunker? Mät tid, rättningar och fall som måste lämnas vidare.",
+        booking: "Avlastning för support och kundtjänst"
+      },
+      {
+        title: "Ett svar. En källa att kontrollera.",
+        scope: "Börja med en dokumentmängd och frågor som kollegorna faktiskt ställer. Jämför svaren med källorna innan ni kopplar på fler flöden.",
+        input: "En utvald dokumentmängd", inputDetail: "Ett område där ni kan avgöra vad som är rätt.",
+        action: "Hitta svar med källor", actionDetail: "Hänvisa till underlaget. Markera när stöd saknas.",
+        human: "Kontrollera mot källan", humanDetail: "En sakkunnig granskar. Osäkra frågor går vidare.",
+        measure: "Hittar kollegorna rätt snabbare? Mät söktid, kontrollera källhänvisningarna och samla frågor som underlaget inte kan besvara.",
+        booking: "Kunskap och flöden på er egen data"
+      }
+    ];
+    const fields = { title: "pilotPlanTitle", scope: "pilotScope", input: "pilotInput", inputDetail: "pilotInputDetail", action: "pilotAction", actionDetail: "pilotActionDetail", human: "pilotHuman", humanDetail: "pilotHumanDetail", measure: "pilotMeasure" };
+    const selectPilot = (index, announce) => {
+      const plan = plans[index];
+      for (const [key, id] of Object.entries(fields)) document.getElementById(id).textContent = plan[key];
+      document.getElementById("pilotIndex").textContent = `0${index + 1} / 03`;
+      pilotButtons.forEach((button, i) => {
+        button.setAttribute("aria-pressed", String(i === index));
+        button.closest(".card").classList.toggle("is-selected", i === index);
+      });
+      const url = new URL("https://cal.com/johan-studt/15min");
+      url.searchParams.set("title", `Pilot: ${plan.booking}`);
+      url.searchParams.set("notes", `${plan.booking}\n\nMöjligt upplägg att diskutera: ${plan.scope}\n\nMänsklig kontroll: ${plan.humanDetail}\n\nMätning: ${plan.measure}\n\nOmfattning och mål är inte beslutade.`);
+      document.getElementById("pilotBook").href = url.href;
+      if (announce) {
+        document.getElementById("pilotStatus").textContent = `Valt: ${plan.booking}. ${plan.title} Upplägget visas nedanför områdena.`;
+        if (window.goatcounter && window.goatcounter.count) window.goatcounter.count({ path: `pilot-val-${index + 1}`, title: "Pilot vald", event: true });
+      }
+    };
+    pilotButtons.forEach((button, index) => {
+      button.hidden = false;
+      button.addEventListener("click", () => {
+        selectPilot(index, true);
+        const panel = document.getElementById("pilotPlan");
+        if (panel.getBoundingClientRect().top > window.innerHeight * 0.75) {
+          panel.scrollIntoView({ behavior: prefersReducedMotion ? "instant" : "smooth", block: "start" });
+        }
+      });
+    });
+    selectPilot(1, false);
+  }
+
   // ---------- launch film: muted loop with a sound toggle, loaded when it scrolls into view ----------
   // Without JS the video keeps its native controls and the 16:9 file.
   const film = document.getElementById("launchFilm");
