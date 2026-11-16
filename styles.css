@@ -2598,3 +2598,27 @@ html.is-booking { overflow: hidden; }
   .delivery > summary { gap: 8px 12px; font-size: 1rem; }
   .delivery > summary span { flex-basis: 100%; padding-left: 32px; }
 }
+
+/* A short brief is the first step; detailed examples are an optional read. */
+.hero-prompt { width: 100%; max-width: 590px; padding: 16px; background: #fff; border: 1px solid var(--line-strong); border-radius: 14px; display: grid; gap: 12px; }
+.hero-prompt label { font-size: .9rem; font-weight: 500; }
+.hero-prompt textarea { width: 100%; resize: vertical; min-height: 64px; max-height: 160px; border: 0; background: transparent; color: var(--text); font: inherit; line-height: 1.5; }
+.hero-prompt textarea::placeholder { color: var(--muted); opacity: 1; }
+.hero-prompt .btn { justify-self: end; background: var(--accent); color: #fff; cursor: pointer; }
+.hero-prompt:focus-within { border-color: var(--accent); }
+.hero__prompt-note { color: var(--muted); font-size: .8rem; margin-top: -16px; }
+#work { padding-top: 36px; padding-bottom: 0; }
+.examples-disclosure { border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.examples-disclosure > summary { display: flex; align-items: center; gap: 16px; padding: 26px 0; cursor: pointer; list-style: none; font-size: 1.3rem; }
+.examples-disclosure > summary::-webkit-details-marker { display: none; }
+.examples-disclosure > summary::after { content: "+"; margin-left: auto; color: var(--accent); }
+.examples-disclosure[open] > summary::after { content: "−"; }
+.examples-disclosure__hint, .examples-disclosure__note { font-size: .9rem; color: var(--muted); }
+.examples-disclosure__note { margin-bottom: 24px; }
+#approach { padding-top: 36px; }
+#approach .demo-cta { margin-top: 0; }
+@media (max-width: 560px) {
+  .hero-prompt .btn { width: 100%; }
+  .examples-disclosure > summary { flex-wrap: wrap; gap: 4px 12px; }
+  .examples-disclosure__hint { order: 3; flex-basis: 100%; }
+}

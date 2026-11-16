@@ -19,7 +19,7 @@
   onScroll();
 
   // ---------- nav: softer booking button while the hero's own booking button is visible ----------
-  const heroCta = document.getElementById("heroCta");
+  const heroCta = document.getElementById("heroAskSend") || document.getElementById("heroCta");
   if (heroCta && "IntersectionObserver" in window) {
     new IntersectionObserver(([entry]) => {
       nav.classList.toggle("is-hero-cta", entry.isIntersecting);
@@ -74,6 +74,7 @@
     });
     syncMail();
   };
+  wireAsk(document.getElementById("heroAsk"), document.getElementById("heroAskInput"), document.getElementById("heroAskTitle"), null);
   const askForm = document.getElementById("askForm");
   wireAsk(askForm, document.getElementById("askInput"), document.getElementById("askTitle"), document.getElementById("askMail"));
 
@@ -115,6 +116,7 @@
     const selectHashExample = () => {
       const index = panels.findIndex((panel) => `#${panel.id}` === window.location.hash);
       if (index < 0) return false;
+      document.getElementById("examplesDisclosure").open = true;
       selectExample(index);
       panels[index].scrollIntoView({ behavior: "instant", block: "start" });
       return true;

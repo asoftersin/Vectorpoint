@@ -89,7 +89,7 @@ const checks = [
   })()],
   ["no em dash in prose", !html.split("\n").some((l) => l.includes("\u2014") && !l.includes("<title>") && !l.includes('property="og:title"') && !l.includes('name="twitter:title"'))],
   ["flow animation", js.includes("getPointAtLength") && js.includes("runPhase")],
-  ["approach section", html.includes('id="approach"') && html.includes("Problem och mål") && html.indexOf('id="approach"') < html.indexOf('id="prototype"')],
+  ["approach section", html.includes('id="approach"') && !html.includes("Fyra steg mot ett mätbart mål.") && html.indexOf('id="approach"') < html.indexOf('id="prototype"')],
   ["trust points cover control and ownership", !html.includes('id="principles"') && html.includes("Säkerhet och kontroll") && html.includes("Ni äger lösningen")],
   ["faq accordion", html.includes('class="faq__item"') && html.includes("<details")],
   ["no background video left behind", !html.includes("heroVideo") && !js.includes("heroVideo") && !css.includes(".hero__video") && !existsSync("assets/hero-bg.mp4") &&
@@ -153,7 +153,7 @@ const checks = [
   ["reveal stagger", css.includes("transition-delay: 0.12s")],
   ["scroll reduced motion", css.includes(".scroll-progress { display: none; }") && js.includes("if (!prefersReducedMotion && progressFill)")],
   ["hero stays in document flow", !html.includes('id="heroScrub"') && !js.includes("heroScrubOn") && !css.includes(".hero-scrub.is-scrub")],
-  ["reveal variants", html.includes('data-reveal="blur"') && html.includes('data-reveal="scale"') && html.includes('data-reveal="left"') && css.includes('[data-reveal="blur"]') && css.includes(".grid--2 > [data-reveal]:nth-child(odd)")],
+  ["reveal variants", html.includes('data-reveal="blur"') && html.includes('data-reveal="scale"') && css.includes('[data-reveal="blur"]') && css.includes(".grid--2 > [data-reveal]:nth-child(odd)")],
   ["faq cascade", html.includes('<details class="faq__item" data-reveal>') && css.includes(".faq__list > [data-reveal]:nth-child(7)")],
   ["faq covers effect, data and procurement", ["Hur vet vi att det ger effekt?", "Vad händer med vår data?", "Kan ni avropas via ramavtal?"].every((q) => html.split(q).length === 3)],
   ["no untested delivery-time promises", !/inom (två veckor|dagar|[0-9]+ (dagar|veckor))/i.test(html)],
@@ -163,11 +163,11 @@ const checks = [
   ["meta speaks to large organisations", html.includes('<meta name="description" content="Vectorpoint hjälper stora organisationer') && html.includes('"legalName": "Vector Point AB"')],
   ["skip link and focus styles", html.includes('class="skip-link"') && css.includes(":focus-visible")],
   ["commitments are spelled out in the optional delivery detail", ["med källhänvisning", "oklara fall går till en människa", "Varje ändring testas innan den släpps", "Behörigheter, loggning och spårbarhet", "hur det mäts"].every((t) => html.includes(t))],
-  ["one clear hero action with examples as the secondary route", (() => {
+  ["hero prompt and direct booking route", (() => {
     const hero = html.slice(html.indexOf('<section class="hero"'), html.indexOf('id="services"'));
-    return hero.includes('id="heroCta"') && hero.includes('href="#work"') && !hero.includes('<form');
+    return hero.includes('id="heroCta"') && hero.includes('id="heroAsk"') && hero.includes('name="notes"');
   })()],
-  ["retired conversion widgets are removed", ["heroAsk", "ai-kollen", "kostnad", "driftPanel", "brief", "memo", "pilotPlan", "launchFilm"].every(id => !html.includes(`id="${id}"`))],
+  ["retired conversion widgets are removed", ["ai-kollen", "kostnad", "driftPanel", "brief", "memo", "pilotPlan", "launchFilm"].every(id => !html.includes(`id="${id}"`))],
   ["technical depth and contact writing are optional", html.includes('<details class="delivery" id="difference">') && html.includes('<details class="contact__optional">')],
   ["footer heading level", html.includes("<h3>Kontakt</h3>") && !html.includes("<h4>")],
 ];

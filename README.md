@@ -23,12 +23,14 @@ PLAYWRIGHT_CHROMIUM_EXECUTABLE=/usr/bin/chromium npm run test:browser
 ## The experience
 
 The page has one primary next step: a first conversation with Johan. Seven
-main sections carry the story: offer, services, examples, method, about, FAQ,
+main sections carry the story: offer, services, optional examples, prototype offer, about, FAQ,
 and contact. The founder and direct contact details sit beside the offer.
-The hero has a booking button and a quiet link to examples.
+The hero has a short problem field that carries the visitor’s words into booking,
+plus a direct booking link. Examples sit in a closed native disclosure; service
+links to individual examples open it automatically. The four-step method grid
+has been removed, leaving a short prototype offer and optional technical detail.
 
-The page deliberately avoids parallel conversion journeys: no hero prompt,
-pilot selector, AI questionnaire, cost calculator, demo-or-drift switch,
+The page deliberately avoids parallel conversion journeys: no pilot selector, AI questionnaire, cost calculator, demo-or-drift switch,
 floating document dock, or generated PM. The launch film assets and sources
 remain in the repository but are not loaded on the page.
 

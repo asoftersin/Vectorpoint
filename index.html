@@ -102,7 +102,7 @@
       <nav class="nav__links" aria-label="Huvudmeny">
         <a href="#services">Uppdrag</a>
         <a href="#work">Exempel</a>
-        <a href="#approach">Metod</a>
+        <a href="#approach">Börja här</a>
         <a href="#about">Om</a>
         <a href="#kontakt">Kontakt</a>
       </nav>
@@ -114,7 +114,7 @@
     <nav class="nav__mobile" id="mobileNav" aria-label="Mobilmeny">
       <a href="#services">Uppdrag</a>
       <a href="#work">Exempel</a>
-      <a href="#approach">Metod</a>
+      <a href="#approach">Börja här</a>
       <a href="#about">Om</a>
       <a href="#kontakt">Kontakt</a>
       <a class="btn btn--primary" href="https://cal.com/johan-studt/15min" target="_blank" rel="noreferrer" data-goatcounter-click="cta-mobilnav">Boka ett samtal</a>
@@ -130,11 +130,14 @@
           <p class="hero__eyebrow">AI-utveckling för stora organisationer</p>
           <h1 class="hero__title" data-reveal><span class="hero__line">AI som fungerar i drift.</span> <span class="hero__line">Inte bara i en demo.</span></h1>
           <p class="hero__lead" data-reveal>Vi hjälper stora organisationer att lösa verkliga problem med AI, från säkra AI-miljöer till avlastning för support och automatiserade flöden på er egen data.<span class="hero__lead-more"><br>Vi enas om vad som ska bli bättre innan vi bygger, och mäter det efteråt.</span></p>
-          <div class="hero__actions hero__actions--simple" data-reveal>
-            <a class="btn btn--primary btn--lg" id="heroCta" href="https://cal.com/johan-studt/15min" target="_blank" rel="noreferrer" data-goatcounter-click="cta-hero">Boka ett första samtal · 15 min</a>
-            <a class="hero__alt" href="#work">Se exempel på vad vi bygger</a>
-          </div>
-          <p class="hero__assurance">Vi börjar med ert problem. Ni behöver ingen färdig kravspecifikation.</p>
+          <form class="hero-prompt" id="heroAsk" action="https://cal.com/johan-studt/15min" method="get" target="_blank" rel="noreferrer">
+            <label for="heroAskInput">Vad ska AI lösa hos er?</label>
+            <textarea id="heroAskInput" name="notes" rows="2" maxlength="400" placeholder="Beskriv problemet med en mening …"></textarea>
+            <input type="hidden" name="title" id="heroAskTitle" value="">
+            <button class="btn btn--primary" id="heroAskSend" type="submit" data-goatcounter-click="cta-hero-prompt">Boka 15 min om det här <span aria-hidden="true">→</span></button>
+          </form>
+          <p class="hero__prompt-note">Texten följer med bokningen till Johan.</p>
+          <a class="hero__alt" id="heroCta" href="https://cal.com/johan-studt/15min" target="_blank" rel="noreferrer" data-goatcounter-click="cta-hero">Boka direkt utan att skriva</a>
           <ul class="hero__facts" data-reveal aria-label="Det här gäller alltid">
             <li>Fast pris på första prototypen</li>
             <li>Ni äger kod och dokumentation</li>
@@ -196,11 +199,9 @@
 
     <!-- EXEMPEL: tre uppspelande exempel på lösningar som byggts på riktigt -->
     <section class="section section--examples" id="work">
-      <div class="section__head">
-        <p class="eyebrow" data-reveal>EXEMPEL</p>
-        <h2 data-reveal="blur">Så kan det se ut.</h2>
-        <p class="section__sub section__sub--wide" data-reveal>Tre lösningar i daglig drift. Bolag, personer och siffror är påhittade. Flödena är verkliga.</p>
-      </div>
+      <details class="examples-disclosure" id="examplesDisclosure">
+        <summary><span>Se vad vi bygger</span><span class="examples-disclosure__hint">Sälj, support och rapportering</span></summary>
+        <p class="examples-disclosure__note">Bolag, personer och siffror är påhittade. Flödena är verkliga.</p>
       <div class="example-tabs" id="exampleTabs" role="tablist" aria-label="Välj ett exempel" hidden>
         <button class="example-tabs__tab" type="button" role="tab" id="tab-leads" aria-controls="work-leads" aria-selected="true" data-goatcounter-click="example-sales">Sälj</button>
         <button class="example-tabs__tab" type="button" role="tab" id="tab-feedback" aria-controls="work-feedback" aria-selected="false" tabindex="-1" data-goatcounter-click="example-support">Support</button>
@@ -351,36 +352,11 @@
         </ol>
       </div>
     </section>
+      </details>
     </section>
 
     <!-- APPROACH: från idé till mätbar effekt, med erbjudandet att börja -->
     <section class="section" id="approach">
-      <div class="section__head">
-        <p class="eyebrow" data-reveal>SÅ GÅR DET TILL</p>
-        <h2 data-reveal="blur">Fyra steg mot ett mätbart mål.</h2>
-      </div>
-      <div class="grid grid--4 grid--tight">
-        <article class="card card--step" data-reveal="left">
-          <span class="card__num">01</span>
-          <h3>Problem och mål</h3>
-          <p>Vi avgränsar problemet och enas om vad som ska bli bättre och hur det mäts.</p>
-        </article>
-        <article class="card card--step" data-reveal="left">
-          <span class="card__num">02</span>
-          <h3>Prototyp på er data</h3>
-          <p>En fungerande prototyp med de integrationer som behövs. Ni ser värdet innan ni bestämmer er.</p>
-        </article>
-        <article class="card card--step" data-reveal="left">
-          <span class="card__num">03</span>
-          <h3>Drift i er miljö</h3>
-          <p>Vi bygger klart i era system och er plattform, med säkerhet planerad från början.</p>
-        </article>
-        <article class="card card--step" data-reveal="left">
-          <span class="card__num">04</span>
-          <h3>Uppföljning</h3>
-          <p>Vi mäter mot målet från steg ett och föreslår nästa steg. Ni äger lösningen.</p>
-        </article>
-      </div>
       <div class="demo-cta" id="prototype" data-reveal>
         <div class="prototype__copy">
           <p class="eyebrow">BÖRJA HÄR</p>
@@ -693,7 +669,7 @@
         <h3>Sidan</h3>
         <a href="#services">Uppdrag</a>
         <a href="#work">Exempel</a>
-        <a href="#approach">Metod</a>
+        <a href="#approach">Börja här</a>
         <a href="#about">Om</a>
         <a href="#faq">FAQ</a>
         <a href="#kontakt">Kontakt</a>
