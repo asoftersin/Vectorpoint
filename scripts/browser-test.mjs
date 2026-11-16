@@ -59,6 +59,8 @@ try {
   await page.goto(url);
   check(await page.locator(".nav__cta").evaluate((el) => getComputedStyle(el).columnGap === "0px"),
     "Booking label keeps normal word spacing when the long label is shown");
+  check(await page.locator("#hero form, #brief, #memo, #ai-kollen, #kostnad, #drift, #pilotPlan, #film").count() === 0, "The landing page has no competing conversion widgets");
+  check(await page.locator("main > section.section, main > section.hero, main > section.contact").count() === 7, "The page has seven main sections");
   const tabs = page.getByRole("tab");
   const panels = page.getByRole("tabpanel");
   check(await tabs.count() === 3, "Three named example tabs");
@@ -101,9 +103,6 @@ try {
     probe.remove();
     return ok && lum(rgb(page)) > 0.8;
   }), "The page is light and every text colour keeps at least 4.5:1 contrast on it");
-  check(await page.locator("#launchFilm").evaluate((video) => !video.getAttribute("src") && !video.controls) &&
-    await page.locator("#filmSound").textContent() === "Spela filmen",
-    "Launch film waits for a click when the visitor prefers reduced motion");
   const navCtaBackground = () => page.locator(".nav__cta").evaluate((el) => getComputedStyle(el).backgroundColor);
   await page.waitForFunction(() => document.getElementById("siteNav").classList.contains("is-hero-cta"));
   check(await navCtaBackground() === "rgba(0, 0, 0, 0)", "Header booking button is a quiet outline while the hero button is visible");
@@ -152,6 +151,10 @@ try {
   await page.waitForFunction(() => !document.querySelector("#work-feedback").hidden);
   check(true, "Browser back restores the linked example");
 
+  check(!await page.locator("#difference").evaluate(el => el.open) && !await page.locator("#tools").isVisible(), "Technical content starts closed");
+  await page.locator("#difference > summary").focus();
+  await page.keyboard.press("Enter");
+  check(await page.locator("#tools").isVisible(), "Keyboard reveals technical content");
   const disclosure = page.locator("#pipeline");
   check(!await disclosure.evaluate((el) => el.open), "Technical detail starts closed");
   check(!await page.locator("#flowSvg4").isVisible(), "Diagram is inside the disclosure");
@@ -196,6 +199,8 @@ try {
   await page.locator("#copyEmail").click();
   await page.waitForFunction(() => document.getElementById("copyEmail").textContent === "Kopierad");
   check(await page.evaluate(() => navigator.clipboard.readText()) === "johan@vectorpoint.se", "Copy button puts the address on the clipboard");
+  check(!await page.locator("#askForm").isVisible(), "Writing is optional; direct booking is visible first");
+  await page.locator(".contact__optional > summary").click();
   check(await page.locator("#askInput").evaluate(() => {
     const tops = [...document.querySelectorAll(".ask__chip")].map((chip) => Math.round(chip.getBoundingClientRect().top));
     return tops.length === 3 && new Set(tops).size === 1;
@@ -233,95 +238,6 @@ try {
   await page.locator("#bookClose").click();
   check(!await page.locator("#bookSheet").isVisible(), "The close button closes the booking sheet");
 
-  // Hjältens skrivfält: en chip fyller fältet, Enter bokar och texten följer med in i kalendern
-  await page.locator("#heroAsk").scrollIntoViewIfNeeded();
-  await page.locator("#heroAsk .prompt__chip", { hasText: "Avlasta supporten" }).click();
-  check(await page.locator("#heroAskInput").inputValue() === "Avlasta supporten" &&
-    await page.locator("#heroAsk").evaluate((el) => el.classList.contains("has-text")), "A hero chip fills the hero field and lights the send button");
-  await page.locator("#heroAskInput").fill("Supporten drunknar i ärenden");
-  await page.locator("#heroAskInput").press("Enter");
-  await page.locator("#bookSheet").waitFor({ state: "visible" });
-  check(await page.locator("#bookNote").textContent() === "Supporten drunknar i ärenden" &&
-    new URL(await page.locator("#bookOut").getAttribute("href")).searchParams.get("title") === "Supporten drunknar i ärenden",
-    "Enter in the hero field opens the calendar on the page with the visitor's words as the note and title");
-  await page.waitForFunction(() => document.getElementById("heroAskInput").value === "Supporten drunknar i ärenden");
-  check(await page.locator("#heroAskInput").inputValue() === "Supporten drunknar i ärenden", "The hero field keeps what the visitor wrote");
-  await page.locator("#bookClose").click();
-
-  // AI-kollen: en fråga i taget, beskedet och svaren följer med till bokningen
-  await page.locator("#ai-kollen").scrollIntoViewIfNeeded();
-  check(await page.locator("#aiCheck .check__q:visible").count() === 1 && !await page.locator("#checkSubmit").isVisible() &&
-    await page.locator("#checkNextBtn").isDisabled(), "AI check shows one question at a time and no booking before an answer");
-  for (const answer of ["Ärenden, support eller kundtjänst", "Många gånger varje dag", "I system vi redan har", "En människa granskar ändå"]) {
-    await page.locator("#aiCheck label", { hasText: answer }).click();
-  }
-  await page.locator("#checkResult").waitFor({ state: "visible" });
-  check(await page.locator("#checkVerdict").textContent() === "Stark kandidat för AI." && await page.locator("#checkWhy li").count() === 3,
-    "A frequent task on system data gets a strong verdict with reasons");
-  const checkMail = new URL(await page.locator("#checkMail").getAttribute("href"));
-  check(checkMail.searchParams.get("body").includes("Besked: Stark kandidat för AI."), "The check's email carries the answers and the verdict");
-  check(!await page.locator("#bookSheet").isVisible() && !await page.evaluate(() => document.documentElement.classList.contains("is-booking")),
-    "Opening the calendar in a new tab closes the booking sheet");
-  await page.locator("#checkSubmit").click();
-  await page.locator("#bookSheet").waitFor({ state: "visible" });
-  check((await page.locator("#bookNote").textContent()).includes("Område: Ärenden, support eller kundtjänst"), "Booking sheet shows the check's answers");
-  const checkPopupPromise = page.waitForEvent("popup");
-  await page.locator("#bookOut").click();
-  const checkPopup = await checkPopupPromise;
-  await checkPopup.waitForLoadState();
-  const checkBooking = new URL(checkPopup.url());
-  check(checkBooking.origin === "https://cal.com" && checkBooking.searchParams.get("notes").includes("Område: Ärenden, support eller kundtjänst") &&
-    checkBooking.searchParams.get("title") === "Samtal efter AI-kollen", "Booking from the check carries the visitor's answers");
-  await checkPopup.close();
-  await page.locator("#checkRestart").click();
-  await page.locator('#aiCheck input[name="area"][value="annat"]').focus();
-  await page.keyboard.press("Space");
-  await page.keyboard.press("ArrowDown");
-  check(await page.locator('#aiCheck fieldset[data-q="area"]').isVisible(), "Arrow keys change the answer without skipping ahead");
-  await page.keyboard.press("Enter");
-  check(await page.locator('#aiCheck fieldset[data-q="volume"]').isVisible(), "Enter moves to the next question");
-  for (const [name, value] of [["volume", "0"], ["data", "0"], ["risk", "mid"]]) {
-    await page.locator(`#aiCheck input[name="${name}"][value="${value}"]`).focus();
-    await page.keyboard.press("Space");
-    await page.locator("#checkNextBtn").click();
-  }
-  check(await page.locator("#checkVerdict").textContent() === "AI är troligen inte första steget.", "A rare task without data gets an honest no");
-
-  // Demo eller drift: with reduced motion the panel rests in the drift state and never flips by itself.
-  const driftPanel = page.locator("#driftPanel");
-  const driftToggle = page.locator("#driftToggle");
-  await driftPanel.scrollIntoViewIfNeeded();
-  await page.waitForTimeout(1800);
-  check(await driftPanel.getAttribute("data-mode") === "drift" && await driftToggle.getAttribute("aria-checked") === "true" &&
-    await page.locator("#driftNum").textContent() === "6" && await page.locator("#driftSwitch").isVisible(),
-    "With reduced motion the demo-or-drift panel rests in the drift state");
-  check(await page.locator("#drift").evaluate((el) => el.previousElementSibling.id === "hero" && el.nextElementSibling.id === "services"),
-    "The demo-or-drift section sits right under the hero");
-  const visibleAnswers = () => driftPanel.locator(".drift__a .drift__v:visible").allTextContents().then((texts) => texts.join(" "));
-  check((await visibleAnswers()).includes("så jag gissar inte") && !(await visibleAnswers()).includes("Ja, det går bra."),
-    "In drift the assistant hands the unclear question to a person instead of guessing");
-  await driftToggle.click();
-  check(await driftPanel.getAttribute("data-mode") === "demo" && await driftToggle.getAttribute("aria-checked") === "false" &&
-    await page.locator("#driftNum").textContent() === "0" && (await page.locator("#driftState").textContent()).startsWith("Demo: 0 av 6"),
-    "The switch turns the panel to demo and announces it");
-  check((await visibleAnswers()).includes("Ja, det går bra.") && !(await visibleAnswers()).includes("så jag gissar inte") &&
-    await driftPanel.locator(".drift__row .drift__v:visible").allTextContents().then((t) => t.length === 6 && t[0] === "Exempelfiler på en laptop"),
-    "In demo the same question gets a guess, and every row shows what is missing");
-  check(await driftPanel.locator(".drift__mark").first().evaluate((el) => getComputedStyle(el).borderTopStyle === "dashed"),
-    "Demo rows are drawn as empty, dashed marks");
-  await driftToggle.press("ArrowRight");
-  check(await driftPanel.getAttribute("data-mode") === "drift" && await page.locator("#driftNum").textContent() === "6",
-    "Right arrow on the switch turns the panel back to drift");
-  await driftToggle.press("ArrowLeft");
-  await driftToggle.press("Enter");
-  check(await driftPanel.getAttribute("data-mode") === "drift", "Left arrow and Enter work the switch from the keyboard");
-  await page.locator("#driftSwitch .drift__opt").first().click();
-  check(await driftPanel.getAttribute("data-mode") === "demo", "Clicking the Demo label sets that mode");
-  await driftPanel.locator(".drift__foot a").click();
-  await page.locator("#bookSheet").waitFor({ state: "visible" });
-  check(await page.locator("#bookNote").textContent() === "Vi har en AI-pilot eller demo som inte har nått drift.",
-    "Booking from the demo-or-drift panel carries the stuck pilot as the note");
-  await page.locator("#bookClose").click();
   await context.close();
 
   const mobile = await newContext({ viewport: { width: 375, height: 812 } });
@@ -351,6 +267,7 @@ try {
       document.documentElement.scrollWidth <= window.innerWidth), `Mobile ${id} has no horizontal overflow`);
     check(await mobilePage.locator("#prototype").isVisible(), "Mobile offer stays available");
   }
+  await mobilePage.locator("#difference > summary").click();
   await mobilePage.locator("#pipeline summary").click();
   check(await mobilePage.evaluate(() =>
     document.documentElement.scrollWidth <= window.innerWidth), "Mobile diagram scroll stays inside its container");
@@ -401,32 +318,17 @@ try {
     await mobilePage.locator("#kontakt").scrollIntoViewIfNeeded();
     check(await mobilePage.locator('#kontakt .contact__ways a[href^="mailto:"]').evaluate((a) =>
       a.getClientRects().length === 1), `Email address stays on one line in the contact card at ${width}px`);
+    if (!await mobilePage.locator(".contact__optional").evaluate(el => el.open)) await mobilePage.locator(".contact__optional > summary").click();
     check(await mobilePage.locator("#kontakt .ask__actions > *").evaluateAll((controls) => controls.every((el) => {
       const rect = el.getBoundingClientRect();
       return rect.height >= 44 && rect.left >= 0 && rect.right <= innerWidth;
     })), `Contact actions fit with 44px touch targets at ${width}px`);
   }
-  await mobilePage.setViewportSize({ width: 375, height: 812 });
-  await mobilePage.locator("#ai-kollen").scrollIntoViewIfNeeded();
-  check(await mobilePage.locator("#aiCheck .check__opts span:visible").evaluateAll((opts) => opts.every((el) => {
-    const rect = el.getBoundingClientRect();
-    return rect.height >= 44 && rect.left >= 0 && rect.right <= innerWidth;
-  })), "AI check answers fit the phone with 44px touch targets");
-  await mobilePage.locator("#driftPanel").scrollIntoViewIfNeeded();
-  check(await mobilePage.locator("#driftToggle").evaluate((el) => {
-    const rect = el.getBoundingClientRect();
-    return rect.height >= 40 && rect.width >= 64 && rect.left >= 0 && rect.right <= innerWidth &&
-      getComputedStyle(el.parentElement).position === "sticky";
-  }) && await mobilePage.evaluate(() => document.documentElement.scrollWidth <= innerWidth) &&
-    await mobilePage.locator("#driftPanel .drift__row").evaluateAll((rows) => rows.every((row) => row.getBoundingClientRect().right <= innerWidth)),
-    "On a phone the switch stays reachable while the rows scroll, and nothing overflows");
   await mobile.close();
 
   const noJs = await newContext({ javaScriptEnabled: false });
   const fallback = await noJs.newPage();
   await fallback.goto(url);
-  check(await fallback.locator("#launchFilm").evaluate((video) => video.controls && video.getAttribute("src") === "assets/launch/film.mp4") &&
-    !await fallback.locator("#filmSound").isVisible(), "Without JS the launch film keeps native controls and no dead sound button");
   check(await fallback.locator("#askMail").getAttribute("href") === "mailto:johan@vectorpoint.se" &&
     !await fallback.locator("#copyEmail").isVisible() && await fallback.locator("#kontakt .contact__ways a:visible").count() === 3,
     "Without JS every contact route still works and no dead copy button shows");
@@ -437,19 +339,11 @@ try {
     return style.opacity === "1" && style.transform === "none" && style.filter === "none";
   })), "Without JS nothing waits for a scroll reveal that will never come");
   check(!await fallback.locator("#exampleTabs").isVisible(), "No dead tab controls without JS");
-  check(await fallback.locator("#aiCheck .check__q:visible").count() === 4 && await fallback.locator("#checkSubmit").isVisible() &&
-    !await fallback.locator("#checkNextBtn").isVisible() && !await fallback.locator("#checkBack").isVisible(),
-    "Without JS the AI check shows every question and a working booking button");
   check(await fallback.locator(".demo__controls:visible").count() === 0, "No dead playback controls without JS");
-  check(!await fallback.locator("#driftSwitch").isVisible() &&
-    await fallback.locator("#driftPanel .drift__chat .drift__v--demo:visible").count() === 0 &&
-    await fallback.locator("#driftPanel .drift__chat .drift__v--drift:visible").count() === 3 &&
-    await fallback.locator("#driftPanel .drift__row .drift__v:visible").count() === 12 &&
-    await fallback.locator("#driftPanel .drift__foot a").getAttribute("href").then((href) => new URL(href).searchParams.get("notes").includes("AI-pilot")),
-    "Without JS the panel shows drift, compares each row with the demo and still books");
   for (const id of ["leads", "feedback", "report"]) {
     check(await fallback.locator(`#work-${id}`).isVisible(), `No-JS ${id} content remains readable`);
   }
+  await fallback.locator("#difference > summary").click();
   await fallback.locator("#pipeline summary").click();
   check(await fallback.locator("#flowSvg4").isVisible(), "Native disclosure works without JS");
   await fallback.locator("#moreTools summary").click();
@@ -471,41 +365,6 @@ try {
     return !el.classList.contains("is-visible") && getComputedStyle(el).opacity === "0";
   });
   check(true, "With motion later sections wait for the scroll");
-  check(await motionPage.locator("#launchFilm").getAttribute("src") === null,
-    "Launch film is not fetched before it scrolls into view");
-  check(await motionPage.locator("#driftPanel").getAttribute("data-mode") === "demo" &&
-    await motionPage.locator("#driftNum").textContent() === "0", "With motion the panel starts as a demo");
-  await motionPage.locator("#driftSwitch").scrollIntoViewIfNeeded();
-  await motionPage.waitForFunction(() => document.getElementById("driftPanel").dataset.mode === "drift" &&
-    document.getElementById("driftNum").textContent === "6", null, { timeout: 6000 });
-  check(await motionPage.locator("#driftPanel").evaluate((el) => el.classList.contains("is-hint")),
-    "Once in view it switches itself to drift, counts the rows in and hints at the switch");
-  await motionPage.locator("#driftToggle").click();
-  await motionPage.waitForTimeout(2200);
-  check(await motionPage.locator("#driftPanel").evaluate((el) => el.dataset.mode === "demo" && !el.classList.contains("is-hint")),
-    "After the visitor has used the switch the panel stays where they put it");
-  await motionPage.evaluate(() => scrollTo({ top: 0, behavior: "instant" }));
-  await motionPage.locator("#film .film").scrollIntoViewIfNeeded();
-  await motionPage.waitForFunction(() => document.getElementById("launchFilm").getAttribute("src") !== null);
-  check(await motionPage.locator("#launchFilm").evaluate((video) =>
-    video.getAttribute("src") === "assets/launch/film.mp4" && video.muted && video.loop) &&
-    await motionPage.locator("#filmSound").textContent() === "Ljud på",
-    "Launch film loops muted in 16:9 on a landscape screen");
-  await motionPage.evaluate(() => scrollTo({ top: 0, behavior: "instant" }));
-  const narrowMotionPage = await animated.newPage();
-  await narrowMotionPage.setViewportSize({ width: 390, height: 844 });
-  await narrowMotionPage.goto(url);
-  await narrowMotionPage.locator("#film .film").scrollIntoViewIfNeeded();
-  await narrowMotionPage.waitForFunction(() => document.getElementById("launchFilm").getAttribute("src") !== null);
-  check(await narrowMotionPage.locator("#launchFilm").evaluate((video) =>
-    video.getAttribute("src") === "assets/launch/film-v.mp4" && video.poster.endsWith("assets/launch/poster-v.jpg")),
-    "Launch film switches to the 9:16 cut on a portrait phone");
-  check(await narrowMotionPage.locator("#film .film").evaluate((el) => {
-    const rect = el.getBoundingClientRect();
-    return rect.left >= 0 && rect.right <= innerWidth && rect.height <= innerHeight * 0.8 &&
-      Math.abs(rect.width / rect.height - 9 / 16) < 0.01;
-  }), "9:16 film keeps its shape and leaves room around it on a phone");
-  await narrowMotionPage.close();
   check(await motionPage.locator(".hero").evaluate((el) =>
     el.getBoundingClientRect().height <= innerHeight && getComputedStyle(el).position !== "sticky"),
     "Desktop hero fits one viewport without pinning");
@@ -596,9 +455,11 @@ try {
       (i === 0 || rect.left >= controls[i - 1].right));
   }), "Both playback controls fit at 320px with 44px touch targets");
   await motionPage.setViewportSize({ width: 1400, height: 900 });
+  if (!await motionPage.locator("#difference").evaluate(el => el.open)) await motionPage.locator("#difference > summary").click();
   await motionPage.locator("#pipeline summary").click();
   await motionPage.locator("#flowSvg4").scrollIntoViewIfNeeded();
   await motionPage.waitForFunction(() => document.querySelector("#flowSvg4 .node.is-active") !== null);
+  if (!await motionPage.locator("#difference").evaluate(el => el.open)) await motionPage.locator("#difference > summary").click();
   await motionPage.locator("#pipeline summary").click();
   await motionPage.waitForFunction(() => [...document.querySelectorAll("#flowSvg4 .pulse")]
     .every((el) => el.style.opacity === "0"));
@@ -606,69 +467,12 @@ try {
   await motionPage.waitForTimeout(900);
   check(await motionPage.locator("#flowCaption4").textContent() === intro, "Closed diagram stops animating");
   check(intro.startsWith("Följ en ändring"), "Closed diagram restores its intro");
+  if (!await motionPage.locator("#difference").evaluate(el => el.open)) await motionPage.locator("#difference > summary").click();
   await motionPage.locator("#pipeline summary").click();
   await motionPage.locator("#flowSvg4").scrollIntoViewIfNeeded();
   await motionPage.waitForFunction(() => !document.querySelector("#flowCaption4").textContent.startsWith("Följ en ändring"));
   check(true, "Reopening restarts the diagram");
   await animated.close();
-
-  // PM till chefen: underlaget som ett beslutsunderlag att skriva ut, mejla vidare eller boka med.
-  const memoContext = await newContext();
-  const memoPage = await memoContext.newPage();
-  await memoPage.goto(url);
-  await memoPage.locator("#heroAskInput").fill("Supporten hinner inte sortera alla ärenden");
-  await memoPage.waitForFunction(() => document.getElementById("briefCount").textContent === "1");
-  await memoPage.evaluate(() => scrollTo({ top: document.getElementById("approach").offsetTop, behavior: "instant" }));
-  await memoPage.locator("#briefMemo").waitFor({ state: "visible" });
-  await memoPage.locator("#briefMemo").click();
-  await memoPage.locator("#memo").waitFor({ state: "visible" });
-  check(await memoPage.locator("#memoTitle").textContent() === "Supporten hinner inte sortera alla ärenden", "PM title is the visitor's own problem");
-  check(await memoPage.locator("#memoProblem .memo__quote").count() === 1, "PM quotes the problem");
-  check(await memoPage.locator("#memoCheck .memo__missing a").getAttribute("href") === "#ai-kollen", "PM links an empty AI-kollen slot to the check");
-  check(await memoPage.locator("#memoCost .memo__missing a").getAttribute("href") === "#kostnad", "PM links an empty cost slot to the calculator");
-  const memoMail = await memoPage.locator("#memoMail").getAttribute("href");
-  check(memoMail.startsWith("mailto:?subject=") && decodeURIComponent(memoMail).includes("Supporten hinner inte sortera"), "PM mail carries the memo for a colleague");
-  check(await memoPage.evaluate(() => document.activeElement.id === "memoClose"), "PM focuses its close button");
-  await memoPage.keyboard.press("Escape");
-  await memoPage.locator("#memo").waitFor({ state: "hidden" });
-  await memoPage.waitForFunction(() => !document.documentElement.classList.contains("is-memo"));
-  check(true, "Closing the PM restores the page");
-  await memoPage.locator("#briefMemo").click();
-  await memoPage.locator("#memoBook").click();
-  await memoPage.locator("#bookSheet").waitFor({ state: "visible" });
-  check((await memoPage.locator("#bookNote").textContent()).includes("Supporten hinner inte sortera"), "Booking from the PM carries the underlag");
-  await memoPage.keyboard.press("Escape");
-  await memoPage.setViewportSize({ width: 320, height: 700 });
-  await memoPage.waitForTimeout(100);
-  check(await memoPage.locator("#briefForm").evaluate((form) => [...form.querySelectorAll("button")]
-    .every((el) => { const r = el.getBoundingClientRect(); return r.left >= 0 && r.right <= innerWidth; })), "Dock buttons fit at 320px");
-  await memoContext.close();
-
-  // Pilot selections must update the complete plan and the booking handoff together.
-  const pilotContext = await newContext();
-  const pilotPage = await pilotContext.newPage();
-  await pilotPage.goto(url);
-  for (const [index, title, guard] of [[0, "Säker AI, med en grupp först.", "Testa åtkomst"], [2, "Ett svar. En källa att kontrollera.", "En sakkunnig"], [1, "Från ärende till svarsförslag.", "Handläggaren"]]) {
-    const pick = pilotPage.locator(`[data-pilot="${index}"]`);
-    await pick.focus();
-    await pilotPage.keyboard.press("Enter");
-    check(await pick.getAttribute("aria-pressed") === "true" && await pilotPage.locator('[data-pilot][aria-pressed="true"]').count() === 1, "One pilot is selected with the keyboard");
-    check(await pilotPage.locator("#pilotPlanTitle").textContent() === title, "Selected pilot shows its matching plan");
-    await pilotPage.locator("#pilotBook").click();
-    check((await pilotPage.locator("#bookNote").textContent()).includes(guard) && (await pilotPage.locator("#bookNote").textContent()).includes("Mätning:"), "Booking carries selected human review and measurement");
-    await pilotPage.keyboard.press("Escape");
-  }
-  for (const width of [320, 375, 768, 1400]) {
-    await pilotPage.setViewportSize({ width, height: 812 });
-    await pilotPage.locator('[data-pilot="0"]').click();
-    check(await pilotPage.locator("#services").evaluate(el => [...el.querySelectorAll(".card, .pilot__flow li, #pilotBook")].every(node => { const r = node.getBoundingClientRect(); return r.left >= 0 && r.right <= innerWidth; })), `Pilot content fits at ${width}px`);
-  }
-  await pilotContext.close();
-  const pilotFallbackContext = await newContext({ javaScriptEnabled: false });
-  const pilotFallback = await pilotFallbackContext.newPage();
-  await pilotFallback.goto(url + "#services");
-  check(await pilotFallback.locator(".pilot__pick:visible").count() === 0 && await pilotFallback.locator("#pilotPlanTitle").textContent() === "Från ärende till svarsförslag." && new URL(await pilotFallback.locator("#pilotBook").getAttribute("href")).searchParams.get("notes").includes("mänsklig"), "No-JS fallback keeps a complete support pilot and booking context");
-  await pilotFallbackContext.close();
 
   check(errors.length === 0, `No browser errors: ${errors.join("; ")}`);
   console.log(`Browser tests passed (${checks} checks).`);

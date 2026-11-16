@@ -123,32 +123,16 @@
 
   <main id="top">
 
-    <!-- HERO: erbjudandet, personen och vägen till kontakt på första skärmen -->
+    <!-- HERO: ett erbjudande, en person och ett tydligt nästa steg -->
     <section class="hero" id="hero">
       <div class="hero__frame">
         <div class="hero__main">
           <h1 class="hero__title" data-reveal><span class="hero__line">AI som fungerar i drift.</span> <span class="hero__line">Inte bara i en demo.</span></h1>
           <p class="hero__lead" data-reveal>Vi hjälper stora organisationer att lösa verkliga problem med AI, från säkra AI-miljöer till avlastning för support och automatiserade flöden på er egen data.<span class="hero__lead-more"><br>Vi enas om vad som ska bli bättre innan vi bygger, och mäter det efteråt.</span></p>
-          <!-- Första steget är att skriva en mening om problemet; texten följer med in i bokningen. Ingen modell läser den. -->
-          <form class="prompt" id="heroAsk" action="https://cal.com/johan-studt/15min" method="get" target="_blank" rel="noreferrer" data-reveal>
-            <label class="prompt__label" for="heroAskInput"><span class="prompt__dot" aria-hidden="true"></span>Vad ska AI lösa hos er?</label>
-            <div class="prompt__box">
-              <textarea class="prompt__input" id="heroAskInput" name="notes" rows="2" maxlength="400" placeholder="Till exempel: supporten hinner inte sortera alla inkommande ärenden"></textarea>
-              <input type="hidden" name="title" id="heroAskTitle" value="">
-              <button class="prompt__send" id="heroAskSend" type="submit" data-goatcounter-click="cta-hero-prompt"><span>Boka 15 min om det här</span><svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true"><path d="M4 10h11M11 5l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-            </div>
-            <div class="prompt__chips" aria-label="Vanliga problem att utgå från">
-              <button type="button" class="prompt__chip">Säker AI för alla</button>
-              <button type="button" class="prompt__chip">Avlasta supporten</button>
-              <button type="button" class="prompt__chip">Hitta i dokumenten</button>
-              <button type="button" class="prompt__chip">Snabbare rapporter</button>
-            </div>
-          </form>
-          <p class="hero__actions" data-reveal>
-            <a class="hero__alt" id="heroCta" href="https://cal.com/johan-studt/15min" target="_blank" rel="noreferrer" data-goatcounter-click="cta-hero">Boka direkt utan att skriva</a>
-            <span class="hero__sep" aria-hidden="true">·</span>
-            <a class="hero__alt" href="#ai-kollen" data-goatcounter-click="ai-kollen-hero">Osäker? Passar AI er, 4 frågor</a>
-          </p>
+          <div class="hero__actions hero__actions--simple" data-reveal>
+            <a class="btn btn--primary btn--lg" id="heroCta" href="https://cal.com/johan-studt/15min" target="_blank" rel="noreferrer" data-goatcounter-click="cta-hero">Boka ett första samtal · 15 min</a>
+            <a class="hero__alt" href="#work">Se exempel på vad vi bygger</a>
+          </div>
           <ul class="hero__facts" data-reveal aria-label="Det här gäller alltid">
             <li>Fast pris på första prototypen</li>
             <li>Ni äger kod och dokumentation</li>
@@ -180,229 +164,28 @@
       </div>
     </section>
 
-    <!-- DEMO ELLER DRIFT: rubrikens löfte som något besökaren själv slår om. Samma assistent och
-         samma två frågor i två lägen. Varje rad i drift-läget är ett åtagande som står i klartext
-         längre ned på sidan, och innehållet i rutan är påhittat och märkt så. Utan JS visas
-         drift-läget, med demo-läget som jämförelse på varje rad. -->
-    <section class="section section--drift" id="drift" aria-labelledby="driftTitle">
-      <div class="section__head">
-        <p class="eyebrow" data-reveal>DEMO ELLER DRIFT</p>
-        <h2 id="driftTitle" data-reveal="blur">En demo imponerar. I drift måste det hålla.</h2>
-        <p class="section__sub section__sub--wide" data-reveal>Samma assistent och samma två frågor. Slå om och se vad som måste finnas på plats innan AI får möta verkligheten.</p>
-      </div>
-      <div class="drift" id="driftPanel" data-mode="drift" data-reveal="scale">
-        <div class="drift__bar">
-          <span class="demo__title"><i class="drift__led" aria-hidden="true"></i>Intern assistent</span>
-          <span class="flow__chip">EXEMPEL · PÅHITTAT INNEHÅLL</span>
-        </div>
-        <div class="drift__switch" id="driftSwitch" hidden>
-          <button class="drift__opt" type="button" data-set="demo" tabindex="-1" aria-hidden="true">Demo</button>
-          <button class="drift__toggle" id="driftToggle" type="button" role="switch" aria-checked="true" aria-label="Visa assistenten i drift"><span class="drift__knob" aria-hidden="true"></span></button>
-          <button class="drift__opt" type="button" data-set="drift" tabindex="-1" aria-hidden="true">I drift</button>
-        </div>
-        <div class="drift__body">
-          <div class="drift__chat">
-            <p class="drift__q">Vilken uppsägningstid gäller i leverantörsavtalet?</p>
-            <div class="drift__a">
-              <p>Tre månader, och uppsägningen ska vara skriftlig.</p>
-              <p class="drift__meta drift__swap">
-                <span class="drift__v drift__v--demo drift__warn">Ingen källa</span>
-                <span class="drift__v drift__v--drift"><span class="drift__src">Leverantörsavtal · § 12.2</span></span>
-              </p>
-            </div>
-            <p class="drift__q">Kan vi säga upp i förtid utan kostnad?</p>
-            <div class="drift__a drift__swap">
-              <div class="drift__v drift__v--demo">
-                <p>Ja, det går bra.</p>
-                <p class="drift__meta drift__warn">Ingen källa · svaret är en gissning</p>
-              </div>
-              <div class="drift__v drift__v--drift">
-                <p>Det står inte i avtalet, så jag gissar inte. Frågan har gått vidare till avtalsansvarig.</p>
-                <p class="drift__meta"><span class="drift__src">→ Till en människa</span></p>
-              </div>
-            </div>
-            <p class="drift__strip drift__swap">
-              <span class="drift__v drift__v--demo">Laptop · exempelfiler · ingen logg</span>
-              <span class="drift__v drift__v--drift">Er plattform · behörighet kontrollerad · loggat</span>
-            </p>
-          </div>
-          <div class="drift__layers">
-            <p class="drift__score"><span class="drift__num" id="driftNum">6</span><span class="drift__of">av 6 på plats</span></p>
-            <div class="drift__meter" aria-hidden="true"><span></span></div>
-            <p class="drift__sr" id="driftState" aria-live="polite"></p>
-            <ul class="drift__list" aria-label="Det som skiljer drift från en demo">
-              <li class="drift__row" style="--i:0">
-                <span class="drift__mark" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.5 8.5l3 3 6-6.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-                <span class="drift__k">Data</span>
-                <span class="drift__vals drift__swap"><span class="drift__v drift__v--demo">Exempelfiler på en laptop</span><span class="drift__v drift__v--drift">Er egen data, i er plattform</span></span>
-              </li>
-              <li class="drift__row" style="--i:1">
-                <span class="drift__mark" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.5 8.5l3 3 6-6.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-                <span class="drift__k">Behörigheter</span>
-                <span class="drift__vals drift__swap"><span class="drift__v drift__v--demo">Alla ser allt</span><span class="drift__v drift__v--drift">Rätt person ser rätt sak, och det loggas</span></span>
-              </li>
-              <li class="drift__row" style="--i:2">
-                <span class="drift__mark" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.5 8.5l3 3 6-6.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-                <span class="drift__k">Källor</span>
-                <span class="drift__vals drift__swap"><span class="drift__v drift__v--demo">Svar utan hänvisning</span><span class="drift__v drift__v--drift">Källa på varje påstående</span></span>
-              </li>
-              <li class="drift__row" style="--i:3">
-                <span class="drift__mark" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.5 8.5l3 3 6-6.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-                <span class="drift__k">Osäkra fall</span>
-                <span class="drift__vals drift__swap"><span class="drift__v drift__v--demo">Gissar hellre än att säga nej</span><span class="drift__v drift__v--drift">Går till en människa</span></span>
-              </li>
-              <li class="drift__row" style="--i:4">
-                <span class="drift__mark" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.5 8.5l3 3 6-6.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-                <span class="drift__k">Tester</span>
-                <span class="drift__vals drift__swap"><span class="drift__v drift__v--demo">Provat för hand, en gång</span><span class="drift__v drift__v--drift">Varje ändring testas mot riktiga system</span></span>
-              </li>
-              <li class="drift__row" style="--i:5">
-                <span class="drift__mark" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.5 8.5l3 3 6-6.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-                <span class="drift__k">Effekt</span>
-                <span class="drift__vals drift__swap"><span class="drift__v drift__v--demo">”Det ser lovande ut”</span><span class="drift__v drift__v--drift">Mäts mot målet vi enades om före start</span></span>
-              </li>
-            </ul>
-          </div>
-        </div>
-        <div class="drift__foot">
-          <p class="drift__ask"><strong>Har ni en pilot som fastnat i demo-läget?</strong> Ta med den till första samtalet.</p>
-          <a class="btn btn--primary" href="https://cal.com/johan-studt/15min?title=Fr%C3%A5n%20demo%20till%20drift&amp;notes=Vi%20har%20en%20AI-pilot%20eller%20demo%20som%20inte%20har%20n%C3%A5tt%20drift." target="_blank" rel="noreferrer" data-goatcounter-click="cta-drift">Boka 15 min om att ta den i drift</a>
-        </div>
-      </div>
-    </section>
-
     <!-- UPPDRAG: problemen stora organisationer oftast kommer med -->
-    <section class="section pilot" id="services" aria-labelledby="pilotTitle">
+    <section class="section" id="services">
       <div class="section__head">
         <p class="eyebrow" data-reveal>UPPDRAG</p>
-        <h2 id="pilotTitle" data-reveal="blur">Ett verkligt problem.<br>Ett första steg ni kan se.</h2>
-        <p class="section__sub">Välj ert område och se hur en avgränsad pilot kan börja. Omfattning och mål bestämmer vi tillsammans före start.</p>
+        <h2 data-reveal="blur">Tre problem vi ofta löser.</h2>
       </div>
       <div class="grid grid--3">
         <article class="card" data-reveal="scale">
           <span class="card__num">01</span>
           <h3>Säker AI för hela organisationen</h3>
           <p>Medarbetarna använder redan AI, ofta i verktyg ni inte har kontroll över. Vi sätter upp en AI-miljö med rätt behörigheter, loggning och avtal, kopplad till er egen data.</p>
-          <button class="pilot__pick" type="button" data-pilot="0" aria-pressed="false" aria-controls="pilotPlan" hidden>Se första steget<span aria-hidden="true"> →</span><span class="sr-only">: Säker AI</span></button>
         </article>
         <article class="card" data-reveal="scale">
           <span class="card__num">02</span>
           <h3>Avlastning för support och kundtjänst</h3>
           <p>Ärenden sorteras, sammanfattas och får svarsförslag. Rätt ärende hamnar hos rätt person, och oklara fall går till en människa.</p>
-          <button class="pilot__pick" type="button" data-pilot="1" aria-pressed="true" aria-controls="pilotPlan" hidden>Se första steget<span aria-hidden="true"> →</span><span class="sr-only">: Support</span></button>
         </article>
         <article class="card" data-reveal="scale">
           <span class="card__num">03</span>
           <h3>Kunskap och flöden på er egen data</h3>
           <p>Sök och svar i interna dokument med källhänvisning, rapporter som sammanställs automatiskt och integrationer mellan era system.</p>
-          <button class="pilot__pick" type="button" data-pilot="2" aria-pressed="false" aria-controls="pilotPlan" hidden>Se första steget<span aria-hidden="true"> →</span><span class="sr-only">: Kunskap</span></button>
         </article>
-      </div>
-      <div class="pilot__plan" id="pilotPlan" role="region" aria-labelledby="pilotPlanTitle">
-        <div class="pilot__intro">
-          <p class="pilot__eyebrow">FÖRSLAG TILL FÖRSTA PILOT · <span id="pilotIndex">02 / 03</span></p>
-          <h3 id="pilotPlanTitle">Från ärende till svarsförslag.</h3>
-          <p id="pilotScope">Börja med en ärendetyp och ett avgränsat urval tidigare ärenden. Jämför förslagen med hur ni arbetar i dag innan något skickas till en kund.</p>
-        </div>
-        <ol class="pilot__flow" aria-label="Så kan flödet se ut">
-          <li><span class="pilot__step">01 · UNDERLAG</span><strong id="pilotInput">Tidigare supportärenden</strong><span id="pilotInputDetail">En ärendetyp, ett tydligt urval.</span></li>
-          <li><span class="pilot__step">02 · AI STÖDJER</span><strong id="pilotAction">Sortera och föreslå svar</strong><span id="pilotActionDetail">Sammanfattning och förslag, med stöd i ert underlag.</span></li>
-          <li><span class="pilot__step">03 · MÄNNISKAN AVGÖR</span><strong id="pilotHuman">Granska före utskick</strong><span id="pilotHumanDetail">Handläggaren godkänner. Oklara fall går vidare.</span></li>
-        </ol>
-        <div class="pilot__outcome"><div><span class="pilot__step">DET VI VILL PRÖVA</span><p id="pilotMeasure">Blir handläggningstiden kortare utan att kvaliteten på svaren sjunker? Mät tid, rättningar och fall som måste lämnas vidare.</p></div>
-          <a class="btn btn--primary" id="pilotBook" href="https://cal.com/johan-studt/15min?title=Pilot%20f%C3%B6r%20support&amp;notes=Vi%20vill%20diskutera%20en%20pilot%20f%C3%B6r%20en%20%C3%A4rendetyp%2C%20med%20m%C3%A4nsklig%20granskning%20och%20m%C3%A4tning%20av%20tid%20och%20kvalitet." target="_blank" rel="noreferrer" data-goatcounter-click="cta-pilot">Boka 15 min om piloten</a>
-        </div>
-        <p class="pilot__fine">Ett möjligt upplägg, inte en färdig offert eller ett löfte om resultat. Ni äger kod och dokumentation.</p>
-        <p class="pilot__status" id="pilotStatus" role="status"></p>
-      </div>
-    </section>
-
-    <!-- AI-KOLLEN: fyra frågor ger ett ärligt, regelbaserat besked och följer med till bokningen -->
-    <section class="section section--split section--check" id="ai-kollen" aria-labelledby="checkTitle">
-      <div class="section__head">
-        <p class="eyebrow" data-reveal>AI-KOLLEN · 4 FRÅGOR</p>
-        <h2 id="checkTitle" data-reveal="blur">Passar AI för ert problem?</h2>
-        <p class="section__sub" data-reveal>Svara på fyra frågor och få ett ärligt besked direkt. Ibland är svaret att AI inte är rätt verktyg, och det säger vi hellre nu än efter ett projekt.</p>
-      </div>
-      <form class="check" id="aiCheck" action="https://cal.com/johan-studt/15min" method="get" target="_blank" rel="noreferrer" data-reveal="scale" novalidate>
-        <div class="check__bar">
-          <span class="check__count" id="checkCount" aria-live="polite">Fråga 1 av 4</span>
-          <span class="check__track" aria-hidden="true"><span class="check__fill" id="checkFill"></span></span>
-        </div>
-
-        <fieldset class="check__q" data-q="area">
-          <legend>Vad gäller det?</legend>
-          <div class="check__opts">
-            <label><input type="radio" name="area" value="support"><span>Ärenden, support eller kundtjänst</span></label>
-            <label><input type="radio" name="area" value="kunskap"><span>Hitta rätt i dokument och intern kunskap</span></label>
-            <label><input type="radio" name="area" value="rapport"><span>Rapporter och sammanställningar</span></label>
-            <label><input type="radio" name="area" value="miljo"><span>Säker AI för alla medarbetare</span></label>
-            <label><input type="radio" name="area" value="annat"><span>Något annat</span></label>
-          </div>
-        </fieldset>
-
-        <fieldset class="check__q" data-q="volume">
-          <legend>Hur ofta görs arbetet i dag?</legend>
-          <div class="check__opts">
-            <label><input type="radio" name="volume" value="3"><span>Många gånger varje dag</span></label>
-            <label><input type="radio" name="volume" value="2"><span>Varje vecka</span></label>
-            <label><input type="radio" name="volume" value="1"><span>Någon gång i månaden</span></label>
-            <label><input type="radio" name="volume" value="0"><span>Sällan, men det är viktigt när det händer</span></label>
-          </div>
-        </fieldset>
-
-        <fieldset class="check__q" data-q="data">
-          <legend>Var finns underlaget?</legend>
-          <div class="check__opts">
-            <label><input type="radio" name="data" value="3"><span>I system vi redan har, som ärendesystem, CRM eller SharePoint</span></label>
-            <label><input type="radio" name="data" value="2"><span>Digitalt men utspritt, i mejl, filer och chattar</span></label>
-            <label><input type="radio" name="data" value="1"><span>Delvis på papper eller i folks huvuden</span></label>
-            <label><input type="radio" name="data" value="0"><span>Vet inte riktigt</span></label>
-          </div>
-        </fieldset>
-
-        <fieldset class="check__q" data-q="risk">
-          <legend>Vad händer om AI:n gör fel?</legend>
-          <div class="check__opts">
-            <label><input type="radio" name="risk" value="low"><span>En människa granskar ändå innan något går vidare</span></label>
-            <label><input type="radio" name="risk" value="mid"><span>Lite merarbete, men inget allvarligt</span></label>
-            <label><input type="radio" name="risk" value="high"><span>Allvarligt, det rör pengar, personer eller säkerhet</span></label>
-          </div>
-        </fieldset>
-
-        <div class="check__result" id="checkResult" tabindex="-1" hidden>
-          <p class="check__verdict-k">Ert besked</p>
-          <h3 class="check__verdict" id="checkVerdict"></h3>
-          <ul class="check__why" id="checkWhy"></ul>
-          <p class="check__next" id="checkNext"></p>
-        </div>
-
-        <input type="hidden" name="title" id="checkTitleField" value="Samtal efter AI-kollen">
-        <input type="hidden" name="notes" id="checkNotes" value="">
-        <div class="check__actions">
-          <button class="btn btn--ghost check__back" id="checkBack" type="button" hidden>Tillbaka</button>
-          <button class="btn btn--primary check__nextbtn" id="checkNextBtn" type="button" hidden>Nästa</button>
-          <button class="btn btn--primary check__submit" id="checkSubmit" type="submit" data-goatcounter-click="cta-ai-kollen">Boka 15 min med era svar</button>
-          <a class="btn btn--ghost check__mail" id="checkMail" href="mailto:johan@vectorpoint.se" data-goatcounter-click="contact-email-ai-kollen" hidden>Skicka svaren som mejl</a>
-          <button class="check__memo" id="checkMemo" type="button" data-memo-open="ai-kollen" aria-haspopup="dialog" hidden>Gör ett PM till chefen</button>
-          <button class="check__restart" id="checkRestart" type="button" hidden>Börja om</button>
-        </div>
-        <p class="check__note">Beskedet räknas fram av fasta regler i din webbläsare, inte av AI. Vi ser inga svar förrän du själv skickar dem.</p>
-      </form>
-    </section>
-
-    <!-- LANSERINGSFILM: kortversionen av sidan. 16:9 på liggande skärmar, 9:16 på stående. -->
-    <section class="section section--film" id="film" aria-labelledby="filmTitle">
-      <div class="section__head">
-        <p class="eyebrow" data-reveal>FILM · 20 SEKUNDER</p>
-        <h2 id="filmTitle" data-reveal="blur">Kortversionen.</h2>
-      </div>
-      <div class="film" data-reveal="scale">
-        <video class="film__video" id="launchFilm" muted loop playsinline controls preload="none"
-          src="assets/launch/film.mp4" poster="assets/launch/poster.jpg"
-          data-src="assets/launch/film.mp4" data-poster="assets/launch/poster.jpg"
-          data-src-portrait="assets/launch/film-v.mp4" data-poster-portrait="assets/launch/poster-v.jpg"></video>
-        <button class="film__btn" id="filmSound" type="button" data-goatcounter-click="launch-film" hidden>Ljud på</button>
       </div>
     </section>
 
@@ -565,52 +348,6 @@
     </section>
     </section>
 
-    <!-- KOSTNADEN I DAG: besökarens egna siffror blir ett belopp, och beloppet följer med till bokningen.
-         Inga antaganden om besparing: andelen AI kan ta är besökarens gissning och märks så. -->
-    <section class="section section--cost" id="kostnad" aria-labelledby="costTitle">
-      <div class="section__head">
-        <p class="eyebrow" data-reveal>RÄKNA PÅ ER EGEN SIFFRA</p>
-        <h2 id="costTitle" data-reveal="blur">Vad kostar det manuella arbetet i dag?</h2>
-        <p class="section__sub" data-reveal>Dra i reglagen. Beloppet blir ert utgångsläge, det vi mäter mot när AI-lösningen är på plats.</p>
-      </div>
-      <form class="cost" id="costCalc" action="https://cal.com/johan-studt/15min" method="get" target="_blank" rel="noreferrer" data-reveal="scale">
-        <div class="cost__inputs">
-          <div class="cost__field">
-            <label for="costPeople">Personer som gör arbetet</label>
-            <output class="cost__val" id="costPeopleOut" for="costPeople">10 personer</output>
-            <input class="cost__range" type="range" id="costPeople" min="1" max="200" step="1" value="10">
-          </div>
-          <div class="cost__field">
-            <label for="costHours">Timmar per person och vecka</label>
-            <output class="cost__val" id="costHoursOut" for="costHours">4 timmar</output>
-            <input class="cost__range" type="range" id="costHours" min="0.5" max="20" step="0.5" value="4">
-          </div>
-          <div class="cost__field">
-            <label for="costRate">Timkostnad med avgifter</label>
-            <output class="cost__val" id="costRateOut" for="costRate">650 kr</output>
-            <input class="cost__range" type="range" id="costRate" min="300" max="1500" step="25" value="650">
-          </div>
-          <div class="cost__field cost__field--guess">
-            <label for="costShare">Er gissning: hur stor del kan AI ta?</label>
-            <output class="cost__val" id="costShareOut" for="costShare">30 %</output>
-            <input class="cost__range" type="range" id="costShare" min="10" max="80" step="5" value="30">
-          </div>
-        </div>
-        <div class="cost__result" aria-live="polite">
-          <p class="cost__k">Det manuella arbetet kostar i dag</p>
-          <p class="cost__total"><span id="costTotal">1 170 000</span> <span class="cost__unit">kr/år</span></p>
-          <p class="cost__hours"><span id="costYearHours">1 800</span> timmar om året, ungefär <span id="costFte">1,1</span> heltidstjänster.</p>
-          <div class="cost__bar" aria-hidden="true"><span class="cost__bar-ai" id="costBar"></span></div>
-          <p class="cost__share"><span class="cost__dot" aria-hidden="true"></span>Om AI tar <span id="costShareTxt">30 %</span>: <strong><span id="costFreed">351 000</span> kr</strong> och <strong><span id="costFreedHours">540</span> timmar</strong> om året tillbaka till annat.</p>
-          <input type="hidden" name="title" value="Samtal om kostnaden för manuellt arbete">
-          <input type="hidden" name="notes" id="costNotes" value="">
-          <button class="btn btn--primary cost__cta" type="submit" data-goatcounter-click="cta-kostnad">Boka 15 min om de här siffrorna</button>
-          <button class="cost__memo" type="button" data-memo-open="kostnad" aria-haspopup="dialog" hidden>Gör ett PM till chefen av siffrorna</button>
-          <p class="cost__note">Räknat på 45 arbetsveckor och 1 600 timmar per heltidstjänst, i din webbläsare. Siffrorna är era, inte ett löfte från oss: i första samtalet enas vi om hur effekten ska mätas.</p>
-        </div>
-      </form>
-    </section>
-
     <!-- APPROACH: från idé till mätbar effekt, med erbjudandet att börja -->
     <section class="section" id="approach">
       <div class="section__head">
@@ -647,14 +384,8 @@
         </div>
         <a class="btn btn--primary" href="https://cal.com/johan-studt/15min" target="_blank" rel="noreferrer" data-goatcounter-click="cta-exempel">Prata om er prototyp · 15 min</a>
       </div>
-    </section>
-
-    <!-- DIFFERENCE: varför det håller, med leveranspipelinen i praktiken -->
-    <section class="section section--alt" id="difference">
-      <div class="section__head">
-        <p class="eyebrow" data-reveal>BYGGT FÖR STORA ORGANISATIONER</p>
-        <h2 data-reveal="blur">AI som går att lita på i drift.</h2>
-      </div>
+      <details class="delivery" id="difference">
+        <summary>Säkerhet, teknik och kvalitetssäkring<span>För dig som vill gå på djupet</span></summary>
       <ul class="points" data-reveal>
         <li class="point"><h3>Säkerhet och kontroll</h3><p>Behörigheter, loggning och spårbarhet från dag ett. Ni godkänner vilka data och tjänster som används, inklusive externa AI-tjänster.</p></li>
         <li class="point"><h3>Era system, er plattform</h3><p>Vi bygger i det ni redan har, till exempel Microsoft 365, Azure och era ärende- och CRM-system.</p></li>
@@ -819,6 +550,7 @@
           <p class="flow__caption" id="flowCaption4">Följ en ändring från pull request till grind. Pulsen visar var koden är, texten förklarar steget.</p>
         </div>
       </details>
+      </details>
     </section>
 
     <!-- ABOUT -->
@@ -886,6 +618,11 @@
           <p class="eyebrow" data-reveal>KONTAKT</p>
           <h2 id="contactTitle" data-reveal="blur">Vilket problem vill ni lösa?</h2>
           <p class="contact__sub" data-reveal>Berätta, så säger vi ärligt om AI är rätt verktyg.</p>
+          <div class="contact__start" data-reveal>
+            <a class="btn btn--primary btn--lg" href="https://cal.com/johan-studt/15min" target="_blank" rel="noreferrer" data-goatcounter-click="cta-kontakt">Boka ett första samtal · 15 min</a>
+          </div>
+          <details class="contact__optional">
+            <summary>Vill du beskriva problemet först?</summary>
           <form class="ask" id="askForm" action="https://cal.com/johan-studt/15min" method="get" target="_blank" rel="noreferrer" data-reveal>
             <label class="ask__label" for="askInput">Beskriv problemet med några ord</label>
             <textarea class="ask__input" id="askInput" name="notes" rows="3" maxlength="400" placeholder="Till exempel: supporten hinner inte sortera alla inkommande ärenden"></textarea>
@@ -896,11 +633,12 @@
               <button type="button" class="ask__chip">Hitta rätt i interna dokument</button>
             </div>
             <div class="ask__actions">
-              <button class="btn btn--primary btn--lg" type="submit" data-goatcounter-click="cta-kontakt">Välj tid för ett samtal</button>
+              <button class="btn btn--primary btn--lg" type="submit" data-goatcounter-click="cta-kontakt-med-text">Välj tid för ett samtal</button>
               <a class="btn btn--ghost btn--lg" id="askMail" href="mailto:johan@vectorpoint.se" data-goatcounter-click="contact-email-form">Skicka som mejl</a>
             </div>
             <p class="ask__note">Texten följer med till bokningen eller mejlet. Ingen AI läser den, det gör vi.</p>
           </form>
+          </details>
           <div class="contact__after" data-reveal>
             <h3>Det här händer sedan</h3>
             <ol class="contact__steps">
@@ -938,26 +676,6 @@
 
   </main>
 
-  <!-- Ert underlag: följer med nedför sidan och samlar det besökaren berättar (problemet,
-       AI-kollens besked, kostnaden) till en bokningsanteckning. Kräver JS; utan JS syns den inte. -->
-  <aside class="brief" id="brief" aria-label="Ert underlag till samtalet" hidden>
-    <form class="brief__bar" id="briefForm" action="https://cal.com/johan-studt/15min" method="get" target="_blank" rel="noreferrer">
-      <div class="brief__head">
-        <span class="brief__ring" aria-hidden="true"><svg viewBox="0 0 36 36"><circle cx="18" cy="18" r="15.5"/><circle class="brief__ring-fill" id="briefRing" cx="18" cy="18" r="15.5"/></svg><span id="briefCount">0</span></span>
-        <span class="brief__label"><span class="brief__kicker">Ert underlag</span><span class="brief__status" id="briefStatus" aria-live="polite">Samlas medan ni läser</span></span>
-      </div>
-      <ol class="brief__items">
-        <li><a class="brief__item" id="briefProblem" href="#kontakt" data-empty="Ert problem"><span class="brief__dot" aria-hidden="true"></span><span class="brief__text">Ert problem</span></a></li>
-        <li><a class="brief__item" id="briefCheck" href="#ai-kollen" data-empty="AI-kollen"><span class="brief__dot" aria-hidden="true"></span><span class="brief__text">AI-kollen</span></a></li>
-        <li><a class="brief__item" id="briefCost" href="#kostnad" data-empty="Kostnaden"><span class="brief__dot" aria-hidden="true"></span><span class="brief__text">Kostnaden</span></a></li>
-      </ol>
-      <input type="hidden" name="title" id="briefTitle" value="">
-      <input type="hidden" name="notes" id="briefNotes" value="">
-      <button class="brief__memo" id="briefMemo" type="button" data-memo-open="dock" aria-haspopup="dialog"><svg viewBox="0 0 20 20" width="16" height="16" aria-hidden="true"><path d="M5.5 2.5h6l3 3v12h-9z M11.5 2.5v3h3 M8 10h4.5M8 13h4.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/></svg><span>PM till chefen</span></button>
-      <button class="brief__send" type="submit" data-goatcounter-click="cta-underlag"><span id="briefSendWith">Boka 15 min</span><svg viewBox="0 0 20 20" width="16" height="16" aria-hidden="true"><path d="M4 10h11M11 5l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-    </form>
-  </aside>
-
   <footer class="footer">
     <div class="footer__inner">
       <div class="footer__brand">
@@ -988,71 +706,6 @@
       <span>Göteborg, Sverige</span>
     </div>
   </footer>
-
-  <!-- PM till chefen: det besökaren berättat, sammanställt som ett beslutsunderlag att skriva ut
-       eller mejla vidare. Byggs i webbläsaren; inget skickas någonstans. Kräver JS. -->
-  <dialog class="memo" id="memo" aria-labelledby="memoTitle">
-    <div class="memo__wrap">
-      <div class="memo__bar">
-        <p class="memo__bar-k"><span class="memo__bar-dot" aria-hidden="true"></span>Beslutsunderlag · byggt av era svar</p>
-        <button class="memo__close" id="memoClose" type="button" aria-label="Stäng PM:et">
-          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-        </button>
-      </div>
-      <article class="memo__paper" id="memoPaper">
-        <header class="memo__head">
-          <img class="memo__logo" src="assets/brand/vectorpoint-logo.svg" alt="Vectorpoint" width="120" height="22">
-          <p class="memo__meta"><span>PM</span><span id="memoDate"></span></p>
-        </header>
-        <p class="memo__k">Förslag till beslut</p>
-        <h2 class="memo__title" id="memoTitle">Pröva AI på ett avgränsat problem</h2>
-        <p class="memo__lede" id="memoLede"></p>
-
-        <section class="memo__sec" id="memoSecProblem">
-          <h3><span>1</span>Problemet</h3>
-          <div class="memo__body" id="memoProblem"></div>
-        </section>
-        <section class="memo__sec" id="memoSecCheck">
-          <h3><span>2</span>Passar AI?</h3>
-          <div class="memo__body" id="memoCheck"></div>
-        </section>
-        <section class="memo__sec" id="memoSecCost">
-          <h3><span>3</span>Vad det kostar i dag</h3>
-          <div class="memo__body" id="memoCost"></div>
-        </section>
-        <section class="memo__sec">
-          <h3><span>4</span>Förslag på första steg</h3>
-          <div class="memo__body">
-            <p>En prototyp på vår egen data, med fast pris och omfattning som bestäms före start. Vi tar ställning till fortsatt arbete efter utvärderingen.</p>
-            <ol class="memo__steps">
-              <li><strong>Problem och mål.</strong> Vi avgränsar problemet och enas om vad som ska bli bättre och hur det mäts.</li>
-              <li><strong>Prototyp på er data.</strong> En fungerande prototyp med de integrationer som behövs. Ni ser värdet innan ni bestämmer er.</li>
-              <li><strong>Drift i er miljö.</strong> Vi bygger klart i era system och er plattform, med säkerhet planerad från början.</li>
-              <li><strong>Uppföljning.</strong> Vi mäter mot målet från steg ett och föreslår nästa steg. Ni äger lösningen.</li>
-            </ol>
-          </div>
-        </section>
-        <section class="memo__sec memo__sec--ask">
-          <h3><span>5</span>Det vi beslutar nu</h3>
-          <div class="memo__body">
-            <p>Att ta ett första samtal på 15 minuter med Vectorpoint om problemet ovan. Det binder oss inte till något.</p>
-          </div>
-        </section>
-
-        <footer class="memo__foot">
-          <img src="assets/johan-portrait.jpg" alt="" width="44" height="44" loading="lazy">
-          <p><strong>Johan Studt</strong>, grundare, Vector Point AB<br>johan@vectorpoint.se · cal.com/johan-studt/15min</p>
-        </footer>
-        <p class="memo__fine">Sammanställt av er själva på vectorpoint.se. Svaren och siffrorna är era egna uppgifter, inte ett löfte från Vectorpoint.</p>
-      </article>
-      <div class="memo__actions">
-        <button class="btn btn--primary memo__book" id="memoBook" type="button" data-goatcounter-click="cta-pm">Boka 15 min med PM:et</button>
-        <a class="btn btn--ghost" id="memoMail" href="mailto:" data-goatcounter-click="pm-mejla">Mejla till en kollega</a>
-        <button class="btn btn--ghost" id="memoPrint" type="button" data-goatcounter-click="pm-skriv-ut">Skriv ut / spara PDF</button>
-        <button class="memo__copy" id="memoCopy" type="button" hidden>Kopiera texten</button>
-      </div>
-    </div>
-  </dialog>
 
   <!-- Bokningsrummet: varje bokningsknapp öppnar kalendern här i stället för i en ny flik.
        Utan JS (eller utan <dialog>) går länkarna som vanligt till cal.com. -->

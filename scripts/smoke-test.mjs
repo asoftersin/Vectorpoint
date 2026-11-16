@@ -32,7 +32,7 @@ const checks = [
   ["hero is the first thing on the page", (() => {
     const main = html.indexOf('<main id="top">');
     const firstSection = html.indexOf("<section", main);
-    return firstSection === html.indexOf('<section class="hero" id="hero">') && html.indexOf('id="film"') > html.indexOf('id="services"');
+    return firstSection === html.indexOf('<section class="hero" id="hero">');
   })()],
   // The headline sells the difference (it works in daily operation); the brand
   // tagline from the film stays in the title, the social cards and the footer.
@@ -46,13 +46,6 @@ const checks = [
       hero.includes('href="mailto:johan@vectorpoint.se"') && hero.includes("https://www.linkedin.com/in/johan-studt/") &&
       hero.includes("Vector Point AB") && hero.indexOf('id="heroCta"') < hero.indexOf('class="founder"');
   })()],
-  ["hero opens with a prompt field that books with the visitor's words", (() => {
-    const hero = html.slice(html.indexOf('<section class="hero"'), html.indexOf("</section>", html.indexOf('<section class="hero"')));
-    return hero.includes('<form class="prompt" id="heroAsk" action="https://cal.com/johan-studt/15min"') && hero.includes('name="notes"') &&
-      hero.indexOf('id="heroAsk"') < hero.indexOf('id="heroCta"') && js.includes('wireAsk(heroAsk, heroAskInput') && js.includes("prefersReducedMotion");
-  })()],
-  // Only organisations Johan has said may be shown, under the label he chose: "previous work",
-  // not "clients". Adding a name or changing that claim is his call, not a design decision.
   ["previous work sits in the hero with local assets", (() => {
     const hero = html.slice(html.indexOf('<section class="hero"'), html.indexOf("</section>", html.indexOf('<section class="hero"')));
     const strip = hero.slice(hero.indexOf('class="clients"'));
@@ -62,16 +55,6 @@ const checks = [
   })()],
   ["hero commitments repeat promises made in full further down", ["Fast pris på första prototypen", "Ni äger kod och dokumentation", "Testat innan det når er"].every((t) => html.includes(`<li>${t}</li>`)) &&
     html.includes("Fast pris och omfattning bestäms före start.") && html.includes("Ni äger lösningen") && html.includes("Testat som programvara")],
-  ["launch film is a framed section that loads on demand", (() => {
-    const film = html.indexOf('id="film"');
-    return film > html.indexOf('id="services"') && film < html.indexOf('id="work"') &&
-      ["film.mp4", "film-v.mp4", "poster.jpg", "poster-v.jpg"].every((f) => html.includes(`assets/launch/${f}`) && existsSync(`assets/launch/${f}`)) &&
-      html.includes('preload="none"') && js.includes('matchMedia("(orientation: portrait)")') && js.includes("if (!film.getAttribute(\"src\")) pickSource();") &&
-      css.includes(".vectorpoint-loaded .film {") && css.includes("aspect-ratio: 9 / 16;");
-  })()],
-  ["light page with dark panels from one token set", css.includes("--bg: #f6f4ef") && css.includes("--accent: #0a66d1") && css.includes("--accent: #0099ff") &&
-    /\.film,\n\.demo,\n\.check,\n\.cost,\n\.drift,\n\.flow__stage,\n\.contact,\n\.footer \{/.test(css) && html.includes('<meta name="theme-color" content="#f6f4ef">') &&
-    html.includes('<img src="assets/brand/vectorpoint-logo.svg" alt="Vectorpoint"')],
   ["optional technical deep dive", html.includes('<details class="pipeline" id="pipeline">') && html.includes("<summary>Se hur vi kvalitetssäkrar")],
   ["data processing described without absolute residency promise", !html.includes("Den stannar i era system.") && html.split("även externa AI-tjänster").length === 3],
   ["LinkedIn CTA", html.includes("https://www.linkedin.com/in/johan-studt/")],
@@ -179,33 +162,13 @@ const checks = [
   ["hero tools line removed", !html.includes("hero__tools") && !css.includes(".hero__tools")],
   ["meta speaks to large organisations", html.includes('<meta name="description" content="Vectorpoint hjälper stora organisationer') && html.includes('"legalName": "Vector Point AB"')],
   ["skip link and focus styles", html.includes('class="skip-link"') && css.includes(":focus-visible")],
-  ["ai check sits between services and film and books on cal.com", html.indexOf('id="ai-kollen"') > html.indexOf('id="services"') && html.indexOf('id="ai-kollen"') < html.indexOf('id="film"') &&
-    html.includes('id="aiCheck" action="https://cal.com/johan-studt/15min"') && html.split('class="check__q"').length === 5 && js.includes("aiCheck")],
-  ["ai check is honest about how it works", html.includes("inte av AI") && html.includes("AI är troligen inte första steget") === false && js.includes("AI är troligen inte första steget.")],
-  ["hero secondary action leads to the ai check", html.includes('href="#ai-kollen" data-goatcounter-click="ai-kollen-hero"')],
-  // The cost section only ever shows the visitor's own numbers: no default saving is claimed,
-  // the AI share is labelled as their guess, and the result travels to the booking as a note.
-  ["cost calculator uses the visitor's numbers and books with them", (() => {
-    const cost = html.slice(html.indexOf('id="kostnad"'), html.indexOf('id="approach"'));
-    return html.indexOf('id="kostnad"') > html.indexOf('id="work"') && html.indexOf('id="kostnad"') < html.indexOf('id="approach"') &&
-      cost.includes('id="costCalc" action="https://cal.com/johan-studt/15min"') && cost.includes('name="notes" id="costNotes"') &&
-      cost.includes("Er gissning") && cost.includes("inte ett löfte") && cost.includes('data-goatcounter-click="cta-kostnad"') &&
-      js.includes("const WEEKS = 45;") && js.includes('$("costNotes").value');
+  ["commitments are spelled out in the optional delivery detail", ["med källhänvisning", "oklara fall går till en människa", "Varje ändring testas innan den släpps", "Behörigheter, loggning och spårbarhet", "hur det mäts"].every((t) => html.includes(t))],
+  ["one clear hero action with examples as the secondary route", (() => {
+    const hero = html.slice(html.indexOf('<section class="hero"'), html.indexOf('id="services"'));
+    return hero.includes('id="heroCta"') && hero.includes('href="#work"') && !hero.includes('<form');
   })()],
-  // Demo eller drift pays off the headline right under the hero. Its drift rows only repeat
-  // commitments made in full elsewhere on the page, its content is labelled as invented, and
-  // without JavaScript it shows the drift state with the demo state as a comparison.
-  ["demo-or-drift switch sits right under the hero and books with the pilot as the note", (() => {
-    const drift = html.slice(html.indexOf('id="drift"'), html.indexOf('id="services"'));
-    return html.indexOf('id="drift"') > html.indexOf('id="hero"') && html.indexOf('id="drift"') < html.indexOf('id="services"') &&
-      drift.includes('id="driftPanel" data-mode="drift"') && drift.includes("EXEMPEL · PÅHITTAT INNEHÅLL") &&
-      drift.split('class="drift__row"').length === 7 && /id="driftSwitch" hidden>/.test(drift) &&
-      drift.includes('role="switch" aria-checked="true"') && drift.includes('data-goatcounter-click="cta-drift"') &&
-      drift.includes('href="https://cal.com/johan-studt/15min?title=') && drift.includes("notes=Vi%20har%20en%20AI-pilot") &&
-      js.includes('"drift-vaxlat"') && js.includes("driftSwitch.hidden = false") &&
-      css.includes('.drift:not(.is-live) .drift__chat .drift__v--demo { display: none; }');
-  })()],
-  ["drift rows repeat commitments spelled out further down", ["med källhänvisning", "oklara fall går till en människa", "Varje ändring testas innan den släpps", "Behörigheter, loggning och spårbarhet", "hur det mäts"].every((t) => html.includes(t))],
+  ["retired conversion widgets are removed", ["heroAsk", "ai-kollen", "kostnad", "driftPanel", "brief", "memo", "pilotPlan", "launchFilm"].every(id => !html.includes(`id="${id}"`))],
+  ["technical depth and contact writing are optional", html.includes('<details class="delivery" id="difference">') && html.includes('<details class="contact__optional">')],
   ["footer heading level", html.includes("<h3>Kontakt</h3>") && !html.includes("<h4>")],
 ];
 
