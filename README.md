@@ -72,7 +72,7 @@ meetings. Never include visitor text in analytics event names.
 ## Design and assets
 
 The opening and main page share a warm paper canvas, dark ink and one brand-blue
-booking action. The founder uses a compact white contact card with a circular monochrome portrait;
+booking action. The founder uses a white contact card with a large color portrait and readable contact details;
 the previous-work strip uses
 a quiet dividing rule. Services are editorial rows with direct links to the
 relevant example or method; those links work without JavaScript. Demos, contact and footer use
