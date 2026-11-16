@@ -3063,3 +3063,94 @@ html.is-booking { overflow: hidden; }
   .book__sk, .book__grid i { animation: none; }
   .book__close:hover { transform: none; }
 }
+
+/* ---------- Ert underlag: dockan som samlar besökarens svar till samtalet ---------- */
+.brief {
+  position: fixed;
+  left: 50%;
+  bottom: max(16px, env(safe-area-inset-bottom));
+  z-index: 60;
+  width: min(960px, calc(100% - 32px));
+  transform: translate(-50%, 0);
+  transition: transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.3s ease;
+}
+.brief.is-away { transform: translate(-50%, calc(100% + 40px)); opacity: 0; pointer-events: none; }
+.brief__bar {
+  --bg: #121417; --surface: #1b1e22; --line: #2c3036; --text: #f2f2f2; --muted: #a3a8b0; --accent: #3ea2ff;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 0;
+  padding: 8px 8px 8px 12px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(18, 20, 23, 0.94);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  color: var(--text);
+  box-shadow: 0 18px 50px rgba(10, 12, 16, 0.35), 0 2px 6px rgba(10, 12, 16, 0.2);
+}
+.brief__head { display: flex; align-items: center; gap: 10px; flex: 0 0 auto; }
+.brief__ring { position: relative; width: 36px; height: 36px; display: grid; place-items: center; font: 600 0.8rem/1 var(--font-mono); }
+.brief__ring svg { position: absolute; inset: 0; transform: rotate(-90deg); }
+.brief__ring circle { fill: none; stroke: var(--line); stroke-width: 3; }
+.brief__ring .brief__ring-fill { stroke: var(--accent); stroke-linecap: round; stroke-dasharray: 97.4; stroke-dashoffset: 97.4; transition: stroke-dashoffset 0.6s cubic-bezier(0.2, 0.8, 0.2, 1); }
+.brief__label { display: flex; flex-direction: column; gap: 2px; line-height: 1.15; }
+.brief__kicker { font: 500 0.68rem/1 var(--font-mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+.brief__status { font-size: 0.86rem; font-weight: 500; white-space: nowrap; }
+.brief__items { display: flex; gap: 6px; flex: 1 1 auto; min-width: 0; margin: 0; padding: 0; list-style: none; }
+.brief__items li { min-width: 0; flex: 0 0 auto; }
+.brief__items li.is-filled { flex: 0 1 auto; }
+.brief__item {
+  display: flex; align-items: center; gap: 7px;
+  max-width: 220px;
+  padding: 7px 12px;
+  border: 1px dashed var(--line);
+  border-radius: 999px;
+  color: var(--muted);
+  font-size: 0.8rem;
+  text-decoration: none;
+  transition: border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
+}
+.brief__item:hover { color: var(--text); border-color: var(--muted); }
+.brief__text { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.brief__dot { flex: 0 0 auto; width: 7px; height: 7px; border-radius: 50%; border: 1.5px solid currentColor; }
+.brief__item.is-filled { border-style: solid; border-color: rgba(62, 162, 255, 0.45); background: rgba(62, 162, 255, 0.1); color: var(--text); }
+.brief__item.is-filled .brief__dot { border-color: var(--accent); background: var(--accent); }
+.brief__item.is-new { animation: brief-pop 0.9s cubic-bezier(0.2, 0.8, 0.2, 1); }
+@keyframes brief-pop {
+  0% { transform: scale(0.9); box-shadow: 0 0 0 0 rgba(62, 162, 255, 0.6); }
+  40% { transform: scale(1.06); }
+  100% { transform: scale(1); box-shadow: 0 0 0 12px rgba(62, 162, 255, 0); }
+}
+.brief__send {
+  flex: 0 0 auto;
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 11px 18px;
+  border: 0;
+  border-radius: 999px;
+  background: #ffffff;
+  color: #15171a;
+  font: 600 0.9rem/1 var(--font-body);
+  cursor: pointer;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+.brief__send:hover { transform: translateY(-1px); background: #e9f3ff; }
+.brief__send:focus-visible, .brief__item:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+html.is-booking .brief { visibility: hidden; }
+@media (max-width: 860px) {
+  .brief__label { display: none; }
+  .brief__item { max-width: 150px; padding: 7px 10px; }
+}
+@media (max-width: 600px) {
+  .brief { bottom: max(10px, env(safe-area-inset-bottom)); width: calc(100% - 20px); }
+  .brief__bar { gap: 10px; padding: 6px 6px 6px 8px; }
+  .brief__label { display: flex; min-width: 0; }
+  .brief__status { font-size: 0.82rem; }
+  .brief__items { display: none; }
+  .brief__send { margin-left: auto; padding: 11px 14px; font-size: 0.86rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .brief, .brief__ring .brief__ring-fill { transition: none; }
+  .brief__item.is-new { animation: none; }
+}

@@ -318,6 +318,7 @@
       const text = summary(assessment);
       notes.value = text;
       mail.href = `mailto:johan@vectorpoint.se?subject=${encodeURIComponent("AI-kollen: " + labelOf("area"))}&body=${encodeURIComponent(text + "\n\n")}`;
+      document.dispatchEvent(new CustomEvent("vp:brief", { detail: { key: "check", short: assessment.verdict.replace(/\.$/, ""), full: text } }));
       if (window.goatcounter && window.goatcounter.count) {
         window.goatcounter.count({ path: `ai-kollen-besked-${assessment.level}`, title: "AI-kollen besked", event: true });
       }
@@ -1258,6 +1259,7 @@
     let counted = false;
     costCalc.addEventListener("input", () => {
       update(true);
+      document.dispatchEvent(new CustomEvent("vp:brief", { detail: { key: "cost", short: `${($("costNotes").value.match(/blir det ([\d\s ]+) kr/) || [, ""])[1].trim()} kr/år`, full: $("costNotes").value } }));
       // En räkning per besök räcker för att se att verktyget används.
       if (!counted && window.goatcounter && window.goatcounter.count) {
         counted = true;
@@ -1266,6 +1268,91 @@
     });
     costCalc.classList.add("is-live");
     update(false);
+  }
+
+  // ---------- Ert underlag: dockan samlar det besökaren berättar och bokar med allt ----------
+  // Tre källor: problemet (hjältens eller kontaktens skrivfält), AI-kollens besked och
+  // kostnaden. Inget skickas någonstans förrän besökaren själv bokar.
+  const brief = document.getElementById("brief");
+  if (brief) {
+    const KEYS = ["problem", "check", "cost"];
+    const items = { problem: "briefProblem", check: "briefCheck", cost: "briefCost" };
+    const ring = document.getElementById("briefRing");
+    const countEl = document.getElementById("briefCount");
+    const status = document.getElementById("briefStatus");
+    const sendWith = document.getElementById("briefSendWith");
+    const STORE = "vp-underlag";
+    let data = {};
+    try { data = JSON.parse(sessionStorage.getItem(STORE) || "{}") || {}; } catch (e) { data = {}; }
+
+    const paint = (fresh) => {
+      let n = 0;
+      KEYS.forEach((key) => {
+        const el = document.getElementById(items[key]);
+        const entry = data[key];
+        el.classList.toggle("is-filled", !!entry);
+        el.parentElement.classList.toggle("is-filled", !!entry);
+        el.querySelector(".brief__text").textContent = entry ? entry.short : el.dataset.empty;
+        el.title = entry ? entry.short : `Lägg till: ${el.dataset.empty.toLowerCase()}`;
+        if (entry) n += 1;
+        if (key === fresh) {
+          el.classList.remove("is-new");
+          void el.offsetWidth;
+          el.classList.add("is-new");
+        }
+      });
+      countEl.textContent = n;
+      ring.style.strokeDashoffset = String(97.4 * (1 - n / 3));
+      status.textContent = n === 0 ? "Samlas medan ni läser" : n === 3 ? "Klart för samtalet" : `${n} av 3 till samtalet`;
+      sendWith.textContent = n === 0 ? "Boka 15 min" : "Boka med underlaget";
+    };
+
+    const set = (key, short, full) => {
+      if (!short) delete data[key];
+      else data[key] = { short, full };
+      try { sessionStorage.setItem(STORE, JSON.stringify(data)); } catch (e) { /* privat läge */ }
+      paint(short ? key : null);
+    };
+
+    document.addEventListener("vp:brief", (event) => set(event.detail.key, event.detail.short, event.detail.full));
+    let typing;
+    [document.getElementById("heroAskInput"), document.getElementById("askInput")].forEach((input) => {
+      if (!input) return;
+      input.addEventListener("input", () => {
+        clearTimeout(typing);
+        typing = setTimeout(() => {
+          const text = input.value.trim();
+          if (text.length < 4) return;
+          set("problem", oneLine(text).slice(0, 48) + (oneLine(text).length > 48 ? "…" : ""), `Problemet: ${text}`);
+        }, 500);
+      });
+    });
+
+    document.getElementById("briefForm").addEventListener("submit", () => {
+      const parts = KEYS.filter((key) => data[key]).map((key) => data[key].full);
+      document.getElementById("briefNotes").value = parts.length ? `Underlag från vectorpoint.se\n\n${parts.join("\n\n")}` : "";
+      document.getElementById("briefTitle").value = data.problem ? oneLine(data.problem.full.replace(/^Problemet: /, "")).slice(0, 60) : "Samtal om ett problem att lösa";
+    });
+
+    // Syns när hjälten är förbi, döljs vid kontaktdelen (som har egna formulär) och sidfoten.
+    const hero = document.getElementById("hero");
+    const contact = document.getElementById("kontakt");
+    const footer = document.querySelector(".footer");
+    const inView = new Map();
+    const sync = () => {
+      const away = inView.get(hero) || inView.get(contact) || inView.get(footer);
+      brief.classList.toggle("is-away", away !== false && !!away);
+    };
+    if ("IntersectionObserver" in window) {
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => inView.set(entry.target, entry.isIntersecting));
+        sync();
+      }, { rootMargin: "0px 0px -15% 0px" });
+      [hero, contact, footer].forEach((el) => { if (el) { inView.set(el, true); io.observe(el); } });
+    }
+    brief.classList.add("is-away");
+    brief.hidden = false;
+    paint(null);
   }
 
   // ---------- bokningsrummet: kalendern öppnas på sidan, inte i en ny flik ----------
