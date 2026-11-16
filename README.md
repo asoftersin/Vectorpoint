@@ -100,6 +100,23 @@ small first step for visitors not ready to book yet. Without JavaScript all four
 questions show at once and the button still books. The verdict is counted in
 GoatCounter as `ai-kollen-besked-stark|mojlig|svag`.
 
+**Vad kostar det manuella arbetet i dag?** (`#kostnad`, between the examples
+and the method) turns the visitor's own numbers into a figure: people doing the
+work, hours per person and week, and hourly cost with fees (defaults 10, 4 and
+650 kr). It counts 45 working weeks a year and 1 600 hours per full-time post,
+and shows the yearly cost in large type (it counts up as the sliders move,
+not with reduced motion), the hours and the number of full-time posts. A
+fourth slider is the visitor's guess at how much AI could take over (labelled
+"Er gissning"), which gives the money and hours freed. "Boka 15 min om de här
+siffrorna" opens the on-page calendar with all of it as the booking note, so
+the first call starts from a baseline the visitor stated themselves. The page
+promises no saving: the note under the button says the figures are theirs, not
+a promise, and that the call agrees how effect will be measured. The section
+exists because a buyer at a large organisation needs a number to take to
+whoever signs off, and the method section right after it is about measuring
+against exactly that number. Without JavaScript the sliders and the default
+figure still show and the button still books.
+
 The 20-second launch film is a framed section after the three problem cards:
 the 16:9 cut on landscape screens and the 9:16 cut on portrait ones. It is not
 fetched until it scrolls into view. It then loops muted; "Ljud på" restarts it
@@ -152,6 +169,7 @@ GoatCounter tracks these clicks:
 | `example-sales`, `example-support`, `example-reporting`, `demo-replay-*` | An example tab or replay |
 | `launch-film` | The film's sound/play button |
 | `ai-kollen-hero`, `cta-ai-kollen`, `contact-email-ai-kollen` | The hero link to AI-kollen, and booking or emailing from its verdict |
+| `cta-kostnad`, `kostnad-raknad` | Booking from the cost section, and the first slider move on a visit (counted once) |
 | `bokning-klar` | **A booking was completed** in the on-page calendar (Cal.com's `bookingSuccessful` event) |
 | `bokning-ny-flik`, `contact-email-bokning` | Leaving the booking sheet for a cal.com tab, or for email |
 

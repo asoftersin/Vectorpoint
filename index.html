@@ -452,6 +452,51 @@
     </section>
     </section>
 
+    <!-- KOSTNADEN I DAG: besökarens egna siffror blir ett belopp, och beloppet följer med till bokningen.
+         Inga antaganden om besparing: andelen AI kan ta är besökarens gissning och märks så. -->
+    <section class="section section--cost" id="kostnad" aria-labelledby="costTitle">
+      <div class="section__head">
+        <p class="eyebrow" data-reveal>RÄKNA PÅ ER EGEN SIFFRA</p>
+        <h2 id="costTitle" data-reveal="blur">Vad kostar det manuella arbetet i dag?</h2>
+        <p class="section__sub" data-reveal>Dra i reglagen. Beloppet blir ert utgångsläge, det vi mäter mot när AI-lösningen är på plats.</p>
+      </div>
+      <form class="cost" id="costCalc" action="https://cal.com/johan-studt/15min" method="get" target="_blank" rel="noreferrer" data-reveal="scale">
+        <div class="cost__inputs">
+          <div class="cost__field">
+            <label for="costPeople">Personer som gör arbetet</label>
+            <output class="cost__val" id="costPeopleOut" for="costPeople">10 personer</output>
+            <input class="cost__range" type="range" id="costPeople" min="1" max="200" step="1" value="10">
+          </div>
+          <div class="cost__field">
+            <label for="costHours">Timmar per person och vecka</label>
+            <output class="cost__val" id="costHoursOut" for="costHours">4 timmar</output>
+            <input class="cost__range" type="range" id="costHours" min="0.5" max="20" step="0.5" value="4">
+          </div>
+          <div class="cost__field">
+            <label for="costRate">Timkostnad med avgifter</label>
+            <output class="cost__val" id="costRateOut" for="costRate">650 kr</output>
+            <input class="cost__range" type="range" id="costRate" min="300" max="1500" step="25" value="650">
+          </div>
+          <div class="cost__field cost__field--guess">
+            <label for="costShare">Er gissning: hur stor del kan AI ta?</label>
+            <output class="cost__val" id="costShareOut" for="costShare">30 %</output>
+            <input class="cost__range" type="range" id="costShare" min="10" max="80" step="5" value="30">
+          </div>
+        </div>
+        <div class="cost__result" aria-live="polite">
+          <p class="cost__k">Det manuella arbetet kostar i dag</p>
+          <p class="cost__total"><span id="costTotal">1 170 000</span> <span class="cost__unit">kr/år</span></p>
+          <p class="cost__hours"><span id="costYearHours">1 800</span> timmar om året, ungefär <span id="costFte">1,1</span> heltidstjänster.</p>
+          <div class="cost__bar" aria-hidden="true"><span class="cost__bar-ai" id="costBar"></span></div>
+          <p class="cost__share"><span class="cost__dot" aria-hidden="true"></span>Om AI tar <span id="costShareTxt">30 %</span>: <strong><span id="costFreed">351 000</span> kr</strong> och <strong><span id="costFreedHours">540</span> timmar</strong> om året tillbaka till annat.</p>
+          <input type="hidden" name="title" value="Samtal om kostnaden för manuellt arbete">
+          <input type="hidden" name="notes" id="costNotes" value="">
+          <button class="btn btn--primary cost__cta" type="submit" data-goatcounter-click="cta-kostnad">Boka 15 min om de här siffrorna</button>
+          <p class="cost__note">Räknat på 45 arbetsveckor och 1 600 timmar per heltidstjänst, i din webbläsare. Siffrorna är era, inte ett löfte från oss: i första samtalet enas vi om hur effekten ska mätas.</p>
+        </div>
+      </form>
+    </section>
+
     <!-- APPROACH: från idé till mätbar effekt, med erbjudandet att börja -->
     <section class="section" id="approach">
       <div class="section__head">
