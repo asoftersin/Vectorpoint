@@ -2547,6 +2547,13 @@ html.is-booking { overflow: hidden; }
   .hero .clients { margin-top: 28px; padding-top: 22px; }
   .hero__assurance { margin-top: -4px; }
   .hero .founder { padding: 20px; }
+  .hero .founder__photo {
+    height: auto;
+    aspect-ratio: 1;
+    object-position: 50% 22%;
+    border-radius: 12px;
+    margin-bottom: 16px;
+  }
   .hero .founder__quote { display: block; font-size: .9rem; margin-top: 16px; }
 }
 
