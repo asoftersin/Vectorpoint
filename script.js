@@ -156,6 +156,185 @@
     syncMail();
   }
 
+  // ---------- AI-kollen: en fråga i taget, ett regelbaserat besked och svaren med till bokningen ----------
+  // Utan JS syns alla fyra frågor och knappen bokar som vanligt.
+  const aiCheck = document.getElementById("aiCheck");
+  if (aiCheck) {
+    const steps = [...aiCheck.querySelectorAll(".check__q")];
+    const total = steps.length;
+    const count = document.getElementById("checkCount");
+    const fill = document.getElementById("checkFill");
+    const result = document.getElementById("checkResult");
+    const verdictEl = document.getElementById("checkVerdict");
+    const whyEl = document.getElementById("checkWhy");
+    const nextEl = document.getElementById("checkNext");
+    const notes = document.getElementById("checkNotes");
+    const back = document.getElementById("checkBack");
+    const submit = document.getElementById("checkSubmit");
+    const mail = document.getElementById("checkMail");
+    const restart = document.getElementById("checkRestart");
+    const nextBtn = document.getElementById("checkNextBtn");
+    let current = 0;
+    let pointerPick = false;
+    let advanceTimer;
+
+    const picked = (name) => aiCheck.querySelector(`input[name="${name}"]:checked`);
+    const labelOf = (name) => {
+      const input = picked(name);
+      return input ? input.nextElementSibling.textContent.trim() : "";
+    };
+
+    const PROTOTYPES = {
+      support: "En första prototyp kan sortera och sammanfatta ett urval av era riktiga ärenden, med svarsförslag som handläggaren godkänner.",
+      kunskap: "En första prototyp kan svara på frågor ur ett avgränsat dokumentområde, med källhänvisning på varje svar.",
+      rapport: "En första prototyp kan ta fram ett av era återkommande underlag automatiskt, med källa på varje påstående.",
+      miljo: "Ett första steg är att kartlägga vilka verktyg som redan används och sätta upp en godkänd miljö med behörigheter och loggning.",
+      annat: "Vi börjar med att avgränsa problemet och enas om vad som ska bli bättre, innan något byggs.",
+    };
+
+    const assess = () => {
+      const area = picked("area").value;
+      const volume = Number(picked("volume").value);
+      const data = Number(picked("data").value);
+      const risk = picked("risk").value;
+      const score = volume + data;
+      const why = [];
+      let level;
+      let verdict;
+
+      if (area === "miljo") {
+        level = "stark";
+        verdict = "Ett tydligt första steg.";
+        why.push("Medarbetare använder redan AI, ofta i verktyg utan avtal eller loggning. En godkänd miljö ger kontroll över det som redan händer.");
+      } else if (score >= 4) {
+        level = "stark";
+        verdict = "Stark kandidat för AI.";
+      } else if (score >= 2) {
+        level = "mojlig";
+        verdict = "Värt att pröva, med en snäv avgränsning.";
+      } else {
+        level = "svag";
+        verdict = "AI är troligen inte första steget.";
+      }
+
+      if (area !== "miljo") {
+        if (volume >= 2) why.push("Arbetet återkommer ofta, så även en liten tidsvinst per gång blir stor över ett år.");
+        else why.push("Arbetet görs sällan, så vinsten måste komma från kvalitet eller snabbhet snarare än sparad tid.");
+        if (data === 3) why.push("Underlaget finns redan i system, vilket gör det enklare att bygga och att mäta effekten.");
+        else if (data === 2) why.push("Underlaget är digitalt men utspritt. Att samla det är ofta halva vinsten.");
+        else why.push("Underlaget behöver bli digitalt och samlat först. Där kan vanlig automation räcka långt.");
+      }
+      if (risk === "high") why.push("Insatserna är höga, så AI:n ska förbereda och en människa fatta beslutet. Det planeras från början.");
+      else if (risk === "low") why.push("En människa granskar redan, vilket gör det tryggt att börja med AI som förslag.");
+
+      const next = level === "svag"
+        ? "Ta gärna samtalet ändå. Vi pekar ut ett rimligt första steg, även om det inte är AI."
+        : PROTOTYPES[area];
+      return { level, verdict, why, next };
+    };
+
+    const summary = (assessment) => [
+      "AI-kollen på vectorpoint.se",
+      `Område: ${labelOf("area")}`,
+      `Hur ofta: ${labelOf("volume")}`,
+      `Underlag: ${labelOf("data")}`,
+      `Om AI gör fel: ${labelOf("risk")}`,
+      `Besked: ${assessment.verdict}`,
+    ].join("\n");
+
+    const render = () => {
+      const done = current >= total;
+      steps.forEach((step, i) => { step.hidden = i !== current; });
+      result.hidden = !done;
+      back.hidden = current === 0;
+      submit.hidden = !done;
+      mail.hidden = !done;
+      restart.hidden = !done;
+      nextBtn.hidden = done;
+      nextBtn.disabled = !done && !picked(steps[current].querySelector("input").name);
+      fill.style.width = `${(Math.min(current, total) / total) * 100}%`;
+      count.textContent = done ? "Klart · ert besked" : `Fråga ${current + 1} av ${total}`;
+      aiCheck.dataset.level = "";
+      if (!done) return;
+
+      const assessment = assess();
+      aiCheck.dataset.level = assessment.level;
+      verdictEl.textContent = assessment.verdict;
+      whyEl.replaceChildren(...assessment.why.map((text) => {
+        const li = document.createElement("li");
+        li.textContent = text;
+        return li;
+      }));
+      nextEl.textContent = assessment.next;
+      const text = summary(assessment);
+      notes.value = text;
+      mail.href = `mailto:johan@vectorpoint.se?subject=${encodeURIComponent("AI-kollen: " + labelOf("area"))}&body=${encodeURIComponent(text + "\n\n")}`;
+      if (window.goatcounter && window.goatcounter.count) {
+        window.goatcounter.count({ path: `ai-kollen-besked-${assessment.level}`, title: "AI-kollen besked", event: true });
+      }
+    };
+
+    const focusCurrent = () => {
+      if (current >= total) {
+        result.focus({ preventScroll: true });
+        // Beskedet är högre än frågorna; se till att rubriken syns under menyn.
+        if (aiCheck.getBoundingClientRect().top < 80) {
+          aiCheck.scrollIntoView({ block: "start", behavior: prefersReducedMotion ? "auto" : "smooth" });
+        }
+        return;
+      }
+      const input = picked(steps[current].querySelector("input").name) || steps[current].querySelector("input");
+      input.focus({ preventScroll: true });
+    };
+
+    aiCheck.classList.add("is-stepped");
+    const advance = () => {
+      clearTimeout(advanceTimer);
+      if (current >= total || !picked(steps[current].querySelector("input").name)) return;
+      current += 1;
+      render();
+      focusCurrent();
+    };
+    nextBtn.addEventListener("click", advance);
+    steps.forEach((step, i) => {
+      // Klick eller tryck går vidare direkt; piltangenter byter bara val, Enter eller "Nästa" går vidare.
+      step.addEventListener("pointerdown", () => { pointerPick = true; });
+      step.addEventListener("keydown", (event) => {
+        pointerPick = false;
+        if (event.key === "Enter") { event.preventDefault(); advance(); }
+      });
+      step.addEventListener("change", () => {
+        nextBtn.disabled = false;
+        if (!pointerPick) return;
+        pointerPick = false;
+        clearTimeout(advanceTimer);
+        // Kort paus så att valet syns innan nästa fråga tar över.
+        advanceTimer = setTimeout(() => {
+          if (current !== i) return;
+          current = i + 1;
+          render();
+          focusCurrent();
+        }, prefersReducedMotion ? 0 : 260);
+      });
+    });
+    back.addEventListener("click", () => {
+      clearTimeout(advanceTimer);
+      current = Math.max(0, current - 1);
+      render();
+      focusCurrent();
+    });
+    restart.addEventListener("click", () => {
+      aiCheck.reset();
+      current = 0;
+      render();
+      focusCurrent();
+    });
+    aiCheck.addEventListener("submit", (event) => {
+      if (current < total) event.preventDefault();
+    });
+    render();
+  }
+
   // ---------- kontakt: kopiera adressen, för den som saknar mejlprogram på datorn ----------
   const copyEmail = document.getElementById("copyEmail");
   if (copyEmail && navigator.clipboard && navigator.clipboard.writeText) {

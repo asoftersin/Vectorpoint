@@ -65,7 +65,7 @@ const checks = [
       css.includes(".vectorpoint-loaded .film {") && css.includes("aspect-ratio: 9 / 16;");
   })()],
   ["light page with dark panels from one token set", css.includes("--bg: #f6f4ef") && css.includes("--accent: #0a66d1") && css.includes("--accent: #0099ff") &&
-    /\.film,\n\.demo,\n\.flow__stage,\n\.contact,\n\.footer \{/.test(css) && html.includes('<meta name="theme-color" content="#f6f4ef">') &&
+    /\.film,\n\.demo,\n\.check,\n\.flow__stage,\n\.contact,\n\.footer \{/.test(css) && html.includes('<meta name="theme-color" content="#f6f4ef">') &&
     html.includes('<img src="assets/brand/vectorpoint-logo.svg" alt="Vectorpoint"')],
   ["optional technical deep dive", html.includes('<details class="pipeline" id="pipeline">') && html.includes("<summary>Se hur vi kvalitetssäkrar")],
   ["data processing described without absolute residency promise", !html.includes("Den stannar i era system.") && html.split("även externa AI-tjänster").length === 3],
@@ -171,6 +171,10 @@ const checks = [
   ["hero tools line removed", !html.includes("hero__tools") && !css.includes(".hero__tools")],
   ["meta speaks to large organisations", html.includes('<meta name="description" content="Vectorpoint hjälper stora organisationer') && html.includes('"legalName": "Vector Point AB"')],
   ["skip link and focus styles", html.includes('class="skip-link"') && css.includes(":focus-visible")],
+  ["ai check sits between services and film and books on cal.com", html.indexOf('id="ai-kollen"') > html.indexOf('id="services"') && html.indexOf('id="ai-kollen"') < html.indexOf('id="film"') &&
+    html.includes('id="aiCheck" action="https://cal.com/johan-studt/15min"') && html.split('class="check__q"').length === 5 && js.includes("aiCheck")],
+  ["ai check is honest about how it works", html.includes("inte av AI") && html.includes("AI är troligen inte första steget") === false && js.includes("AI är troligen inte första steget.")],
+  ["hero secondary action leads to the ai check", html.includes('href="#ai-kollen" data-goatcounter-click="ai-kollen-hero"')],
   ["footer heading level", html.includes("<h3>Kontakt</h3>") && !html.includes("<h4>")],
 ];
 

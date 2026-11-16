@@ -131,7 +131,7 @@
           <p class="hero__lead" data-reveal>Vi hjälper stora organisationer att lösa verkliga problem med AI, från säkra AI-miljöer till avlastning för support och automatiserade flöden på er egen data.<br>Vi enas om vad som ska bli bättre innan vi bygger, och mäter det efteråt.</p>
           <div class="hero__actions" data-reveal>
             <a class="btn btn--primary btn--lg" id="heroCta" href="https://cal.com/johan-studt/15min" target="_blank" rel="noreferrer" data-goatcounter-click="cta-hero">Boka ett samtal · 15 min</a>
-            <a class="btn btn--ghost btn--lg" href="#work">Se exempel</a>
+            <a class="btn btn--ghost btn--lg" href="#ai-kollen" data-goatcounter-click="ai-kollen-hero">Passar AI er? · 4 frågor</a>
           </div>
           <ul class="hero__facts" data-reveal aria-label="Det här gäller alltid">
             <li>Fast pris på första prototypen</li>
@@ -187,6 +187,79 @@
           <p>Sök och svar i interna dokument med källhänvisning, rapporter som sammanställs automatiskt och integrationer mellan era system.</p>
         </article>
       </div>
+    </section>
+
+    <!-- AI-KOLLEN: fyra frågor ger ett ärligt, regelbaserat besked och följer med till bokningen -->
+    <section class="section section--split section--check" id="ai-kollen" aria-labelledby="checkTitle">
+      <div class="section__head">
+        <p class="eyebrow" data-reveal>AI-KOLLEN · 4 FRÅGOR</p>
+        <h2 id="checkTitle" data-reveal="blur">Passar AI för ert problem?</h2>
+        <p class="section__sub" data-reveal>Svara på fyra frågor och få ett ärligt besked direkt. Ibland är svaret att AI inte är rätt verktyg, och det säger vi hellre nu än efter ett projekt.</p>
+      </div>
+      <form class="check" id="aiCheck" action="https://cal.com/johan-studt/15min" method="get" target="_blank" rel="noreferrer" data-reveal="scale" novalidate>
+        <div class="check__bar">
+          <span class="check__count" id="checkCount" aria-live="polite">Fråga 1 av 4</span>
+          <span class="check__track" aria-hidden="true"><span class="check__fill" id="checkFill"></span></span>
+        </div>
+
+        <fieldset class="check__q" data-q="area">
+          <legend>Vad gäller det?</legend>
+          <div class="check__opts">
+            <label><input type="radio" name="area" value="support"><span>Ärenden, support eller kundtjänst</span></label>
+            <label><input type="radio" name="area" value="kunskap"><span>Hitta rätt i dokument och intern kunskap</span></label>
+            <label><input type="radio" name="area" value="rapport"><span>Rapporter och sammanställningar</span></label>
+            <label><input type="radio" name="area" value="miljo"><span>Säker AI för alla medarbetare</span></label>
+            <label><input type="radio" name="area" value="annat"><span>Något annat</span></label>
+          </div>
+        </fieldset>
+
+        <fieldset class="check__q" data-q="volume">
+          <legend>Hur ofta görs arbetet i dag?</legend>
+          <div class="check__opts">
+            <label><input type="radio" name="volume" value="3"><span>Många gånger varje dag</span></label>
+            <label><input type="radio" name="volume" value="2"><span>Varje vecka</span></label>
+            <label><input type="radio" name="volume" value="1"><span>Någon gång i månaden</span></label>
+            <label><input type="radio" name="volume" value="0"><span>Sällan, men det är viktigt när det händer</span></label>
+          </div>
+        </fieldset>
+
+        <fieldset class="check__q" data-q="data">
+          <legend>Var finns underlaget?</legend>
+          <div class="check__opts">
+            <label><input type="radio" name="data" value="3"><span>I system vi redan har, som ärendesystem, CRM eller SharePoint</span></label>
+            <label><input type="radio" name="data" value="2"><span>Digitalt men utspritt, i mejl, filer och chattar</span></label>
+            <label><input type="radio" name="data" value="1"><span>Delvis på papper eller i folks huvuden</span></label>
+            <label><input type="radio" name="data" value="0"><span>Vet inte riktigt</span></label>
+          </div>
+        </fieldset>
+
+        <fieldset class="check__q" data-q="risk">
+          <legend>Vad händer om AI:n gör fel?</legend>
+          <div class="check__opts">
+            <label><input type="radio" name="risk" value="low"><span>En människa granskar ändå innan något går vidare</span></label>
+            <label><input type="radio" name="risk" value="mid"><span>Lite merarbete, men inget allvarligt</span></label>
+            <label><input type="radio" name="risk" value="high"><span>Allvarligt, det rör pengar, personer eller säkerhet</span></label>
+          </div>
+        </fieldset>
+
+        <div class="check__result" id="checkResult" tabindex="-1" hidden>
+          <p class="check__verdict-k">Ert besked</p>
+          <h3 class="check__verdict" id="checkVerdict"></h3>
+          <ul class="check__why" id="checkWhy"></ul>
+          <p class="check__next" id="checkNext"></p>
+        </div>
+
+        <input type="hidden" name="title" id="checkTitleField" value="Samtal efter AI-kollen">
+        <input type="hidden" name="notes" id="checkNotes" value="">
+        <div class="check__actions">
+          <button class="btn btn--ghost check__back" id="checkBack" type="button" hidden>Tillbaka</button>
+          <button class="btn btn--primary check__nextbtn" id="checkNextBtn" type="button" hidden>Nästa</button>
+          <button class="btn btn--primary check__submit" id="checkSubmit" type="submit" data-goatcounter-click="cta-ai-kollen">Boka 15 min med era svar</button>
+          <a class="btn btn--ghost check__mail" id="checkMail" href="mailto:johan@vectorpoint.se" data-goatcounter-click="contact-email-ai-kollen" hidden>Skicka svaren som mejl</a>
+          <button class="check__restart" id="checkRestart" type="button" hidden>Börja om</button>
+        </div>
+        <p class="check__note">Beskedet räknas fram av fasta regler i din webbläsare, inte av AI. Vi ser inga svar förrän du själv skickar dem.</p>
+      </form>
     </section>
 
     <!-- LANSERINGSFILM: kortversionen av sidan. 16:9 på liggande skärmar, 9:16 på stående. -->
