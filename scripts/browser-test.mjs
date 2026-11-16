@@ -285,6 +285,42 @@ try {
     await page.locator("#checkNextBtn").click();
   }
   check(await page.locator("#checkVerdict").textContent() === "AI är troligen inte första steget.", "A rare task without data gets an honest no");
+
+  // Demo eller drift: with reduced motion the panel rests in the drift state and never flips by itself.
+  const driftPanel = page.locator("#driftPanel");
+  const driftToggle = page.locator("#driftToggle");
+  await driftPanel.scrollIntoViewIfNeeded();
+  await page.waitForTimeout(1800);
+  check(await driftPanel.getAttribute("data-mode") === "drift" && await driftToggle.getAttribute("aria-checked") === "true" &&
+    await page.locator("#driftNum").textContent() === "6" && await page.locator("#driftSwitch").isVisible(),
+    "With reduced motion the demo-or-drift panel rests in the drift state");
+  check(await page.locator("#drift").evaluate((el) => el.previousElementSibling.id === "hero" && el.nextElementSibling.id === "services"),
+    "The demo-or-drift section sits right under the hero");
+  const visibleAnswers = () => driftPanel.locator(".drift__a .drift__v:visible").allTextContents().then((texts) => texts.join(" "));
+  check((await visibleAnswers()).includes("så jag gissar inte") && !(await visibleAnswers()).includes("Ja, det går bra."),
+    "In drift the assistant hands the unclear question to a person instead of guessing");
+  await driftToggle.click();
+  check(await driftPanel.getAttribute("data-mode") === "demo" && await driftToggle.getAttribute("aria-checked") === "false" &&
+    await page.locator("#driftNum").textContent() === "0" && (await page.locator("#driftState").textContent()).startsWith("Demo: 0 av 6"),
+    "The switch turns the panel to demo and announces it");
+  check((await visibleAnswers()).includes("Ja, det går bra.") && !(await visibleAnswers()).includes("så jag gissar inte") &&
+    await driftPanel.locator(".drift__row .drift__v:visible").allTextContents().then((t) => t.length === 6 && t[0] === "Exempelfiler på en laptop"),
+    "In demo the same question gets a guess, and every row shows what is missing");
+  check(await driftPanel.locator(".drift__mark").first().evaluate((el) => getComputedStyle(el).borderTopStyle === "dashed"),
+    "Demo rows are drawn as empty, dashed marks");
+  await driftToggle.press("ArrowRight");
+  check(await driftPanel.getAttribute("data-mode") === "drift" && await page.locator("#driftNum").textContent() === "6",
+    "Right arrow on the switch turns the panel back to drift");
+  await driftToggle.press("ArrowLeft");
+  await driftToggle.press("Enter");
+  check(await driftPanel.getAttribute("data-mode") === "drift", "Left arrow and Enter work the switch from the keyboard");
+  await page.locator("#driftSwitch .drift__opt").first().click();
+  check(await driftPanel.getAttribute("data-mode") === "demo", "Clicking the Demo label sets that mode");
+  await driftPanel.locator(".drift__foot a").click();
+  await page.locator("#bookSheet").waitFor({ state: "visible" });
+  check(await page.locator("#bookNote").textContent() === "Vi har en AI-pilot eller demo som inte har nått drift.",
+    "Booking from the demo-or-drift panel carries the stuck pilot as the note");
+  await page.locator("#bookClose").click();
   await context.close();
 
   const mobile = await newContext({ viewport: { width: 375, height: 812 } });
@@ -375,6 +411,14 @@ try {
     const rect = el.getBoundingClientRect();
     return rect.height >= 44 && rect.left >= 0 && rect.right <= innerWidth;
   })), "AI check answers fit the phone with 44px touch targets");
+  await mobilePage.locator("#driftPanel").scrollIntoViewIfNeeded();
+  check(await mobilePage.locator("#driftToggle").evaluate((el) => {
+    const rect = el.getBoundingClientRect();
+    return rect.height >= 40 && rect.width >= 64 && rect.left >= 0 && rect.right <= innerWidth &&
+      getComputedStyle(el.parentElement).position === "sticky";
+  }) && await mobilePage.evaluate(() => document.documentElement.scrollWidth <= innerWidth) &&
+    await mobilePage.locator("#driftPanel .drift__row").evaluateAll((rows) => rows.every((row) => row.getBoundingClientRect().right <= innerWidth)),
+    "On a phone the switch stays reachable while the rows scroll, and nothing overflows");
   await mobile.close();
 
   const noJs = await newContext({ javaScriptEnabled: false });
@@ -396,6 +440,12 @@ try {
     !await fallback.locator("#checkNextBtn").isVisible() && !await fallback.locator("#checkBack").isVisible(),
     "Without JS the AI check shows every question and a working booking button");
   check(await fallback.locator(".demo__controls:visible").count() === 0, "No dead playback controls without JS");
+  check(!await fallback.locator("#driftSwitch").isVisible() &&
+    await fallback.locator("#driftPanel .drift__chat .drift__v--demo:visible").count() === 0 &&
+    await fallback.locator("#driftPanel .drift__chat .drift__v--drift:visible").count() === 3 &&
+    await fallback.locator("#driftPanel .drift__row .drift__v:visible").count() === 12 &&
+    await fallback.locator("#driftPanel .drift__foot a").getAttribute("href").then((href) => new URL(href).searchParams.get("notes").includes("AI-pilot")),
+    "Without JS the panel shows drift, compares each row with the demo and still books");
   for (const id of ["leads", "feedback", "report"]) {
     check(await fallback.locator(`#work-${id}`).isVisible(), `No-JS ${id} content remains readable`);
   }
@@ -422,6 +472,18 @@ try {
   check(true, "With motion later sections wait for the scroll");
   check(await motionPage.locator("#launchFilm").getAttribute("src") === null,
     "Launch film is not fetched before it scrolls into view");
+  check(await motionPage.locator("#driftPanel").getAttribute("data-mode") === "demo" &&
+    await motionPage.locator("#driftNum").textContent() === "0", "With motion the panel starts as a demo");
+  await motionPage.locator("#driftSwitch").scrollIntoViewIfNeeded();
+  await motionPage.waitForFunction(() => document.getElementById("driftPanel").dataset.mode === "drift" &&
+    document.getElementById("driftNum").textContent === "6", null, { timeout: 6000 });
+  check(await motionPage.locator("#driftPanel").evaluate((el) => el.classList.contains("is-hint")),
+    "Once in view it switches itself to drift, counts the rows in and hints at the switch");
+  await motionPage.locator("#driftToggle").click();
+  await motionPage.waitForTimeout(2200);
+  check(await motionPage.locator("#driftPanel").evaluate((el) => el.dataset.mode === "demo" && !el.classList.contains("is-hint")),
+    "After the visitor has used the switch the panel stays where they put it");
+  await motionPage.evaluate(() => scrollTo({ top: 0, behavior: "instant" }));
   await motionPage.locator("#film .film").scrollIntoViewIfNeeded();
   await motionPage.waitForFunction(() => document.getElementById("launchFilm").getAttribute("src") !== null);
   check(await motionPage.locator("#launchFilm").evaluate((video) =>

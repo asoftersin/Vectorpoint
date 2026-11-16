@@ -1270,6 +1270,74 @@
     update(false);
   }
 
+  // ---------- demo eller drift: samma assistent i två lägen, besökaren slår om ----------
+  // Utan JS visar rutan drift-läget, med demo-läget som jämförelse på varje rad. Med JS börjar
+  // den i demo-läget och slår om till drift en gång när den syns; sedan styr besökaren själv.
+  // Med reducerad rörelse står den i drift-läget från början och slår aldrig om av sig själv.
+  const driftPanel = document.getElementById("driftPanel");
+  const driftToggle = document.getElementById("driftToggle");
+  if (driftPanel && driftToggle) {
+    const driftSwitch = document.getElementById("driftSwitch");
+    const num = document.getElementById("driftNum");
+    const state = document.getElementById("driftState");
+    const total = driftPanel.querySelectorAll(".drift__row").length;
+    let timers = [];
+    let touched = false;
+    let autoTimer;
+
+    const setMode = (mode, byVisitor) => {
+      timers.forEach(clearTimeout);
+      timers = [];
+      driftPanel.dataset.mode = mode;
+      driftToggle.setAttribute("aria-checked", String(mode === "drift"));
+      if (mode === "drift" && !prefersReducedMotion) {
+        // Siffran räknar upp i takt med att raderna kommer på plats.
+        num.textContent = "0";
+        for (let i = 1; i <= total; i += 1) {
+          timers.push(setTimeout(() => { num.textContent = String(i); }, 140 + i * 90));
+        }
+      } else num.textContent = mode === "drift" ? String(total) : "0";
+      if (byVisitor) {
+        state.textContent = mode === "drift" ? `I drift: ${total} av ${total} på plats.` : `Demo: 0 av ${total} på plats.`;
+        clearTimeout(autoTimer);
+        driftPanel.classList.remove("is-hint");
+        // En räkning per besök räcker för att se att reglaget används.
+        if (!touched && window.goatcounter && window.goatcounter.count) {
+          window.goatcounter.count({ path: "drift-vaxlat", title: "Demo eller drift växlat", event: true });
+        }
+        touched = true;
+      }
+    };
+    const flip = () => setMode(driftPanel.dataset.mode === "drift" ? "demo" : "drift", true);
+
+    driftToggle.addEventListener("click", flip);
+    driftToggle.addEventListener("keydown", (event) => {
+      if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
+        event.preventDefault();
+        setMode(event.key === "ArrowRight" ? "drift" : "demo", true);
+      }
+    });
+    driftSwitch.querySelectorAll(".drift__opt").forEach((opt) => {
+      opt.addEventListener("click", () => setMode(opt.dataset.set, true));
+    });
+
+    driftPanel.classList.add("is-live");
+    driftSwitch.hidden = false;
+    if (!prefersReducedMotion && "IntersectionObserver" in window) {
+      setMode("demo", false);
+      const seen = new IntersectionObserver(([entry]) => {
+        if (!entry.isIntersecting) return;
+        seen.disconnect();
+        autoTimer = setTimeout(() => {
+          if (touched) return;
+          setMode("drift", false);
+          driftPanel.classList.add("is-hint");
+        }, 1300);
+      }, { rootMargin: "0px 0px -30% 0px" });
+      seen.observe(driftSwitch);
+    }
+  }
+
   // ---------- Ert underlag: dockan samlar det besökaren berättar och bokar med allt ----------
   // Tre källor: problemet (hjältens eller kontaktens skrivfält), AI-kollens besked och
   // kostnaden. Inget skickas någonstans förrän besökaren själv bokar.

@@ -22,7 +22,7 @@ For browser regression coverage (starts its own local preview server):
 npm run test:browser
 ```
 
-The browser checks cover the first screen, AI-kollen (mouse, keyboard, booking handoff, phone fit, no JS) (offer, founder card and booking button
+The browser checks cover the first screen, the demo-or-drift switch (mouse, keyboard, booking handoff, phone, reduced motion, no JS), AI-kollen (mouse, keyboard, booking handoff, phone fit, no JS) (offer, founder card and booking button
 on desktop and phone), the contact routes, text contrast, example tabs (mouse,
 keyboard and direct links), mobile layout, demo pause/resume, reduced motion,
 optional disclosures, booking handoff and the no-JS fallback. Install Playwright
@@ -85,6 +85,24 @@ button is visible the header booking button is an outline, so there is a single
 primary action; it turns primary once the hero button scrolls away. On narrow
 screens the header shortens its booking label while keeping the booking link and
 a 44px menu button visible.
+
+**Demo eller drift** (`#drift`, right under the hero) lets the visitor try the
+headline's claim. One dark panel shows the same fictional internal assistant
+answering the same two questions, and a switch moves it between "Demo" and "I
+drift". In demo the second answer is a confident guess with no source, and six
+rows (data, permissions, sources, unclear cases, tests, effect) are empty; in
+drift the first answer carries its source, the second says the contract does not
+cover it and goes to a person, the rows fill in one at a time and the count runs
+from 0 to 6. It starts as a demo and switches itself to drift once, when it
+scrolls into view; after that only the visitor moves it (a ring pulses on the
+knob until they do). With reduced motion it rests in drift and never moves by
+itself. On phones the switch sticks under the header while the rows scroll.
+Every drift row repeats a commitment spelled out elsewhere on the page (the
+smoke test checks that), and the panel is labelled as invented content. It ends
+in "Har ni en pilot som fastnat i demo-läget?", whose button books with that
+situation as the note: a stalled pilot is a concrete reason to call, which
+"book a call" alone is not. Without JavaScript the panel shows the drift state
+with the demo wording under each row, and the button still books.
 
 **AI-kollen** (`#ai-kollen`, right after the three problem cards) is four
 quick questions: what the problem is, how often the work happens, where the data
@@ -183,6 +201,7 @@ GoatCounter tracks these clicks:
 | `launch-film` | The film's sound/play button |
 | `ai-kollen-hero`, `cta-ai-kollen`, `contact-email-ai-kollen` | The hero link to AI-kollen, and booking or emailing from its verdict |
 | `cta-underlag` | Booking from the Ert underlag dock |
+| `cta-drift`, `drift-vaxlat` | Booking from the demo-or-drift panel, and the visitor's first own use of its switch on a visit (counted once) |
 | `cta-kostnad`, `kostnad-raknad` | Booking from the cost section, and the first slider move on a visit (counted once) |
 | `bokning-klar` | **A booking was completed** in the on-page calendar (Cal.com's `bookingSuccessful` event) |
 | `bokning-ny-flik`, `contact-email-bokning` | Leaving the booking sheet for a cal.com tab, or for email |

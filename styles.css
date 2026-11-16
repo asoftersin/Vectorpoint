@@ -37,6 +37,7 @@
 .demo,
 .check,
 .cost,
+.drift,
 .flow__stage,
 .contact,
 .footer {
@@ -1192,6 +1193,398 @@ a { color: inherit; }
 
 @media (prefers-reduced-motion: reduce) {
   .cost__bar-ai { transition: none; }
+}
+
+/* ---------- Demo eller drift: samma assistent i två lägen, besökaren slår om ---------- */
+
+/* Grundutseendet är drift-läget, så att sidan utan JS visar det färdiga läget.
+   .is-live (sätts av script.js) slår på växlingen mellan de två lägena. */
+.drift {
+  position: relative;
+  isolation: isolate;
+  background: var(--bg);
+  border: 1px solid rgba(0, 153, 255, 0.34);
+  border-radius: 20px;
+  box-shadow: 0 30px 70px rgba(21, 23, 26, 0.22), 0 18px 90px rgba(10, 102, 209, 0.28);
+  --warn: #f5a524;
+  transition: border-color 0.6s ease, box-shadow 0.8s ease;
+}
+
+.drift.is-live[data-mode="demo"] {
+  border-color: var(--line);
+  box-shadow: 0 30px 70px rgba(21, 23, 26, 0.22), 0 18px 90px rgba(10, 102, 209, 0);
+}
+
+/* Det blå skenet hör till drift-läget och tonar in när läget slås om. */
+.drift::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background:
+    radial-gradient(70% 90% at 100% 0%, rgba(0, 153, 255, 0.22), transparent 60%),
+    radial-gradient(50% 70% at 0% 100%, rgba(124, 58, 237, 0.12), transparent 60%);
+  transition: opacity 0.8s ease;
+  pointer-events: none;
+}
+
+.drift.is-live[data-mode="demo"]::before { opacity: 0; }
+
+.drift__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px 16px;
+  flex-wrap: wrap;
+  min-height: 72px;
+  padding: 12px clamp(16px, 2.6vw, 32px);
+  border-bottom: 1px solid var(--line);
+}
+
+.drift__bar .flow__chip { padding: 4px 10px; font-size: 0.62rem; }
+
+.drift__led {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 8px rgba(0, 153, 255, 0.8);
+  transition: background 0.4s ease, box-shadow 0.4s ease;
+}
+
+.drift.is-live[data-mode="demo"] .drift__led { background: var(--warn); box-shadow: none; }
+
+/* Reglaget: sidans enda strömbrytare. Mitt i panelens list på breda skärmar. */
+.drift__switch {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  height: 72px;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.drift__opt {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+  background: none;
+  border: 0;
+  padding: 14px 4px;
+  cursor: pointer;
+  transition: color 0.25s ease;
+}
+
+.drift__opt:hover { color: var(--text-dim); }
+
+.drift[data-mode="demo"] .drift__opt[data-set="demo"],
+.drift[data-mode="drift"] .drift__opt[data-set="drift"] { color: var(--text); }
+
+.drift__toggle {
+  position: relative;
+  flex: 0 0 auto;
+  width: 72px;
+  height: 40px;
+  padding: 0;
+  border: 1px solid var(--accent);
+  border-radius: 999px;
+  background: var(--accent);
+  cursor: pointer;
+  transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 0 0 6px rgba(0, 153, 255, 0.12);
+}
+
+.drift__knob {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #ffffff;
+  transform: translateX(32px);
+  transition: transform 0.4s cubic-bezier(0.3, 1.5, 0.5, 1), background 0.3s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.45);
+}
+
+.drift[data-mode="demo"] .drift__toggle {
+  background: var(--surface-2);
+  border-color: var(--line-strong);
+  box-shadow: none;
+}
+
+.drift[data-mode="demo"] .drift__knob { transform: none; background: var(--text-dim); }
+
+/* En ring runt knoppen tills besökaren har slagit om själv. */
+.drift.is-hint .drift__knob::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: 50%;
+  border: 2px solid #ffffff;
+  animation: driftHint 1.8s ease-out infinite;
+}
+
+@keyframes driftHint {
+  0% { opacity: 0.7; transform: scale(1); }
+  70%, 100% { opacity: 0; transform: scale(1.9); }
+}
+
+.drift__body {
+  display: grid;
+  grid-template-columns: minmax(0, 1.08fr) minmax(0, 1fr);
+}
+
+/* De två lägenas texter ligger i samma ruta, så att inget hoppar när läget slås om. */
+.drift__swap { display: grid; }
+
+.drift.is-live .drift__swap > .drift__v {
+  grid-area: 1 / 1;
+  transition: opacity 0.35s ease, visibility 0s linear 0s;
+}
+
+.drift.is-live[data-mode="demo"] .drift__swap > .drift__v--drift,
+.drift.is-live[data-mode="drift"] .drift__swap > .drift__v--demo {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease, visibility 0s linear 0.2s;
+}
+
+/* Utan JS: samtalet visar bara drift-läget, raderna visar demo-läget som jämförelse under. */
+.drift:not(.is-live) .drift__chat .drift__v--demo { display: none; }
+.drift:not(.is-live) .drift__vals { gap: 2px; }
+.drift:not(.is-live) .drift__vals .drift__v--demo { order: 2; font-size: 0.8rem; color: var(--muted); }
+.drift:not(.is-live) .drift__vals .drift__v--demo::before { content: "I en demo: "; }
+
+/* ----- samtalet ----- */
+.drift__chat {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: clamp(18px, 2.6vw, 32px);
+  border-right: 1px solid var(--line);
+}
+
+.drift__q {
+  align-self: flex-end;
+  max-width: 88%;
+  padding: 10px 14px;
+  border: 1px solid var(--line);
+  border-radius: 14px 14px 4px 14px;
+  background: var(--surface-2);
+  font-size: 0.95rem;
+  line-height: 1.45;
+}
+
+.drift__a {
+  align-self: flex-start;
+  max-width: 94%;
+  padding: 12px 14px;
+  border: 1px solid rgba(0, 153, 255, 0.4);
+  border-radius: 14px 14px 14px 4px;
+  background: var(--surface);
+  font-size: 0.95rem;
+  line-height: 1.45;
+  transition: border-color 0.5s ease;
+}
+
+.drift__a:not(.drift__swap),
+.drift__a > .drift__v { display: grid; gap: 8px; align-content: start; }
+
+.drift.is-live[data-mode="demo"] .drift__a { border-color: var(--line); border-style: dashed; }
+
+.drift__meta,
+.drift__strip {
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.drift__warn { color: var(--warn); }
+
+.drift__src {
+  display: inline-block;
+  padding: 2px 9px;
+  border: 1px solid rgba(0, 153, 255, 0.4);
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.drift__strip {
+  margin-top: auto;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+}
+
+.drift__strip .drift__v--drift { color: var(--text-dim); }
+
+/* ----- det som ska finnas på plats ----- */
+.drift__layers {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: clamp(18px, 2.6vw, 32px);
+}
+
+.drift__score { display: flex; align-items: baseline; gap: 12px; }
+
+.drift__num {
+  font-size: clamp(3rem, 5.6vw, 4.4rem);
+  font-weight: 600;
+  letter-spacing: -0.04em;
+  line-height: 0.9;
+  font-variant-numeric: tabular-nums;
+  transition: color 0.4s ease;
+}
+
+.drift.is-live[data-mode="demo"] .drift__num { color: var(--muted); }
+
+.drift__of {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+.drift__meter { height: 3px; border-radius: 3px; background: var(--line); overflow: hidden; }
+
+.drift__meter span {
+  display: block;
+  height: 100%;
+  background: var(--accent);
+  transform-origin: left;
+  transition: transform 0.75s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.drift.is-live[data-mode="demo"] .drift__meter span { transform: scaleX(0); transition-duration: 0.25s; }
+
+.drift__sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.drift__list { list-style: none; display: grid; }
+
+.drift__row {
+  display: grid;
+  grid-template-columns: 22px 112px minmax(0, 1fr);
+  align-items: center;
+  gap: 4px 12px;
+  padding: 11px 0;
+  border-top: 1px solid var(--line);
+}
+
+.drift__mark {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  border: 1.5px solid var(--accent);
+  background: var(--accent);
+  color: var(--on-accent);
+  transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+.drift__mark svg { width: 12px; height: 12px; }
+
+.drift__mark path {
+  stroke-dasharray: 16;
+  stroke-dashoffset: 0;
+  transition: stroke-dashoffset 0.35s ease;
+}
+
+.drift__k {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.drift__vals { font-size: 0.95rem; line-height: 1.35; align-items: center; }
+.drift__vals .drift__v--drift { font-weight: 500; }
+.drift__vals .drift__v--demo { color: var(--text-dim); }
+
+.drift.is-live[data-mode="demo"] .drift__mark {
+  background: transparent;
+  border-color: rgba(255, 255, 255, 0.32);
+  border-style: dashed;
+}
+
+.drift.is-live[data-mode="demo"] .drift__mark path { stroke-dashoffset: 16; transition-duration: 0.15s; }
+
+/* Raderna kommer på plats en i taget när läget slås om till drift. */
+.drift.is-live[data-mode="drift"] .drift__row .drift__mark,
+.drift.is-live[data-mode="drift"] .drift__row .drift__mark path { transition-delay: calc(var(--i) * 90ms + 140ms); }
+.drift.is-live[data-mode="drift"] .drift__row .drift__v--drift { transition-delay: calc(var(--i) * 90ms + 180ms); }
+.drift.is-live[data-mode="drift"] .drift__row .drift__v--demo { transition-delay: calc(var(--i) * 90ms + 60ms), calc(var(--i) * 90ms + 260ms); }
+
+.drift__foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px 24px;
+  flex-wrap: wrap;
+  padding: 18px clamp(16px, 2.6vw, 32px);
+  border-top: 1px solid var(--line);
+}
+
+.drift__ask { color: var(--text-dim); }
+.drift__ask strong { color: var(--text); font-weight: 600; }
+
+@media (max-width: 959px) {
+  /* Reglaget får en egen rad under listen. */
+  .drift__bar { min-height: 0; }
+  .drift__switch {
+    position: static;
+    height: auto;
+    transform: none;
+    justify-content: center;
+    padding: 8px 16px;
+    background: var(--bg);
+    border-bottom: 1px solid var(--line);
+  }
+}
+
+@media (max-width: 860px) {
+  /* Under den smala navraden (67 px) följer reglaget med medan man läser raderna. */
+  .drift__switch { position: sticky; top: 67px; z-index: 2; }
+}
+
+@media (max-width: 760px) {
+  .drift__body { grid-template-columns: 1fr; }
+  .drift__chat { border-right: 0; border-bottom: 1px solid var(--line); }
+  .drift__foot .btn { width: 100%; }
+}
+
+@media (max-width: 560px) {
+  .drift { border-radius: 16px; }
+  .drift__row { grid-template-columns: 22px minmax(0, 1fr); }
+  .drift__row .drift__k,
+  .drift__row .drift__vals { grid-column: 2; }
+  .drift__row .drift__mark { grid-row: 1 / span 2; align-self: start; margin-top: 2px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .drift,
+  .drift::before,
+  .drift *,
+  .drift *::after { transition: none !important; animation: none !important; }
 }
 
 /* ---------- sections ---------- */
