@@ -46,6 +46,11 @@ const checks = [
       hero.includes('href="mailto:johan@vectorpoint.se"') && hero.includes("https://www.linkedin.com/in/johan-studt/") &&
       hero.includes("Vector Point AB") && hero.indexOf('id="heroCta"') < hero.indexOf('class="founder"');
   })()],
+  ["hero opens with a prompt field that books with the visitor's words", (() => {
+    const hero = html.slice(html.indexOf('<section class="hero"'), html.indexOf("</section>", html.indexOf('<section class="hero"')));
+    return hero.includes('<form class="prompt" id="heroAsk" action="https://cal.com/johan-studt/15min"') && hero.includes('name="notes"') &&
+      hero.indexOf('id="heroAsk"') < hero.indexOf('id="heroCta"') && js.includes('wireAsk(heroAsk, heroAskInput') && js.includes("prefersReducedMotion");
+  })()],
   // Only organisations Johan has said may be shown, under the label he chose: "previous work",
   // not "clients". Adding a name or changing that claim is his call, not a design decision.
   ["previous work sits in the hero with local assets", (() => {

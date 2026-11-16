@@ -128,11 +128,27 @@
       <div class="hero__frame">
         <div class="hero__main">
           <h1 class="hero__title" data-reveal><span class="hero__line">AI som fungerar i drift.</span> <span class="hero__line">Inte bara i en demo.</span></h1>
-          <p class="hero__lead" data-reveal>Vi hjälper stora organisationer att lösa verkliga problem med AI, från säkra AI-miljöer till avlastning för support och automatiserade flöden på er egen data.<br>Vi enas om vad som ska bli bättre innan vi bygger, och mäter det efteråt.</p>
-          <div class="hero__actions" data-reveal>
-            <a class="btn btn--primary btn--lg" id="heroCta" href="https://cal.com/johan-studt/15min" target="_blank" rel="noreferrer" data-goatcounter-click="cta-hero">Boka ett samtal · 15 min</a>
-            <a class="btn btn--ghost btn--lg" href="#ai-kollen" data-goatcounter-click="ai-kollen-hero">Passar AI er? · 4 frågor</a>
-          </div>
+          <p class="hero__lead" data-reveal>Vi hjälper stora organisationer att lösa verkliga problem med AI, från säkra AI-miljöer till avlastning för support och automatiserade flöden på er egen data.<span class="hero__lead-more"><br>Vi enas om vad som ska bli bättre innan vi bygger, och mäter det efteråt.</span></p>
+          <!-- Första steget är att skriva en mening om problemet; texten följer med in i bokningen. Ingen modell läser den. -->
+          <form class="prompt" id="heroAsk" action="https://cal.com/johan-studt/15min" method="get" target="_blank" rel="noreferrer" data-reveal>
+            <label class="prompt__label" for="heroAskInput"><span class="prompt__dot" aria-hidden="true"></span>Vad ska AI lösa hos er?</label>
+            <div class="prompt__box">
+              <textarea class="prompt__input" id="heroAskInput" name="notes" rows="2" maxlength="400" placeholder="Till exempel: supporten hinner inte sortera alla inkommande ärenden"></textarea>
+              <input type="hidden" name="title" id="heroAskTitle" value="">
+              <button class="prompt__send" id="heroAskSend" type="submit" data-goatcounter-click="cta-hero-prompt"><span>Boka 15 min om det här</span><svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true"><path d="M4 10h11M11 5l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+            </div>
+            <div class="prompt__chips" aria-label="Vanliga problem att utgå från">
+              <button type="button" class="prompt__chip">Säker AI för alla</button>
+              <button type="button" class="prompt__chip">Avlasta supporten</button>
+              <button type="button" class="prompt__chip">Hitta i dokumenten</button>
+              <button type="button" class="prompt__chip">Snabbare rapporter</button>
+            </div>
+          </form>
+          <p class="hero__actions" data-reveal>
+            <a class="hero__alt" id="heroCta" href="https://cal.com/johan-studt/15min" target="_blank" rel="noreferrer" data-goatcounter-click="cta-hero">Boka direkt utan att skriva</a>
+            <span class="hero__sep" aria-hidden="true">·</span>
+            <a class="hero__alt" href="#ai-kollen" data-goatcounter-click="ai-kollen-hero">Osäker? Passar AI er, 4 frågor</a>
+          </p>
           <ul class="hero__facts" data-reveal aria-label="Det här gäller alltid">
             <li>Fast pris på första prototypen</li>
             <li>Ni äger kod och dokumentation</li>

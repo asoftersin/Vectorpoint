@@ -233,6 +233,20 @@ try {
   await page.locator("#bookClose").click();
   check(!await page.locator("#bookSheet").isVisible(), "The close button closes the booking sheet");
 
+  // Hjältens skrivfält: en chip fyller fältet, Enter bokar och texten följer med in i kalendern
+  await page.locator("#heroAsk").scrollIntoViewIfNeeded();
+  await page.locator("#heroAsk .prompt__chip", { hasText: "Avlasta supporten" }).click();
+  check(await page.locator("#heroAskInput").inputValue() === "Avlasta supporten" &&
+    await page.locator("#heroAsk").evaluate((el) => el.classList.contains("has-text")), "A hero chip fills the hero field and lights the send button");
+  await page.locator("#heroAskInput").fill("Supporten drunknar i ärenden");
+  await page.locator("#heroAskInput").press("Enter");
+  await page.locator("#bookSheet").waitFor({ state: "visible" });
+  check(await page.locator("#bookNote").textContent() === "Supporten drunknar i ärenden" &&
+    new URL(await page.locator("#bookOut").getAttribute("href")).searchParams.get("title") === "Supporten drunknar i ärenden",
+    "Enter in the hero field opens the calendar on the page with the visitor's words as the note and title");
+  check(await page.locator("#heroAskInput").inputValue() === "Supporten drunknar i ärenden", "The hero field keeps what the visitor wrote");
+  await page.locator("#bookClose").click();
+
   // AI-kollen: en fråga i taget, beskedet och svaren följer med till bokningen
   await page.locator("#ai-kollen").scrollIntoViewIfNeeded();
   check(await page.locator("#aiCheck .check__q:visible").count() === 1 && !await page.locator("#checkSubmit").isVisible() &&
