@@ -170,6 +170,22 @@ visit only and leave the browser only when the visitor books. On phones the
 dock shows the ring, the count and the button. It needs JavaScript and stays
 hidden without it.
 
+**PM till chefen** (`#memo`) turns the same underlag into a one-page decision
+memo, because the person who finds the page is rarely the one who signs off. The
+dock's "PM till chefen" button (an icon on phones), and links that appear under
+AI-kollen's verdict and the cost figure, open it as a sheet of paper: the
+visitor's problem as the title, AI-kollen's verdict with its reasons and
+suggested first prototype, the yearly cost, the method's four steps, and the
+proposed decision ("ta ett första samtal på 15 minuter", which binds them to
+nothing), signed with Johan's contact details. Empty parts link back to where
+they are filled in. "Skriv ut / spara PDF" prints only the paper (print CSS);
+"Mejla till en kollega" opens a `mailto:` with no recipient and the memo as
+plain text; "Kopiera texten" copies it; "Boka 15 min med PM:et" books with the
+underlag like the dock does. Every sentence in the memo is either the visitor's
+own input or a commitment already made elsewhere on the page, and the fine print
+says the figures are theirs, not a promise. Built in the browser; nothing is
+sent until the visitor sends it. Needs JavaScript.
+
 **Booking happens on the page.** Every booking link and both booking forms
 (contact and AI-kollen) open a sheet instead of a new cal.com tab: Johan's
 portrait, what happens on the call, the visitor's own text or AI-kollen answers
@@ -201,6 +217,7 @@ GoatCounter tracks these clicks:
 | `launch-film` | The film's sound/play button |
 | `ai-kollen-hero`, `cta-ai-kollen`, `contact-email-ai-kollen` | The hero link to AI-kollen, and booking or emailing from its verdict |
 | `cta-underlag` | Booking from the Ert underlag dock |
+| `pm-oppnat-dock`, `pm-oppnat-ai-kollen`, `pm-oppnat-kostnad`, `cta-pm`, `pm-mejla`, `pm-skriv-ut` | Opening the PM (by where), and booking, mailing or printing from it |
 | `cta-drift`, `drift-vaxlat` | Booking from the demo-or-drift panel, and the visitor's first own use of its switch on a visit (counted once) |
 | `cta-kostnad`, `kostnad-raknad` | Booking from the cost section, and the first slider move on a visit (counted once) |
 | `bokning-klar` | **A booking was completed** in the on-page calendar (Cal.com's `bookingSuccessful` event) |

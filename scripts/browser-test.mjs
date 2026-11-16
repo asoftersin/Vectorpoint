@@ -610,6 +610,39 @@ try {
   await motionPage.waitForFunction(() => !document.querySelector("#flowCaption4").textContent.startsWith("Följ en ändring"));
   check(true, "Reopening restarts the diagram");
   await animated.close();
+
+  // PM till chefen: underlaget som ett beslutsunderlag att skriva ut, mejla vidare eller boka med.
+  const memoContext = await newContext();
+  const memoPage = await memoContext.newPage();
+  await memoPage.goto(url);
+  await memoPage.locator("#heroAskInput").fill("Supporten hinner inte sortera alla ärenden");
+  await memoPage.waitForFunction(() => document.getElementById("briefCount").textContent === "1");
+  await memoPage.evaluate(() => scrollTo({ top: document.getElementById("approach").offsetTop, behavior: "instant" }));
+  await memoPage.locator("#briefMemo").waitFor({ state: "visible" });
+  await memoPage.locator("#briefMemo").click();
+  await memoPage.locator("#memo").waitFor({ state: "visible" });
+  check(await memoPage.locator("#memoTitle").textContent() === "Supporten hinner inte sortera alla ärenden", "PM title is the visitor's own problem");
+  check(await memoPage.locator("#memoProblem .memo__quote").count() === 1, "PM quotes the problem");
+  check(await memoPage.locator("#memoCheck .memo__missing a").getAttribute("href") === "#ai-kollen", "PM links an empty AI-kollen slot to the check");
+  check(await memoPage.locator("#memoCost .memo__missing a").getAttribute("href") === "#kostnad", "PM links an empty cost slot to the calculator");
+  const memoMail = await memoPage.locator("#memoMail").getAttribute("href");
+  check(memoMail.startsWith("mailto:?subject=") && decodeURIComponent(memoMail).includes("Supporten hinner inte sortera"), "PM mail carries the memo for a colleague");
+  check(await memoPage.evaluate(() => document.activeElement.id === "memoClose"), "PM focuses its close button");
+  await memoPage.keyboard.press("Escape");
+  await memoPage.locator("#memo").waitFor({ state: "hidden" });
+  await memoPage.waitForFunction(() => !document.documentElement.classList.contains("is-memo"));
+  check(true, "Closing the PM restores the page");
+  await memoPage.locator("#briefMemo").click();
+  await memoPage.locator("#memoBook").click();
+  await memoPage.locator("#bookSheet").waitFor({ state: "visible" });
+  check((await memoPage.locator("#bookNote").textContent()).includes("Supporten hinner inte sortera"), "Booking from the PM carries the underlag");
+  await memoPage.keyboard.press("Escape");
+  await memoPage.setViewportSize({ width: 320, height: 700 });
+  await memoPage.waitForTimeout(100);
+  check(await memoPage.locator("#briefForm").evaluate((form) => [...form.querySelectorAll("button")]
+    .every((el) => { const r = el.getBoundingClientRect(); return r.left >= 0 && r.right <= innerWidth; })), "Dock buttons fit at 320px");
+  await memoContext.close();
+
   check(errors.length === 0, `No browser errors: ${errors.join("; ")}`);
   console.log(`Browser tests passed (${checks} checks).`);
 } finally {
