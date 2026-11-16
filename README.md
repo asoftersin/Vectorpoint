@@ -43,10 +43,12 @@ from those two.
   the About card, the contact section and the footer. The header keeps a
   booking button and a `Kontakt` link on every screen size.
 - **Only claims the company has actually made.** The three commitments under
-  the hero buttons repeat promises spelled out further down. There are no
-  client logos, testimonials, result figures, response-time or price promises,
-  and no phone number, because none have been supplied. Add them when they
-  exist; do not invent them. The smoke test guards several of these.
+  the hero buttons repeat promises spelled out further down. The client strip
+  at the bottom of the hero shows only clients Johan has said may be named:
+  Prevas (logo in `assets/clients/`) and Stratsys (name only, no logo has been
+  cleared). There are no testimonials, result figures, response-time or price
+  promises, and no phone number, because none have been supplied. Add them
+  when they exist; do not invent them. The smoke test guards several of these.
 - **Examples say they are fictional** wherever invented names and numbers
   appear.
 

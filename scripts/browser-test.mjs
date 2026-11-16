@@ -74,6 +74,9 @@ try {
     [".founder", "the founder card"], ['.founder a[href^="mailto:"]', "a direct email address"]]) {
     check(await onFirstScreen(page, selector), `Desktop first screen shows ${what}`);
   }
+  check(await onFirstScreen(page, ".clients") && await page.locator(".clients img").evaluateAll((imgs) =>
+    imgs.length > 0 && imgs.every((img) => img.complete && img.naturalWidth > 0)) &&
+    await page.locator(".clients__list li").count() === 2, "Desktop first screen names the clients, with their logos loaded");
   check(await page.locator(".founder__photo").evaluate((img) =>
     img.complete && img.naturalWidth > 0 && getComputedStyle(img).objectFit === "cover"), "Founder portrait loads and is cropped, not stretched");
   check(await page.locator("#heroCta").getAttribute("href") === "https://cal.com/johan-studt/15min" &&
@@ -225,6 +228,10 @@ try {
     const rect = el.getBoundingClientRect();
     return rect.top < innerHeight && rect.top >= document.querySelector(".hero__main").getBoundingClientRect().bottom;
   }), "Phone first screen reaches the founder card below the text");
+  check(await mobilePage.locator(".clients").evaluate((el) =>
+    el.getBoundingClientRect().top >= document.querySelector(".founder").getBoundingClientRect().bottom) &&
+    await mobilePage.locator(".clients__list li").evaluateAll((items) => new Set(items.map((li) =>
+      Math.round(li.getBoundingClientRect().top))).size === 1), "On a phone the clients follow the founder card, side by side");
   check(await mobilePage.locator(".founder a").evaluateAll((links) =>
     links.every((a) => a.getBoundingClientRect().height >= 36)), "Founder card links are comfortable touch targets");
   for (const id of ["leads", "feedback", "report"]) {

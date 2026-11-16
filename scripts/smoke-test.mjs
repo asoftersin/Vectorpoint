@@ -43,6 +43,14 @@ const checks = [
       hero.includes('href="mailto:johan@vectorpoint.se"') && hero.includes("https://www.linkedin.com/in/johan-studt/") &&
       hero.includes("Vector Point AB") && hero.indexOf('id="heroCta"') < hero.indexOf('class="founder"');
   })()],
+  // Only clients Johan has said may be shown. Adding a name here is his call, not a design decision.
+  ["named clients sit in the hero with local assets", (() => {
+    const hero = html.slice(html.indexOf('<section class="hero"'), html.indexOf("</section>", html.indexOf('<section class="hero"')));
+    const strip = hero.slice(hero.indexOf('class="clients"'));
+    const shown = [...strip.matchAll(/alt="([^"]+)"|class="clients__name">([^<]+)</g)].map((m) => m[1] || m[2]);
+    return hero.includes('class="clients"') && shown.join(",") === "Prevas,Stratsys" &&
+      strip.includes('src="assets/clients/prevas.svg"') && readdirSync("assets/clients").every((f) => html.includes(`assets/clients/${f}`));
+  })()],
   ["hero commitments repeat promises made in full further down", ["Fast pris på första prototypen", "Ni äger kod och dokumentation", "Testat innan det når er"].every((t) => html.includes(`<li>${t}</li>`)) &&
     html.includes("Fast pris och omfattning bestäms före start.") && html.includes("Ni äger lösningen") && html.includes("Testat som programvara")],
   ["launch film is a framed section that loads on demand", (() => {

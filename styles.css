@@ -298,7 +298,7 @@ a { color: inherit; }
   position: relative;
   min-height: min(780px, 100svh);
   display: flex;
-  padding: 130px var(--pad-x) 72px;
+  padding: 130px var(--pad-x) 48px;
   overflow: hidden;
   background:
     radial-gradient(ellipse 46% 60% at 88% 34%, rgba(10, 102, 209, 0.09), transparent 70%),
@@ -458,14 +458,59 @@ a { color: inherit; }
 
 .founder__links a:hover { color: var(--accent); text-decoration-color: var(--accent); }
 
+/* ---------- kunder: bara namn och logotyper som uttryckligen får visas ---------- */
+
+.clients {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px 40px;
+  margin-top: 36px;
+  padding-top: 22px;
+  border-top: 1px solid var(--line);
+}
+
+.clients__title {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  line-height: 1.4;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.clients__list {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px 44px;
+}
+
+.clients__list li { display: flex; align-items: center; min-height: 32px; }
+.clients__list img { display: block; height: 26px; width: auto; }
+
+/* A client we may name but have no logo for is set as a plain wordmark of the same weight. */
+.clients__name {
+  font-size: 1.6rem;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  color: var(--text);
+}
+
 @media (min-width: 1000px) {
   .hero__frame {
     display: grid;
     grid-template-columns: minmax(0, 720px) clamp(290px, 26vw, 350px);
+    grid-template-rows: 1fr auto;
     justify-content: space-between;
     align-items: center;
     column-gap: 48px;
   }
+
+  .clients { grid-column: 1 / -1; }
 
   .founder {
     flex-direction: column;
