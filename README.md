@@ -246,3 +246,10 @@ uses `--nohud` renders; after re-rendering, refresh
 from the brand file. The nav uses the dark version on the light page and the
 footer the white one; `favicon.svg` and `assets/og-image.png` carry the same mark. The film reads its animated
 copy from `launch-video/logo.js`.
+
+### Midnight opening
+
+The hero now uses a midnight blue canvas, electric blue second headline and a
+light booking panel. The founder portrait stays alongside the offer; previous
+work sits on a light strip so original logos retain their contrast. Navigation
+has an opaque light background to stay readable over both dark and light sections.

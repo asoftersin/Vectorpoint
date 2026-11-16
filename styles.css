@@ -3718,3 +3718,61 @@ html.is-memo .brief { visibility: hidden; }
   html.is-memo .memo__sec { break-inside: avoid; padding: 12px 0; }
   @page { margin: 16mm 18mm; }
 }
+
+/* The opening statement: midnight ink, electric blue, a paper booking surface. */
+.hero {
+  --text: #f4f7fc;
+  --text-dim: #c3cede;
+  --muted: #aabbd0;
+  --line: #33445b;
+  --line-strong: #70839e;
+  --accent: #91bfff;
+  color: var(--text);
+  background: radial-gradient(ellipse at 85% 20%, #183f73 0, transparent 55%), #091524;
+}
+.hero::before {
+  background-image: linear-gradient(#88baff0d 1px, transparent 1px), linear-gradient(90deg, #88baff0d 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: linear-gradient(100deg, transparent 15%, #000);
+}
+.hero__title { letter-spacing: -.045em; }
+.hero__line:last-child { color: #91bfff; }
+.hero__lead { max-width: 630px; }
+.hero .prompt {
+  --text: #15171a;
+  --text-dim: #444f5d;
+  --muted: #566375;
+  --line: #cbd5e2;
+  --accent: #075cc7;
+  --accent-soft: #e8f1ff;
+  color: var(--text);
+  padding: 22px;
+  background: #f4f7fc;
+  border-radius: 18px;
+  box-shadow: 0 20px 60px #0003;
+}
+.hero .prompt__label { color: #26374d; }
+.hero .prompt__box { background: #fff; }
+.hero .prompt__send { background: #075cc7; color: #fff; }
+.hero .prompt__send:hover { background: #044a9f; }
+.hero .founder {
+  background: #102238;
+  border-color: #38516f;
+  box-shadow: 0 24px 70px #0003;
+  overflow: hidden;
+}
+.hero .founder__photo { filter: saturate(.75); }
+.hero .clients {
+  background: #f4f7fc;
+  border: 0;
+  border-radius: 12px;
+  padding: 18px 24px;
+  color: #15171a;
+}
+.hero .clients__title { color: #566375; }
+@media (max-width: 560px) {
+  .hero .prompt { padding: 16px; border-radius: 14px; }
+  .hero .clients { padding: 16px; }
+}
+/* Keep navigation readable above the dark opening and every later section. */
+.nav { background: #f6f5f1; border-bottom: 1px solid #d9dfe6; }
