@@ -139,6 +139,19 @@ starts afresh; switching tabs cancels the hidden demo and resets its pause state
 Reduced motion shows the completed example without looping or a pause button.
 Playback controls stay hidden when JavaScript is unavailable.
 
+**Ert underlag** (`#brief`) is a dark dock that floats at the bottom of the
+screen once the hero has scrolled away, and hides again at the contact section,
+the footer and while the booking sheet is open. It collects what the visitor has
+already told the page, in three slots: their problem (typed in the hero or
+contact field), AI-kollen's verdict and the cost figure from the sliders. Empty
+slots are links to where each is filled in; a ring counts "x av 3". "Boka med
+underlaget" opens the on-page calendar with everything gathered as one booking
+note, so the visitor never has to choose which of the three tools to book from,
+and the call starts from all of it. The answers live in `sessionStorage` for the
+visit only and leave the browser only when the visitor books. On phones the
+dock shows the ring, the count and the button. It needs JavaScript and stays
+hidden without it.
+
 **Booking happens on the page.** Every booking link and both booking forms
 (contact and AI-kollen) open a sheet instead of a new cal.com tab: Johan's
 portrait, what happens on the call, the visitor's own text or AI-kollen answers
@@ -169,6 +182,7 @@ GoatCounter tracks these clicks:
 | `example-sales`, `example-support`, `example-reporting`, `demo-replay-*` | An example tab or replay |
 | `launch-film` | The film's sound/play button |
 | `ai-kollen-hero`, `cta-ai-kollen`, `contact-email-ai-kollen` | The hero link to AI-kollen, and booking or emailing from its verdict |
+| `cta-underlag` | Booking from the Ert underlag dock |
 | `cta-kostnad`, `kostnad-raknad` | Booking from the cost section, and the first slider move on a visit (counted once) |
 | `bokning-klar` | **A booking was completed** in the on-page calendar (Cal.com's `bookingSuccessful` event) |
 | `bokning-ny-flik`, `contact-email-bokning` | Leaving the booking sheet for a cal.com tab, or for email |

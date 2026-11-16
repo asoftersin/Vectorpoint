@@ -824,6 +824,25 @@
 
   </main>
 
+  <!-- Ert underlag: följer med nedför sidan och samlar det besökaren berättar (problemet,
+       AI-kollens besked, kostnaden) till en bokningsanteckning. Kräver JS; utan JS syns den inte. -->
+  <aside class="brief" id="brief" aria-label="Ert underlag till samtalet" hidden>
+    <form class="brief__bar" id="briefForm" action="https://cal.com/johan-studt/15min" method="get" target="_blank" rel="noreferrer">
+      <div class="brief__head">
+        <span class="brief__ring" aria-hidden="true"><svg viewBox="0 0 36 36"><circle cx="18" cy="18" r="15.5"/><circle class="brief__ring-fill" id="briefRing" cx="18" cy="18" r="15.5"/></svg><span id="briefCount">0</span></span>
+        <span class="brief__label"><span class="brief__kicker">Ert underlag</span><span class="brief__status" id="briefStatus" aria-live="polite">Samlas medan ni läser</span></span>
+      </div>
+      <ol class="brief__items">
+        <li><a class="brief__item" id="briefProblem" href="#kontakt" data-empty="Ert problem"><span class="brief__dot" aria-hidden="true"></span><span class="brief__text">Ert problem</span></a></li>
+        <li><a class="brief__item" id="briefCheck" href="#ai-kollen" data-empty="AI-kollen"><span class="brief__dot" aria-hidden="true"></span><span class="brief__text">AI-kollen</span></a></li>
+        <li><a class="brief__item" id="briefCost" href="#kostnad" data-empty="Kostnaden"><span class="brief__dot" aria-hidden="true"></span><span class="brief__text">Kostnaden</span></a></li>
+      </ol>
+      <input type="hidden" name="title" id="briefTitle" value="">
+      <input type="hidden" name="notes" id="briefNotes" value="">
+      <button class="brief__send" type="submit" data-goatcounter-click="cta-underlag"><span id="briefSendWith">Boka 15 min</span><svg viewBox="0 0 20 20" width="16" height="16" aria-hidden="true"><path d="M4 10h11M11 5l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    </form>
+  </aside>
+
   <footer class="footer">
     <div class="footer__inner">
       <div class="footer__brand">
