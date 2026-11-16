@@ -180,6 +180,97 @@
       </div>
     </section>
 
+    <!-- DEMO ELLER DRIFT: rubrikens löfte som något besökaren själv slår om. Samma assistent och
+         samma två frågor i två lägen. Varje rad i drift-läget är ett åtagande som står i klartext
+         längre ned på sidan, och innehållet i rutan är påhittat och märkt så. Utan JS visas
+         drift-läget, med demo-läget som jämförelse på varje rad. -->
+    <section class="section section--drift" id="drift" aria-labelledby="driftTitle">
+      <div class="section__head">
+        <p class="eyebrow" data-reveal>DEMO ELLER DRIFT</p>
+        <h2 id="driftTitle" data-reveal="blur">En demo imponerar. I drift måste det hålla.</h2>
+        <p class="section__sub section__sub--wide" data-reveal>Samma assistent och samma två frågor. Slå om och se vad som måste finnas på plats innan AI får möta verkligheten.</p>
+      </div>
+      <div class="drift" id="driftPanel" data-mode="drift" data-reveal="scale">
+        <div class="drift__bar">
+          <span class="demo__title"><i class="drift__led" aria-hidden="true"></i>Intern assistent</span>
+          <span class="flow__chip">EXEMPEL · PÅHITTAT INNEHÅLL</span>
+        </div>
+        <div class="drift__switch" id="driftSwitch" hidden>
+          <button class="drift__opt" type="button" data-set="demo" tabindex="-1" aria-hidden="true">Demo</button>
+          <button class="drift__toggle" id="driftToggle" type="button" role="switch" aria-checked="true" aria-label="Visa assistenten i drift"><span class="drift__knob" aria-hidden="true"></span></button>
+          <button class="drift__opt" type="button" data-set="drift" tabindex="-1" aria-hidden="true">I drift</button>
+        </div>
+        <div class="drift__body">
+          <div class="drift__chat">
+            <p class="drift__q">Vilken uppsägningstid gäller i leverantörsavtalet?</p>
+            <div class="drift__a">
+              <p>Tre månader, och uppsägningen ska vara skriftlig.</p>
+              <p class="drift__meta drift__swap">
+                <span class="drift__v drift__v--demo drift__warn">Ingen källa</span>
+                <span class="drift__v drift__v--drift"><span class="drift__src">Leverantörsavtal · § 12.2</span></span>
+              </p>
+            </div>
+            <p class="drift__q">Kan vi säga upp i förtid utan kostnad?</p>
+            <div class="drift__a drift__swap">
+              <div class="drift__v drift__v--demo">
+                <p>Ja, det går bra.</p>
+                <p class="drift__meta drift__warn">Ingen källa · svaret är en gissning</p>
+              </div>
+              <div class="drift__v drift__v--drift">
+                <p>Det står inte i avtalet, så jag gissar inte. Frågan har gått vidare till avtalsansvarig.</p>
+                <p class="drift__meta"><span class="drift__src">→ Till en människa</span></p>
+              </div>
+            </div>
+            <p class="drift__strip drift__swap">
+              <span class="drift__v drift__v--demo">Laptop · exempelfiler · ingen logg</span>
+              <span class="drift__v drift__v--drift">Er plattform · behörighet kontrollerad · loggat</span>
+            </p>
+          </div>
+          <div class="drift__layers">
+            <p class="drift__score"><span class="drift__num" id="driftNum">6</span><span class="drift__of">av 6 på plats</span></p>
+            <div class="drift__meter" aria-hidden="true"><span></span></div>
+            <p class="drift__sr" id="driftState" aria-live="polite"></p>
+            <ul class="drift__list" aria-label="Det som skiljer drift från en demo">
+              <li class="drift__row" style="--i:0">
+                <span class="drift__mark" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.5 8.5l3 3 6-6.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                <span class="drift__k">Data</span>
+                <span class="drift__vals drift__swap"><span class="drift__v drift__v--demo">Exempelfiler på en laptop</span><span class="drift__v drift__v--drift">Er egen data, i er plattform</span></span>
+              </li>
+              <li class="drift__row" style="--i:1">
+                <span class="drift__mark" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.5 8.5l3 3 6-6.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                <span class="drift__k">Behörigheter</span>
+                <span class="drift__vals drift__swap"><span class="drift__v drift__v--demo">Alla ser allt</span><span class="drift__v drift__v--drift">Rätt person ser rätt sak, och det loggas</span></span>
+              </li>
+              <li class="drift__row" style="--i:2">
+                <span class="drift__mark" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.5 8.5l3 3 6-6.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                <span class="drift__k">Källor</span>
+                <span class="drift__vals drift__swap"><span class="drift__v drift__v--demo">Svar utan hänvisning</span><span class="drift__v drift__v--drift">Källa på varje påstående</span></span>
+              </li>
+              <li class="drift__row" style="--i:3">
+                <span class="drift__mark" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.5 8.5l3 3 6-6.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                <span class="drift__k">Osäkra fall</span>
+                <span class="drift__vals drift__swap"><span class="drift__v drift__v--demo">Gissar hellre än att säga nej</span><span class="drift__v drift__v--drift">Går till en människa</span></span>
+              </li>
+              <li class="drift__row" style="--i:4">
+                <span class="drift__mark" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.5 8.5l3 3 6-6.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                <span class="drift__k">Tester</span>
+                <span class="drift__vals drift__swap"><span class="drift__v drift__v--demo">Provat för hand, en gång</span><span class="drift__v drift__v--drift">Varje ändring testas mot riktiga system</span></span>
+              </li>
+              <li class="drift__row" style="--i:5">
+                <span class="drift__mark" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.5 8.5l3 3 6-6.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                <span class="drift__k">Effekt</span>
+                <span class="drift__vals drift__swap"><span class="drift__v drift__v--demo">”Det ser lovande ut”</span><span class="drift__v drift__v--drift">Mäts mot målet vi enades om före start</span></span>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="drift__foot">
+          <p class="drift__ask"><strong>Har ni en pilot som fastnat i demo-läget?</strong> Ta med den till första samtalet.</p>
+          <a class="btn btn--primary" href="https://cal.com/johan-studt/15min?title=Fr%C3%A5n%20demo%20till%20drift&amp;notes=Vi%20har%20en%20AI-pilot%20eller%20demo%20som%20inte%20har%20n%C3%A5tt%20drift." target="_blank" rel="noreferrer" data-goatcounter-click="cta-drift">Boka 15 min om att ta den i drift</a>
+        </div>
+      </div>
+    </section>
+
     <!-- UPPDRAG: problemen stora organisationer oftast kommer med -->
     <section class="section" id="services">
       <div class="section__head">

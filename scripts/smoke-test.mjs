@@ -70,7 +70,7 @@ const checks = [
       css.includes(".vectorpoint-loaded .film {") && css.includes("aspect-ratio: 9 / 16;");
   })()],
   ["light page with dark panels from one token set", css.includes("--bg: #f6f4ef") && css.includes("--accent: #0a66d1") && css.includes("--accent: #0099ff") &&
-    /\.film,\n\.demo,\n\.check,\n\.cost,\n\.flow__stage,\n\.contact,\n\.footer \{/.test(css) && html.includes('<meta name="theme-color" content="#f6f4ef">') &&
+    /\.film,\n\.demo,\n\.check,\n\.cost,\n\.drift,\n\.flow__stage,\n\.contact,\n\.footer \{/.test(css) && html.includes('<meta name="theme-color" content="#f6f4ef">') &&
     html.includes('<img src="assets/brand/vectorpoint-logo.svg" alt="Vectorpoint"')],
   ["optional technical deep dive", html.includes('<details class="pipeline" id="pipeline">') && html.includes("<summary>Se hur vi kvalitetssäkrar")],
   ["data processing described without absolute residency promise", !html.includes("Den stannar i era system.") && html.split("även externa AI-tjänster").length === 3],
@@ -192,6 +192,20 @@ const checks = [
       cost.includes("Er gissning") && cost.includes("inte ett löfte") && cost.includes('data-goatcounter-click="cta-kostnad"') &&
       js.includes("const WEEKS = 45;") && js.includes('$("costNotes").value');
   })()],
+  // Demo eller drift pays off the headline right under the hero. Its drift rows only repeat
+  // commitments made in full elsewhere on the page, its content is labelled as invented, and
+  // without JavaScript it shows the drift state with the demo state as a comparison.
+  ["demo-or-drift switch sits right under the hero and books with the pilot as the note", (() => {
+    const drift = html.slice(html.indexOf('id="drift"'), html.indexOf('id="services"'));
+    return html.indexOf('id="drift"') > html.indexOf('id="hero"') && html.indexOf('id="drift"') < html.indexOf('id="services"') &&
+      drift.includes('id="driftPanel" data-mode="drift"') && drift.includes("EXEMPEL · PÅHITTAT INNEHÅLL") &&
+      drift.split('class="drift__row"').length === 7 && /id="driftSwitch" hidden>/.test(drift) &&
+      drift.includes('role="switch" aria-checked="true"') && drift.includes('data-goatcounter-click="cta-drift"') &&
+      drift.includes('href="https://cal.com/johan-studt/15min?title=') && drift.includes("notes=Vi%20har%20en%20AI-pilot") &&
+      js.includes('"drift-vaxlat"') && js.includes("driftSwitch.hidden = false") &&
+      css.includes('.drift:not(.is-live) .drift__chat .drift__v--demo { display: none; }');
+  })()],
+  ["drift rows repeat commitments spelled out further down", ["med källhänvisning", "oklara fall går till en människa", "Varje ändring testas innan den släpps", "Behörigheter, loggning och spårbarhet", "hur det mäts"].every((t) => html.includes(t))],
   ["footer heading level", html.includes("<h3>Kontakt</h3>") && !html.includes("<h4>")],
 ];
 
