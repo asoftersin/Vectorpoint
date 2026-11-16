@@ -42,11 +42,16 @@ from those two.
   a stranger: booking (Cal.com), email and LinkedIn. They appear in the hero,
   the About card, the contact section and the footer. The header keeps a
   booking button and a `Kontakt` link on every screen size.
+- **Instagram is proof, not a contact route.** Johan's videos about AI and tech
+  for companies are linked from the About card and the footer, where they
+  support who he is. They are kept out of the hero and the contact section so
+  the three contact routes stay clear.
 - **Only claims the company has actually made.** The three commitments under
   the hero buttons repeat promises spelled out further down. The client strip
   at the bottom of the hero shows only clients Johan has said may be named:
-  Prevas (logo in `assets/clients/`) and Stratsys (name only, no logo has been
-  cleared). There are no testimonials, result figures, response-time or price
+  Stratsys, Prevas and Chalmers, using the logo files he supplied
+  (`assets/clients/`, unaltered apart from trimming and resizing). There are
+  no testimonials, result figures, response-time or price
   promises, and no phone number, because none have been supplied. Add them
   when they exist; do not invent them. The smoke test guards several of these.
 - **Examples say they are fictional** wherever invented names and numbers
@@ -63,8 +68,10 @@ panels, so components never hard-code which mode they are in.
 
 ## Page behaviour and measurement
 
-The hero scrolls with the document. Its headline keeps each sentence on one
-line. From 1000px the founder card sits beside the text with a large portrait;
+The hero scrolls with the document. Its headline ("AI som fungerar i drift.
+Inte bara i en demo.") keeps each sentence on one line; the brand tagline from
+the film ("Från AI-idé till mätbar effekt") stays in the page title, the social
+cards and the footer. From 1000px the founder card sits beside the text with a large portrait;
 below that it becomes a compact card under the text. While the hero's booking
 button is visible the header booking button is an outline, so there is a single
 primary action; it turns primary once the hero button scrolls away. On narrow
@@ -104,6 +111,7 @@ GoatCounter tracks these clicks:
 | `cta-nav`, `cta-mobilnav`, `cta-hero`, `cta-exempel`, `cta-om`, `cta-kontakt`, `cta-kontakt-direkt`, `cta-footer` | A booking link, by position |
 | `contact-email-hero`, `contact-email`, `contact-email-form`, `contact-email-footer`, `contact-email-copy` | An email link, or the copy button |
 | `contact-linkedin-hero`, `contact-linkedin-om`, `contact-linkedin` | A LinkedIn link |
+| `instagram-om`, `instagram-footer` | The Instagram link |
 | `example-sales`, `example-support`, `example-reporting`, `demo-replay-*` | An example tab or replay |
 | `launch-film` | The film's sound/play button |
 
@@ -121,6 +129,9 @@ uses `--nohud` renders; after re-rendering, refresh
 `assets/launch/` with `launch-video/web-encode.sh`.
 
 ## Logo
+
+`assets/johan.jpg` is the full-size portrait; `assets/johan-portrait.jpg` is the
+4:5 crop the page uses.
 
 `assets/brand/` holds the logo as SVG (dark, white, and the mark alone), traced
 from the brand file. The nav uses the dark version on the light page and the

@@ -34,7 +34,10 @@ const checks = [
     const firstSection = html.indexOf("<section", main);
     return firstSection === html.indexOf('<section class="hero" id="hero">') && html.indexOf('id="film"') > html.indexOf('id="services"');
   })()],
-  ["outcome-led hero headline", html.includes('class="hero__title" data-reveal><span class="hero__line">Från AI-idé</span> <span class="hero__line">till mätbar effekt.</span></h1>')],
+  // The headline sells the difference (it works in daily operation); the brand
+  // tagline from the film stays in the title, the social cards and the footer.
+  ["hero headline sells the difference, tagline stays in the title", html.includes('class="hero__title" data-reveal><span class="hero__line">AI som fungerar i drift.</span> <span class="hero__line">Inte bara i en demo.</span></h1>') &&
+    html.includes("<title>Vectorpoint — Från AI-idé till mätbar effekt</title>") && html.includes("från idé till mätbar effekt.</p>")],
   ["examples are progressively enhanced tabs", html.includes('id="exampleTabs" role="tablist"') && html.includes('aria-controls="work-report"') && js.includes('panel.setAttribute("role", "tabpanel")') && css.includes("[hidden] { display: none !important; }")],
   ["prototype offer outside every panel", html.indexOf('id="prototype"') > html.indexOf('id="demoReport"') && html.includes("Fast pris och omfattning bestäms före start.")],
   ["founder and direct contact details in hero", (() => {
@@ -47,9 +50,9 @@ const checks = [
   ["named clients sit in the hero with local assets", (() => {
     const hero = html.slice(html.indexOf('<section class="hero"'), html.indexOf("</section>", html.indexOf('<section class="hero"')));
     const strip = hero.slice(hero.indexOf('class="clients"'));
-    const shown = [...strip.matchAll(/alt="([^"]+)"|class="clients__name">([^<]+)</g)].map((m) => m[1] || m[2]);
-    return hero.includes('class="clients"') && shown.join(",") === "Prevas,Stratsys" &&
-      strip.includes('src="assets/clients/prevas.svg"') && readdirSync("assets/clients").every((f) => html.includes(`assets/clients/${f}`));
+    const shown = [...strip.matchAll(/src="assets\/clients\/([a-z]+)\.png" alt="([^"]+)"/g)];
+    return hero.includes('class="clients"') && shown.map((m) => m[2]).join(",") === "Stratsys,Prevas,Chalmers" &&
+      shown.every((m) => existsSync(`assets/clients/${m[1]}.png`)) && readdirSync("assets/clients").length === shown.length;
   })()],
   ["hero commitments repeat promises made in full further down", ["Fast pris på första prototypen", "Ni äger kod och dokumentation", "Testat innan det når er"].every((t) => html.includes(`<li>${t}</li>`)) &&
     html.includes("Fast pris och omfattning bestäms före start.") && html.includes("Ni äger lösningen") && html.includes("Testat som programvara")],
@@ -122,6 +125,14 @@ const checks = [
   ["contact controls degrade without script", html.includes('id="askMail" href="mailto:johan@vectorpoint.se"') && /id="copyEmail"[^>]* hidden>/.test(html) &&
     js.includes("copyEmail.hidden = false") && js.includes("navigator.clipboard.writeText")],
   ["no contact detail or promise we were not given", !/tel:|\+46/.test(html) && !/kostnadsfri|gratis|svar inom/i.test(html)],
+  // Instagram shows Johan explaining AI to companies: proof of the person, not a way to reach him.
+  ["instagram supports the about section without becoming a contact route", (() => {
+    const about = html.slice(html.indexOf('id="about"'), html.indexOf('id="faq"'));
+    const contact = html.slice(html.indexOf('id="kontakt"'), html.indexOf("</main>"));
+    const hero = html.slice(html.indexOf('<section class="hero"'), html.indexOf('id="services"'));
+    return about.includes('href="https://www.instagram.com/johanstudt/"') && !contact.includes("instagram") && !hero.includes("instagram") &&
+      html.split('"https://www.instagram.com/johanstudt/"]').length === 3;
+  })()],
   ["structured data carries the contact address", html.includes('"email": "johan@vectorpoint.se"')],
   ["analytics snippet", html.includes("data-goatcounter=") && html.includes("gc.zgo.at/count.js")],
   ["no placeholders left", !html.includes("PLACEHOLDER")],

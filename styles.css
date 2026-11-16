@@ -488,16 +488,21 @@ a { color: inherit; }
   gap: 14px 44px;
 }
 
-.clients__list li { display: flex; align-items: center; min-height: 32px; }
-.clients__list img { display: block; height: 26px; width: auto; }
+.clients__list li { display: flex; align-items: center; }
+.clients__logo { display: block; width: auto; }
 
-/* A client we may name but have no logo for is set as a plain wordmark of the same weight. */
-.clients__name {
-  font-size: 1.6rem;
-  font-weight: 600;
-  letter-spacing: -0.03em;
-  line-height: 1;
-  color: var(--text);
+/* Heights are set per logo so the wordmarks look the same size: one has a
+   tagline under it and one is a square tile. */
+.clients__logo--stratsys { height: 28px; }
+.clients__logo--prevas { height: 42px; }
+.clients__logo--chalmers { height: 54px; border-radius: 8px; }
+
+/* On a phone all three share one row across the full width. */
+@media (max-width: 560px) {
+  .clients__list { width: 100%; flex-wrap: nowrap; justify-content: space-between; gap: 16px; }
+  .clients__logo--stratsys { height: 22px; }
+  .clients__logo--prevas { height: 33px; }
+  .clients__logo--chalmers { height: 42px; border-radius: 6px; }
 }
 
 @media (min-width: 1000px) {
