@@ -70,7 +70,7 @@ const checks = [
       css.includes(".vectorpoint-loaded .film {") && css.includes("aspect-ratio: 9 / 16;");
   })()],
   ["light page with dark panels from one token set", css.includes("--bg: #f6f4ef") && css.includes("--accent: #0a66d1") && css.includes("--accent: #0099ff") &&
-    /\.film,\n\.demo,\n\.check,\n\.flow__stage,\n\.contact,\n\.footer \{/.test(css) && html.includes('<meta name="theme-color" content="#f6f4ef">') &&
+    /\.film,\n\.demo,\n\.check,\n\.cost,\n\.flow__stage,\n\.contact,\n\.footer \{/.test(css) && html.includes('<meta name="theme-color" content="#f6f4ef">') &&
     html.includes('<img src="assets/brand/vectorpoint-logo.svg" alt="Vectorpoint"')],
   ["optional technical deep dive", html.includes('<details class="pipeline" id="pipeline">') && html.includes("<summary>Se hur vi kvalitetssäkrar")],
   ["data processing described without absolute residency promise", !html.includes("Den stannar i era system.") && html.split("även externa AI-tjänster").length === 3],
@@ -183,6 +183,15 @@ const checks = [
     html.includes('id="aiCheck" action="https://cal.com/johan-studt/15min"') && html.split('class="check__q"').length === 5 && js.includes("aiCheck")],
   ["ai check is honest about how it works", html.includes("inte av AI") && html.includes("AI är troligen inte första steget") === false && js.includes("AI är troligen inte första steget.")],
   ["hero secondary action leads to the ai check", html.includes('href="#ai-kollen" data-goatcounter-click="ai-kollen-hero"')],
+  // The cost section only ever shows the visitor's own numbers: no default saving is claimed,
+  // the AI share is labelled as their guess, and the result travels to the booking as a note.
+  ["cost calculator uses the visitor's numbers and books with them", (() => {
+    const cost = html.slice(html.indexOf('id="kostnad"'), html.indexOf('id="approach"'));
+    return html.indexOf('id="kostnad"') > html.indexOf('id="work"') && html.indexOf('id="kostnad"') < html.indexOf('id="approach"') &&
+      cost.includes('id="costCalc" action="https://cal.com/johan-studt/15min"') && cost.includes('name="notes" id="costNotes"') &&
+      cost.includes("Er gissning") && cost.includes("inte ett löfte") && cost.includes('data-goatcounter-click="cta-kostnad"') &&
+      js.includes("const WEEKS = 45;") && js.includes('$("costNotes").value');
+  })()],
   ["footer heading level", html.includes("<h3>Kontakt</h3>") && !html.includes("<h4>")],
 ];
 

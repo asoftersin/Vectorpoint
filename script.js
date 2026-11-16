@@ -1177,6 +1177,97 @@
 
   setupFlow(PIPELINE_FLOW);
 
+  // ---------- kostnaden i dag: besökarens egna siffror blir ett belopp ----------
+  // Allt räknas här i webbläsaren. Andelen AI kan ta är besökarens gissning, inte vårt löfte,
+  // och beloppen följer med som anteckning till bokningen.
+  const costCalc = document.getElementById("costCalc");
+  if (costCalc) {
+    const WEEKS = 45;
+    const FTE_HOURS = 1600;
+    const $ = (id) => document.getElementById(id);
+    const people = $("costPeople");
+    const hours = $("costHours");
+    const rate = $("costRate");
+    const share = $("costShare");
+    const totalEl = $("costTotal");
+    const fmt = (n) => Math.round(n).toLocaleString("sv-SE").replace(/[\u00a0\u202f]/g, " ");
+    const dec = (n) => n.toLocaleString("sv-SE", { maximumFractionDigits: 1 });
+    // Avrunda stora belopp till tusental så att de inte ser mer exakta ut än de är.
+    const round = (n) => (n >= 100000 ? Math.round(n / 1000) * 1000 : Math.round(n / 100) * 100);
+    let shown = 1170000;
+    let tween = 0;
+    let bumpTimer;
+
+    const paintTotal = (target) => {
+      cancelAnimationFrame(tween);
+      if (prefersReducedMotion) { shown = target; totalEl.textContent = fmt(target); return; }
+      const from = shown;
+      const start = performance.now();
+      const step = (now) => {
+        const t = Math.min(1, (now - start) / 450);
+        shown = from + (target - from) * (1 - Math.pow(1 - t, 3));
+        totalEl.textContent = fmt(t < 1 ? round(shown) : target);
+        if (t < 1) tween = requestAnimationFrame(step);
+      };
+      tween = requestAnimationFrame(step);
+      costCalc.classList.add("is-bump");
+      clearTimeout(bumpTimer);
+      bumpTimer = setTimeout(() => costCalc.classList.remove("is-bump"), 260);
+    };
+
+    const fill = (input) => {
+      const p = ((input.value - input.min) / (input.max - input.min)) * 100;
+      input.style.setProperty("--fill", `${p}%`);
+    };
+
+    const update = (animate) => {
+      const n = Number(people.value);
+      const h = Number(hours.value);
+      const r = Number(rate.value);
+      const pct = Number(share.value);
+      const yearHours = n * h * WEEKS;
+      const total = round(yearHours * r);
+      const freed = round(total * pct / 100);
+      const freedHours = Math.round(yearHours * pct / 100);
+
+      const label = {
+        costPeople: `${n} ${n === 1 ? "person" : "personer"}`,
+        costHours: `${dec(h)} ${h === 1 ? "timme" : "timmar"}`,
+        costRate: `${fmt(r)} kr`,
+        costShare: `${pct} %`,
+      };
+      [people, hours, rate, share].forEach((input) => {
+        $(`${input.id}Out`).textContent = label[input.id];
+        input.setAttribute("aria-valuetext", label[input.id]);
+        fill(input);
+      });
+
+      if (animate) paintTotal(total); else { shown = total; totalEl.textContent = fmt(total); }
+      $("costYearHours").textContent = fmt(yearHours);
+      $("costFte").textContent = dec(Math.round((yearHours / FTE_HOURS) * 10) / 10);
+      $("costShareTxt").textContent = `${pct} %`;
+      $("costFreed").textContent = fmt(freed);
+      $("costFreedHours").textContent = fmt(freedHours);
+      $("costBar").style.width = `${pct}%`;
+      $("costNotes").value =
+        `Vårt utgångsläge (räknat på vectorpoint.se): ${label.costPeople} lägger ${label.costHours} i veckan var, ` +
+        `${fmt(yearHours)} timmar om året. Med ${label.costRate} i timmen blir det ${fmt(total)} kr om året. ` +
+        `Vår gissning är att AI kan ta ${pct} %, ungefär ${fmt(freed)} kr och ${fmt(freedHours)} timmar om året.`;
+    };
+
+    let counted = false;
+    costCalc.addEventListener("input", () => {
+      update(true);
+      // En räkning per besök räcker för att se att verktyget används.
+      if (!counted && window.goatcounter && window.goatcounter.count) {
+        counted = true;
+        window.goatcounter.count({ path: "kostnad-raknad", title: "Kostnaden räknad", event: true });
+      }
+    });
+    costCalc.classList.add("is-live");
+    update(false);
+  }
+
   // ---------- bokningsrummet: kalendern öppnas på sidan, inte i en ny flik ----------
   // Alla länkar och formulär mot cal.com-eventet fångas här. Ctrl/Cmd-klick, mittenklick
   // och webbläsare utan <dialog> får den vanliga länken. Kalendern (Cal.com:s inbäddning)
