@@ -97,7 +97,8 @@
   onScroll();
 
   // ---------- nav: softer booking button while the hero's own booking button is visible ----------
-  const heroCta = document.getElementById("heroCta");
+  // Hjältens primära handling är skrivfältets bokningsknapp; finns den inte, den vanliga bokningslänken.
+  const heroCta = document.getElementById("heroAskSend") || document.getElementById("heroCta");
   if (heroCta && "IntersectionObserver" in window) {
     new IntersectionObserver(([entry]) => {
       nav.classList.toggle("is-hero-cta", entry.isIntersecting);
@@ -119,41 +120,89 @@
     });
   }
 
-  // ---------- kontaktformuläret: chips fyller fältet, texten följer med till bokningen eller mejlet ----------
-  const askForm = document.getElementById("askForm");
-  if (askForm) {
-    const askInput = document.getElementById("askInput");
-    const askTitle = document.getElementById("askTitle");
-    const askMail = document.getElementById("askMail");
-    const mailBase = askMail ? askMail.getAttribute("href") : "";
-    const oneLine = (text) => text.replace(/\s+/g, " ").trim();
+  // ---------- skrivfälten (hjälten och kontakten): chips fyller fältet, texten följer med till bokningen eller mejlet ----------
+  const oneLine = (text) => text.replace(/\s+/g, " ").trim();
+  const wireAsk = (form, input, titleField, mail) => {
+    if (!form || !input) return;
+    const mailBase = mail ? mail.getAttribute("href") : "";
     // Mejllänken är en vanlig mailto-länk utan JS; med JS får den med sig texten som skrivits.
     const syncMail = () => {
-      if (!askMail) return;
-      const text = askInput.value.trim();
-      askMail.href = text
+      if (!mail) return;
+      const text = input.value.trim();
+      mail.href = text
         ? `${mailBase}?subject=${encodeURIComponent(oneLine(text).slice(0, 60))}&body=${encodeURIComponent(text)}`
         : mailBase;
     };
-    askInput.addEventListener("input", syncMail);
-    askForm.querySelectorAll(".ask__chip").forEach((chip) => {
+    input.addEventListener("input", syncMail);
+    form.querySelectorAll(".ask__chip, .prompt__chip").forEach((chip) => {
       chip.addEventListener("click", () => {
-        askInput.value = chip.textContent.trim();
-        syncMail();
-        askInput.focus();
+        input.value = chip.textContent.trim();
+        input.dispatchEvent(new Event("input"));
+        input.focus();
       });
     });
-    askForm.addEventListener("submit", () => {
-      const text = askInput.value.trim();
+    // Enter skickar, Shift+Enter ger ny rad, som i ett chattfält.
+    if (form.classList.contains("prompt")) {
+      input.addEventListener("keydown", (event) => {
+        if (event.key === "Enter" && !event.shiftKey && !event.isComposing) {
+          event.preventDefault();
+          form.requestSubmit ? form.requestSubmit() : form.submit();
+        }
+      });
+    }
+    form.addEventListener("submit", () => {
+      const text = input.value.trim();
       // cal.com-eventet kräver en mötesrubrik; en kort version av texten duger, annars ett standardvärde
-      askTitle.value = text ? oneLine(text).slice(0, 60) : "Samtal om ett problem att lösa";
+      titleField.value = text ? oneLine(text).slice(0, 60) : "Samtal om ett problem att lösa";
       if (text) {
-        askInput.value = text + " (skrivet på vectorpoint.se)";
-        // Bokningen öppnas i en ny flik; fältet här ska visa det besökaren faktiskt skrev.
-        setTimeout(() => { askInput.value = text; }, 0);
+        input.value = text + " (skrivet på vectorpoint.se)";
+        // Fältet här ska visa det besökaren faktiskt skrev.
+        setTimeout(() => { input.value = text; }, 0);
       }
     });
     syncMail();
+  };
+  const askForm = document.getElementById("askForm");
+  wireAsk(askForm, document.getElementById("askInput"), document.getElementById("askTitle"), document.getElementById("askMail"));
+
+  const heroAsk = document.getElementById("heroAsk");
+  const heroAskInput = document.getElementById("heroAskInput");
+  wireAsk(heroAsk, heroAskInput, document.getElementById("heroAskTitle"), null);
+  if (heroAsk && heroAskInput) {
+    const sync = () => heroAsk.classList.toggle("has-text", heroAskInput.value.trim().length > 0);
+    heroAskInput.addEventListener("input", sync);
+    sync();
+    // Platshållaren skriver fram verkliga exempel, en i taget, tills någon börjar skriva själv.
+    const EXAMPLES = [
+      "supporten hinner inte sortera alla inkommande ärenden",
+      "vi vill ge alla medarbetare AI utan att data läcker ut",
+      "ingen hittar rätt version av våra rutiner och avtal",
+      "veckorapporten tar en halv dag att klippa ihop",
+      "säljarna lägger timmar på att leta kontakter",
+    ];
+    if (!prefersReducedMotion) {
+      let ex = 0, pos = 0, deleting = false, timer;
+      const tick = () => {
+        if (document.activeElement === heroAskInput || heroAskInput.value) {
+          heroAskInput.placeholder = "Beskriv problemet med en mening";
+          timer = setTimeout(tick, 600);
+          return;
+        }
+        const full = EXAMPLES[ex];
+        pos += deleting ? -1 : 1;
+        heroAskInput.placeholder = "Till exempel: " + full.slice(0, pos) + (pos < full.length || deleting ? "▍" : "");
+        let wait = deleting ? 18 : 42;
+        if (!deleting && pos >= full.length) { deleting = true; wait = 2200; }
+        else if (deleting && pos <= 0) { deleting = false; ex = (ex + 1) % EXAMPLES.length; wait = 350; }
+        timer = setTimeout(tick, wait);
+      };
+      if ("IntersectionObserver" in window) {
+        new IntersectionObserver(([entry]) => {
+          clearTimeout(timer);
+          if (entry.isIntersecting) timer = setTimeout(tick, 1200);
+        }).observe(heroAsk);
+      } else timer = setTimeout(tick, 1200);
+    }
   }
 
   // ---------- AI-kollen: en fråga i taget, ett regelbaserat besked och svaren med till bokningen ----------

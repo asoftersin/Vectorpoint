@@ -36,8 +36,15 @@ reasons to trust the company before they do. Every design choice below follows
 from those two.
 
 - **The first screen** says what Vectorpoint does, shows who you would be
-  dealing with (portrait, name, company, email, LinkedIn) and offers the
-  booking button. No film or animation stands between a visitor and that.
+  dealing with (portrait, name, company, email, LinkedIn) and starts the
+  conversation right there: a prompt-style field, "Vad ska AI lösa hos er?",
+  whose button ("Boka 15 min om det här") opens the on-page calendar with the
+  visitor's own words as the booking note and title. Typing one sentence is a
+  smaller step than booking a stranger cold, and Johan arrives at the call
+  knowing the problem. The placeholder types out real example problems (not
+  with reduced motion), chips fill the field, Enter books and Shift+Enter
+  adds a line. Below it, "Boka direkt utan att skriva" (`#heroCta`) and the
+  AI-kollen link stay for visitors who want neither. No film or animation stands between a visitor and that.
 - **Contact has three routes**, because not everyone wants to book a slot with
   a stranger: booking (Cal.com), email and LinkedIn. They appear in the hero,
   the About card, the contact section and the footer. The header keeps a
@@ -137,6 +144,7 @@ GoatCounter tracks these clicks:
 
 | Event | What was clicked |
 | --- | --- |
+| `cta-hero-prompt` | Booking from the hero's prompt field |
 | `cta-nav`, `cta-mobilnav`, `cta-hero`, `cta-exempel`, `cta-om`, `cta-kontakt`, `cta-kontakt-direkt`, `cta-footer` | A booking link, by position |
 | `contact-email-hero`, `contact-email`, `contact-email-form`, `contact-email-footer`, `contact-email-copy` | An email link, or the copy button |
 | `contact-linkedin-hero`, `contact-linkedin-om`, `contact-linkedin` | A LinkedIn link |
