@@ -363,6 +363,7 @@
           <button class="btn btn--primary check__nextbtn" id="checkNextBtn" type="button" hidden>Nästa</button>
           <button class="btn btn--primary check__submit" id="checkSubmit" type="submit" data-goatcounter-click="cta-ai-kollen">Boka 15 min med era svar</button>
           <a class="btn btn--ghost check__mail" id="checkMail" href="mailto:johan@vectorpoint.se" data-goatcounter-click="contact-email-ai-kollen" hidden>Skicka svaren som mejl</a>
+          <button class="check__memo" id="checkMemo" type="button" data-memo-open="ai-kollen" aria-haspopup="dialog" hidden>Gör ett PM till chefen</button>
           <button class="check__restart" id="checkRestart" type="button" hidden>Börja om</button>
         </div>
         <p class="check__note">Beskedet räknas fram av fasta regler i din webbläsare, inte av AI. Vi ser inga svar förrän du själv skickar dem.</p>
@@ -583,6 +584,7 @@
           <input type="hidden" name="title" value="Samtal om kostnaden för manuellt arbete">
           <input type="hidden" name="notes" id="costNotes" value="">
           <button class="btn btn--primary cost__cta" type="submit" data-goatcounter-click="cta-kostnad">Boka 15 min om de här siffrorna</button>
+          <button class="cost__memo" type="button" data-memo-open="kostnad" aria-haspopup="dialog" hidden>Gör ett PM till chefen av siffrorna</button>
           <p class="cost__note">Räknat på 45 arbetsveckor och 1 600 timmar per heltidstjänst, i din webbläsare. Siffrorna är era, inte ett löfte från oss: i första samtalet enas vi om hur effekten ska mätas.</p>
         </div>
       </form>
@@ -930,6 +932,7 @@
       </ol>
       <input type="hidden" name="title" id="briefTitle" value="">
       <input type="hidden" name="notes" id="briefNotes" value="">
+      <button class="brief__memo" id="briefMemo" type="button" data-memo-open="dock" aria-haspopup="dialog"><svg viewBox="0 0 20 20" width="16" height="16" aria-hidden="true"><path d="M5.5 2.5h6l3 3v12h-9z M11.5 2.5v3h3 M8 10h4.5M8 13h4.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/></svg><span>PM till chefen</span></button>
       <button class="brief__send" type="submit" data-goatcounter-click="cta-underlag"><span id="briefSendWith">Boka 15 min</span><svg viewBox="0 0 20 20" width="16" height="16" aria-hidden="true"><path d="M4 10h11M11 5l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
     </form>
   </aside>
@@ -964,6 +967,71 @@
       <span>Göteborg, Sverige</span>
     </div>
   </footer>
+
+  <!-- PM till chefen: det besökaren berättat, sammanställt som ett beslutsunderlag att skriva ut
+       eller mejla vidare. Byggs i webbläsaren; inget skickas någonstans. Kräver JS. -->
+  <dialog class="memo" id="memo" aria-labelledby="memoTitle">
+    <div class="memo__wrap">
+      <div class="memo__bar">
+        <p class="memo__bar-k"><span class="memo__bar-dot" aria-hidden="true"></span>Beslutsunderlag · byggt av era svar</p>
+        <button class="memo__close" id="memoClose" type="button" aria-label="Stäng PM:et">
+          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+      <article class="memo__paper" id="memoPaper">
+        <header class="memo__head">
+          <img class="memo__logo" src="assets/brand/vectorpoint-logo.svg" alt="Vectorpoint" width="120" height="22">
+          <p class="memo__meta"><span>PM</span><span id="memoDate"></span></p>
+        </header>
+        <p class="memo__k">Förslag till beslut</p>
+        <h2 class="memo__title" id="memoTitle">Pröva AI på ett avgränsat problem</h2>
+        <p class="memo__lede" id="memoLede"></p>
+
+        <section class="memo__sec" id="memoSecProblem">
+          <h3><span>1</span>Problemet</h3>
+          <div class="memo__body" id="memoProblem"></div>
+        </section>
+        <section class="memo__sec" id="memoSecCheck">
+          <h3><span>2</span>Passar AI?</h3>
+          <div class="memo__body" id="memoCheck"></div>
+        </section>
+        <section class="memo__sec" id="memoSecCost">
+          <h3><span>3</span>Vad det kostar i dag</h3>
+          <div class="memo__body" id="memoCost"></div>
+        </section>
+        <section class="memo__sec">
+          <h3><span>4</span>Förslag på första steg</h3>
+          <div class="memo__body">
+            <p>En prototyp på vår egen data, med fast pris och omfattning som bestäms före start. Vi tar ställning till fortsatt arbete efter utvärderingen.</p>
+            <ol class="memo__steps">
+              <li><strong>Problem och mål.</strong> Vi avgränsar problemet och enas om vad som ska bli bättre och hur det mäts.</li>
+              <li><strong>Prototyp på er data.</strong> En fungerande prototyp med de integrationer som behövs. Ni ser värdet innan ni bestämmer er.</li>
+              <li><strong>Drift i er miljö.</strong> Vi bygger klart i era system och er plattform, med säkerhet planerad från början.</li>
+              <li><strong>Uppföljning.</strong> Vi mäter mot målet från steg ett och föreslår nästa steg. Ni äger lösningen.</li>
+            </ol>
+          </div>
+        </section>
+        <section class="memo__sec memo__sec--ask">
+          <h3><span>5</span>Det vi beslutar nu</h3>
+          <div class="memo__body">
+            <p>Att ta ett första samtal på 15 minuter med Vectorpoint om problemet ovan. Det binder oss inte till något.</p>
+          </div>
+        </section>
+
+        <footer class="memo__foot">
+          <img src="assets/johan-portrait.jpg" alt="" width="44" height="44" loading="lazy">
+          <p><strong>Johan Studt</strong>, grundare, Vector Point AB<br>johan@vectorpoint.se · cal.com/johan-studt/15min</p>
+        </footer>
+        <p class="memo__fine">Sammanställt av er själva på vectorpoint.se. Svaren och siffrorna är era egna uppgifter, inte ett löfte från Vectorpoint.</p>
+      </article>
+      <div class="memo__actions">
+        <button class="btn btn--primary memo__book" id="memoBook" type="button" data-goatcounter-click="cta-pm">Boka 15 min med PM:et</button>
+        <a class="btn btn--ghost" id="memoMail" href="mailto:" data-goatcounter-click="pm-mejla">Mejla till en kollega</a>
+        <button class="btn btn--ghost" id="memoPrint" type="button" data-goatcounter-click="pm-skriv-ut">Skriv ut / spara PDF</button>
+        <button class="memo__copy" id="memoCopy" type="button" hidden>Kopiera texten</button>
+      </div>
+    </div>
+  </dialog>
 
   <!-- Bokningsrummet: varje bokningsknapp öppnar kalendern här i stället för i en ny flik.
        Utan JS (eller utan <dialog>) går länkarna som vanligt till cal.com. -->

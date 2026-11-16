@@ -318,7 +318,8 @@
       const text = summary(assessment);
       notes.value = text;
       mail.href = `mailto:johan@vectorpoint.se?subject=${encodeURIComponent("AI-kollen: " + labelOf("area"))}&body=${encodeURIComponent(text + "\n\n")}`;
-      document.dispatchEvent(new CustomEvent("vp:brief", { detail: { key: "check", short: assessment.verdict.replace(/\.$/, ""), full: text } }));
+      document.dispatchEvent(new CustomEvent("vp:brief", { detail: { key: "check", short: assessment.verdict.replace(/\.$/, ""), full: text, verdict: assessment.verdict, why: assessment.why, next: assessment.next, area: labelOf("area") } }));
+      document.getElementById("checkMemo").hidden = false;
       if (window.goatcounter && window.goatcounter.count) {
         window.goatcounter.count({ path: `ai-kollen-besked-${assessment.level}`, title: "AI-kollen besked", event: true });
       }
@@ -1259,7 +1260,9 @@
     let counted = false;
     costCalc.addEventListener("input", () => {
       update(true);
-      document.dispatchEvent(new CustomEvent("vp:brief", { detail: { key: "cost", short: `${($("costNotes").value.match(/blir det ([\d\s ]+) kr/) || [, ""])[1].trim()} kr/år`, full: $("costNotes").value } }));
+      const yearly = ($("costNotes").value.match(/blir det ([\d\s ]+) kr/) || [, ""])[1].trim();
+      document.dispatchEvent(new CustomEvent("vp:brief", { detail: { key: "cost", short: `${yearly} kr/år`, full: $("costNotes").value, total: yearly, hours: $("costYearHours").textContent, fte: $("costFte").textContent, share: $("costShareTxt").textContent, freed: $("costFreed").textContent } }));
+      costCalc.querySelector(".cost__memo").hidden = false;
       // En räkning per besök räcker för att se att verktyget används.
       if (!counted && window.goatcounter && window.goatcounter.count) {
         counted = true;
@@ -1375,14 +1378,17 @@
       sendWith.textContent = n === 0 ? "Boka 15 min" : "Boka med underlaget";
     };
 
-    const set = (key, short, full) => {
+    const set = (key, short, full, extra) => {
       if (!short) delete data[key];
-      else data[key] = { short, full };
+      else data[key] = { short, full, ...(extra || {}) };
       try { sessionStorage.setItem(STORE, JSON.stringify(data)); } catch (e) { /* privat läge */ }
       paint(short ? key : null);
     };
 
-    document.addEventListener("vp:brief", (event) => set(event.detail.key, event.detail.short, event.detail.full));
+    document.addEventListener("vp:brief", (event) => {
+      const { key, short, full, ...extra } = event.detail;
+      set(key, short, full, extra);
+    });
     let typing;
     [document.getElementById("heroAskInput"), document.getElementById("askInput")].forEach((input) => {
       if (!input) return;
@@ -1421,6 +1427,127 @@
     brief.classList.add("is-away");
     brief.hidden = false;
     paint(null);
+
+    // ---------- PM till chefen: underlaget som ett beslutsunderlag att skriva ut eller skicka vidare ----------
+    // Den som hittar sidan är sällan den som beslutar. PM:et ger hen något att ta med sig in,
+    // byggt av det besökaren själv har skrivit och räknat. Inget lämnar webbläsaren förrän de skickar.
+    const memo = document.getElementById("memo");
+    if (memo && typeof memo.showModal === "function") {
+      const el = (tag, cls, text) => {
+        const node = document.createElement(tag);
+        if (cls) node.className = cls;
+        if (text != null) node.textContent = text;
+        return node;
+      };
+      const missing = (text, href, cta) => {
+        const p = el("p", "memo__missing");
+        p.append(el("span", null, text + " "));
+        const a = el("a", null, cta);
+        a.href = href;
+        a.addEventListener("click", () => memo.close());
+        p.append(a);
+        return p;
+      };
+      const problemText = () => (data.problem ? data.problem.full.replace(/^Problemet: /, "").trim() : "");
+      const titleText = () => {
+        const p = oneLine(problemText());
+        if (!p) return data.check && data.check.area ? `Pröva AI för: ${data.check.area.toLowerCase()}` : "Pröva AI på ett avgränsat problem";
+        return p.length > 90 ? p.slice(0, 88).replace(/\s+\S*$/, "") + "…" : p;
+      };
+
+      const build = () => {
+        const now = new Date();
+        document.getElementById("memoDate").textContent = now.toLocaleDateString("sv-SE", { year: "numeric", month: "long", day: "numeric" });
+        document.getElementById("memoTitle").textContent = titleText();
+        const filled = KEYS.filter((k) => data[k]).length;
+        document.getElementById("memoLede").textContent = filled
+          ? "Vi föreslår att pröva om AI kan lösa problemet nedan, i liten skala och med ett mål vi kan mäta, innan vi bestämmer oss för något större."
+          : "Fyll i ert problem, AI-kollen eller kostnaden på sidan, så skrivs PM:et om med era egna uppgifter.";
+
+        const prob = document.getElementById("memoProblem");
+        prob.replaceChildren(problemText()
+          ? el("p", "memo__quote", problemText())
+          : missing("Inte beskrivet ännu.", "#hero", "Skriv en mening om problemet"));
+
+        const chk = document.getElementById("memoCheck");
+        if (data.check && data.check.verdict) {
+          const ul = el("ul", "memo__list");
+          (data.check.why || []).forEach((t) => ul.append(el("li", null, t)));
+          chk.replaceChildren(el("p", "memo__verdict", data.check.verdict), ul);
+          if (data.check.next) chk.append(el("p", "memo__next", data.check.next));
+          chk.append(el("p", "memo__src", "Enligt AI-kollen på vectorpoint.se, fyra frågor som besvaras med fasta regler."));
+        } else if (data.check) {
+          chk.replaceChildren(el("p", "memo__pre", data.check.full));
+        } else {
+          chk.replaceChildren(missing("Inte bedömt ännu.", "#ai-kollen", "Svara på fyra frågor"));
+        }
+
+        const cst = document.getElementById("memoCost");
+        if (data.cost && data.cost.total) {
+          const fig = el("p", "memo__fig");
+          fig.append(el("strong", null, data.cost.total), el("span", null, " kr om året"));
+          cst.replaceChildren(fig,
+            el("p", null, `${data.cost.hours} timmar om året, ungefär ${data.cost.fte} heltidstjänster. Om AI tar ${data.cost.share}: ${data.cost.freed} kr om året tillbaka till annat.`),
+            el("p", "memo__src", "Våra egna uppskattningar, räknat på 45 arbetsveckor och 1 600 timmar per heltidstjänst. Det är vår utgångspunkt att mäta mot, inte ett utlovat resultat."));
+        } else if (data.cost) {
+          cst.replaceChildren(el("p", null, data.cost.full));
+        } else {
+          cst.replaceChildren(missing("Inte räknat ännu.", "#kostnad", "Räkna på det manuella arbetet"));
+        }
+        return plain();
+      };
+
+      // Samma PM som ren text, för mejl, kopiering och bokningens anteckning.
+      const plain = () => {
+        const lines = [`PM: ${titleText()}`, "", "1. Problemet", problemText() || "(inte beskrivet ännu)", "", "2. Passar AI?"];
+        if (data.check && data.check.verdict) {
+          lines.push(data.check.verdict, ...(data.check.why || []).map((t) => `- ${t}`));
+          if (data.check.next) lines.push(data.check.next);
+        } else lines.push(data.check ? data.check.full : "(inte bedömt ännu)");
+        lines.push("", "3. Vad det kostar i dag", data.cost ? data.cost.full : "(inte räknat ännu)", "",
+          "4. Förslag på första steg",
+          "En prototyp på vår egen data, med fast pris och omfattning som bestäms före start. Problem och mål, prototyp, drift i vår miljö, uppföljning mot målet.",
+          "", "5. Det vi beslutar nu",
+          "Att ta ett första samtal på 15 minuter med Vectorpoint. Det binder oss inte till något.",
+          "", "Kontakt: Johan Studt, Vector Point AB · johan@vectorpoint.se · https://cal.com/johan-studt/15min",
+          "Sammanställt på vectorpoint.se. Svaren och siffrorna är våra egna uppgifter.");
+        return lines.join("\n");
+      };
+
+      const mailLink = document.getElementById("memoMail");
+      const copyBtn = document.getElementById("memoCopy");
+      let text = "";
+      const openMemo = (from) => {
+        text = build();
+        mailLink.href = `mailto:?subject=${encodeURIComponent("PM: " + titleText())}&body=${encodeURIComponent(text)}`;
+        copyBtn.textContent = "Kopiera texten";
+        document.documentElement.classList.add("is-memo");
+        memo.showModal();
+        memo.querySelector(".memo__wrap").scrollTop = 0;
+        document.getElementById("memoClose").focus({ preventScroll: true });
+        if (window.goatcounter && window.goatcounter.count) {
+          window.goatcounter.count({ path: `pm-oppnat-${from || "okand"}`, title: "PM öppnat", event: true });
+        }
+      };
+      document.querySelectorAll("[data-memo-open]").forEach((btn) => {
+        btn.addEventListener("click", () => openMemo(btn.dataset.memoOpen));
+      });
+      memo.addEventListener("close", () => document.documentElement.classList.remove("is-memo"));
+      document.getElementById("memoClose").addEventListener("click", () => memo.close());
+      memo.addEventListener("click", (event) => { if (event.target === memo) memo.close(); });
+      document.getElementById("memoPrint").addEventListener("click", () => window.print());
+      if (navigator.clipboard && window.isSecureContext) {
+        copyBtn.hidden = false;
+        copyBtn.addEventListener("click", () => {
+          navigator.clipboard.writeText(text).then(() => { copyBtn.textContent = "Kopierat"; }, () => { copyBtn.textContent = "Gick inte att kopiera"; });
+        });
+      }
+      // Boka med PM:et: samma väg som dockans knapp, så bokningsrummet får hela underlaget.
+      document.getElementById("memoBook").addEventListener("click", () => {
+        memo.close();
+        document.getElementById("briefForm").requestSubmit();
+      });
+    }
   }
 
   // ---------- bokningsrummet: kalendern öppnas på sidan, inte i en ny flik ----------
